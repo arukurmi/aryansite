@@ -1,16 +1,97 @@
-
+* {background-color: black}
 #title {
-    background-color: pink;
+    background-color: black;
     
 }
 
+.navbar{
+    padding-bottom: 4.5rem !important;
+}
+
+.nav-item{
+    padding: 0 18px;
+}
+
+.nav-link{
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+}
+
+h2{
+    color: white;
+}
+h3{
+    color: white;
+}
+h4{
+    color: white;
+}
+.stam{
+    color: white;
+    text-align: left;
+}
+
+.navbar-toggler{
+    background-color: transparent;
+    background-image: none;
+    border: 1px solid transparent white;
+}
+
 .my-container-fluid{
-    padding: 3% 15% 3% 15%;
+    padding: 3% 10% 3% 10%;
+}
+
+a{
+    color: black;
+    text-decoration: none;
+}
+
+hr{
+    border-style: none !important;
+    border-top-style: dotted !important;
+    border-color: white !important;
+    border-width: 5px !important;
+    /* width: 5% !important; */
+}
+
+button{
+    margin: 2px !important;
+}
+
+.col-lg-6{
+    text-align: center !important;
+vertical-align: middle !important;
+}
+
+.photo1{
+    width: 40%;
+    border-radius: 46%;
+    margin: 3%;
+    align-self: right;
+}
+
+.col-image{
+    justify-content: center;
 }
 
 .name-heading {
     font-family: "Sacramento";
     color: white;
-    font-size: 10rem;
+    font-size: 6em;
     line-height: 1.5;
+}
+
+
+.div-stam{
+    padding: 3% 10% 3% 10%;
+    justify-content: center;
+    text-align: center;
+    margin: auto;
+}
+
+.footer{
+    padding: 3% 10% 3% 10%;
+    justify-content: center;
+    text-align: center;
+    margin: auto;
 }
