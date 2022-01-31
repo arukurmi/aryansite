@@ -38,7 +38,7 @@ h4{
 }
 
 .my-container-fluid{
-    padding: 3% 10% 3% 10%;
+    padding: 2% 10% 1% 10%;
 }
 
 a{
@@ -55,7 +55,7 @@ hr{
 }
 
 button{
-    margin: 2px !important;
+    margin: 3px !important;
 }
 
 .col-lg-6{
@@ -90,7 +90,7 @@ vertical-align: middle !important;
 }
 
 .footer{
-    padding: 3% 10% 3% 10%;
+    padding: 1% 10% 1% 10%;
     justify-content: center;
     text-align: center;
     margin: auto;
