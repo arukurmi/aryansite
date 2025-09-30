@@ -23,13 +23,10 @@ export default function Home() {
 
   return (
     <div className="min-h-screen relative overflow-hidden">
-      {/* Animated Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-dark-900 via-dark-800 to-dark-900">
         <div className="absolute inset-0 bg-hero-pattern opacity-20"></div>
         <div className="absolute inset-0 bg-gradient-to-r from-primary-500/10 to-transparent"></div>
       </div>
-
-      {/* Floating Particles */}
       <div className="particles">
         {[...Array(50)].map((_, i) => (
           <div
@@ -45,10 +42,8 @@ export default function Home() {
         ))}
       </div>
 
-      {/* Main Content */}
       <div className="relative z-10 container mx-auto px-4 py-16">
         <div className="text-center">
-          {/* Hero Section */}
           <div className={`transition-all duration-1000 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
             <h1 className="text-6xl md:text-8xl font-bold mb-6">
               <span className="gradient-text typing-animation">
@@ -63,7 +58,6 @@ export default function Home() {
             </p>
           </div>
 
-          {/* Tech Stack Preview */}
           <div className={`transition-all duration-1000 delay-500 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
             <div className="flex flex-wrap justify-center gap-3 mb-12">
               {['Node.js', 'React', 'TypeScript', 'PostgreSQL', 'Redis', 'Docker'].map((tech, index) => (
@@ -78,7 +72,6 @@ export default function Home() {
             </div>
           </div>
 
-          {/* CTA Buttons */}
           <div className={`flex flex-col sm:flex-row gap-4 justify-center transition-all duration-1000 delay-700 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
             <button className="btn-primary text-lg px-8 py-4">
               <i className="fas fa-file-alt mr-2"></i>
@@ -90,7 +83,6 @@ export default function Home() {
             </button>
           </div>
 
-          {/* Scroll Indicator */}
           <div className={`mt-16 transition-all duration-1000 delay-1000 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
             <div className="animate-bounce">
               <i className="fas fa-chevron-down text-primary-400 text-2xl"></i>
