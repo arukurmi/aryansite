@@ -170,8 +170,8 @@ export default function BlogIndex({ posts, categories }) {
 }
 
 export async function getStaticProps() {
-  const posts = getAllPosts()
-  const categories = getAllCategories()
+  const posts = await getAllPosts()
+  const categories = await getAllCategories()
   
   return {
     props: {

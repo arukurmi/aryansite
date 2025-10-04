@@ -121,7 +121,7 @@ export default function BlogPost({ post, relatedPosts }) {
               </div>
 
               {/* Article Content */}
-              <div className="prose prose-lg prose-invert max-w-none">
+              <div className="prose prose-lg max-w-none">
                 <div 
                   className="text-gray-300 leading-relaxed"
                   dangerouslySetInnerHTML={{ __html: post.content }}
@@ -214,7 +214,7 @@ export default function BlogPost({ post, relatedPosts }) {
 }
 
 export async function getStaticPaths() {
-  const posts = getAllPosts()
+  const posts = await getAllPosts()
   const paths = posts.map((post) => ({
     params: { slug: post.slug },
   }))
@@ -226,8 +226,8 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }) {
-  const post = getPostBySlug(params.slug)
-  const relatedPosts = getRelatedPosts(params.slug, 3)
+  const post = await getPostBySlug(params.slug)
+  const relatedPosts = await getRelatedPosts(params.slug, 3)
 
   return {
     props: {

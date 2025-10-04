@@ -15,7 +15,7 @@ export default function Home({ recentPosts }) {
 }
 
 export async function getStaticProps() {
-  const recentPosts = getRecentPosts(3)
+  const recentPosts = await getRecentPosts(3)
   
   return {
     props: {
