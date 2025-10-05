@@ -10,26 +10,31 @@ export default function Layout({ children, className = '' }) {
   }, [])
 
   return (
-    <div className={`min-h-screen bg-gradient-to-br from-dark-900 via-dark-800 to-dark-900 ${className}`}>
-      {/* Animated Background */}
-      <div className="absolute inset-0 bg-hero-pattern opacity-20"></div>
-      <div className="absolute inset-0 bg-gradient-to-r from-primary-500/10 to-transparent"></div>
-      
-      {/* Floating Particles */}
-      <div className="particles">
-        {[...Array(30)].map((_, i) => (
-          <div
-            key={i}
-            className="particle"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 6}s`,
-              animationDuration: `${6 + Math.random() * 4}s`,
-            }}
-          />
-        ))}
-      </div>
+    <div className={`min-h-screen bg-dark-900 ${className}`}>
+      {/* Simple background for blog pages */}
+      {!className.includes('blog') && (
+        <>
+          {/* Animated Background */}
+          <div className="absolute inset-0 bg-hero-pattern opacity-20"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-primary-500/10 to-transparent"></div>
+          
+          {/* Floating Particles */}
+          <div className="particles">
+            {[...Array(30)].map((_, i) => (
+              <div
+                key={i}
+                className="particle"
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  top: `${Math.random() * 100}%`,
+                  animationDelay: `${Math.random() * 6}s`,
+                  animationDuration: `${6 + Math.random() * 4}s`,
+                }}
+              />
+            ))}
+          </div>
+        </>
+      )}
 
       {/* Header */}
       <Header />

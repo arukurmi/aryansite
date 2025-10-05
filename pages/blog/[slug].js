@@ -53,7 +53,7 @@ export default function BlogPost({ post, relatedPosts }) {
   }
 
   return (
-    <Layout>
+    <Layout className="blog-page">
       <div className="min-h-screen">
         {/* Reading Progress Bar */}
         <div className="fixed top-0 left-0 w-full h-1 bg-dark-700 z-50">
@@ -121,9 +121,9 @@ export default function BlogPost({ post, relatedPosts }) {
               </div>
 
               {/* Article Content */}
-              <div className="prose prose-lg max-w-none">
+              <div className="max-w-none">
                 <div 
-                  className="text-gray-300 leading-relaxed"
+                  className="text-gray-300 leading-relaxed blog-content"
                   dangerouslySetInnerHTML={{ __html: post.content }}
                 />
               </div>

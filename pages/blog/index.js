@@ -34,7 +34,7 @@ export default function BlogIndex({ posts, categories }) {
   }
 
   return (
-    <Layout>
+    <Layout className="blog-page">
       <div className="min-h-screen py-20">
         <div className="container mx-auto px-4">
           {/* Header */}
