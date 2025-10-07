@@ -34,7 +34,6 @@ export default function Header() {
             </span>
           </Link>
 
-          {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             {navItems.map((item) => (
               <Link
@@ -48,7 +47,6 @@ export default function Header() {
             ))}
           </div>
 
-          {/* CTA Button */}
           <div className="hidden md:flex items-center space-x-4">
             <a
               href="https://drive.google.com/file/d/1886vZeTRqPPvchbldM-3D5KE_KChNOs1/view?usp=sharing"
@@ -61,7 +59,6 @@ export default function Header() {
             </a>
           </div>
 
-          {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             className="md:hidden text-white hover:text-primary-400 transition-colors duration-300"
@@ -70,7 +67,6 @@ export default function Header() {
           </button>
         </div>
 
-        {/* Mobile Navigation */}
         <div className={`md:hidden transition-all duration-300 ${
           isMobileMenuOpen 
             ? 'max-h-96 opacity-100' 
