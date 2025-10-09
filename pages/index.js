@@ -2,6 +2,7 @@ import Layout from '../components/layout/Layout'
 import HeroSection from '../components/sections/HeroSection'
 import ExperienceSection from '../components/sections/ExperienceSection'
 import BlogSection from '../components/sections/BlogSection'
+import ContactSection from '../components/sections/ContactSection'
 import { getRecentPosts } from '../lib/blog'
 
 export default function Home({ recentPosts }) {
@@ -10,6 +11,7 @@ export default function Home({ recentPosts }) {
       <HeroSection />
       <ExperienceSection />
       <BlogSection recentPosts={recentPosts} />
+      <ContactSection />
     </Layout>
   )
 }

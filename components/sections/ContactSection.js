@@ -29,12 +29,10 @@ export default function ContactSection() {
     setSubmitStatus(null)
 
     try {
-      // EmailJS configuration - you'll need to replace these with your actual IDs
       const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || 'your_service_id'
       const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || 'your_template_id'
       const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || 'your_public_key'
 
-      // Send email using EmailJS
       await emailjs.sendForm(serviceId, templateId, form.current, publicKey)
       
       setSubmitStatus('success')
@@ -92,7 +90,6 @@ export default function ContactSection() {
         </div>
 
         <div className="grid lg:grid-cols-2 gap-12">
-          {/* Contact Information */}
           <div className="space-y-8">
             <div>
               <h3 className="text-2xl font-bold text-white mb-6">Let's Connect</h3>
@@ -102,7 +99,6 @@ export default function ContactSection() {
               </p>
             </div>
 
-            {/* Contact Cards */}
             <div className="space-y-4">
               {contactInfo.map((info, index) => (
                 <a
@@ -125,7 +121,6 @@ export default function ContactSection() {
               ))}
             </div>
 
-            {/* Tech Stack */}
             <div>
               <h4 className="text-lg font-semibold text-white mb-4">Currently Working With</h4>
               <div className="flex flex-wrap gap-2">
@@ -138,7 +133,6 @@ export default function ContactSection() {
             </div>
           </div>
 
-          {/* Contact Form */}
           <div>
             <Card className="h-full">
               <CardHeader>
@@ -150,7 +144,6 @@ export default function ContactSection() {
               
               <CardContent>
                 <form ref={form} onSubmit={handleSubmit} className="space-y-6">
-                  {/* Name Field */}
                   <div>
                     <label htmlFor="name" className="block text-sm font-medium text-white mb-2">
                       Name *
@@ -167,7 +160,6 @@ export default function ContactSection() {
                     />
                   </div>
 
-                  {/* Email Field */}
                   <div>
                     <label htmlFor="email" className="block text-sm font-medium text-white mb-2">
                       Email *
@@ -184,7 +176,6 @@ export default function ContactSection() {
                     />
                   </div>
 
-                  {/* Subject Field */}
                   <div>
                     <label htmlFor="subject" className="block text-sm font-medium text-white mb-2">
                       Subject *
@@ -207,7 +198,6 @@ export default function ContactSection() {
                     </select>
                   </div>
 
-                  {/* Message Field */}
                   <div>
                     <label htmlFor="message" className="block text-sm font-medium text-white mb-2">
                       Message *
@@ -224,7 +214,6 @@ export default function ContactSection() {
                     />
                   </div>
 
-                  {/* Submit Button */}
                   <Button
                     type="submit"
                     disabled={isSubmitting}
@@ -234,7 +223,6 @@ export default function ContactSection() {
                     {isSubmitting ? 'Sending...' : 'Send Message'}
                   </Button>
 
-                  {/* Status Messages */}
                   {submitStatus === 'success' && (
                     <div className="p-4 bg-green-500/20 border border-green-500/30 rounded-lg">
                       <div className="flex items-center space-x-2">
