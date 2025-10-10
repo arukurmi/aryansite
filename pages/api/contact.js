@@ -1,4 +1,3 @@
-// Alternative API route for contact form (if you prefer not to use EmailJS)
 import nodemailer from 'nodemailer'
 
 export default async function handler(req, res) {
@@ -8,19 +7,16 @@ export default async function handler(req, res) {
 
   const { name, email, subject, message } = req.body
 
-  // Validate required fields
   if (!name || !email || !subject || !message) {
     return res.status(400).json({ message: 'All fields are required' })
   }
 
-  // Email validation
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
   if (!emailRegex.test(email)) {
     return res.status(400).json({ message: 'Invalid email format' })
   }
 
   try {
-    // Create transporter (configure with your SMTP settings)
     const transporter = nodemailer.createTransporter({
       host: process.env.SMTP_HOST || 'smtp.gmail.com',
       port: process.env.SMTP_PORT || 587,
@@ -31,10 +27,9 @@ export default async function handler(req, res) {
       },
     })
 
-    // Email content
     const mailOptions = {
       from: process.env.SMTP_USER,
-      to: 'arukurmi22@gmail.com', // Your email
+      to: 'arukurmi22@gmail.com',
       subject: `Portfolio Contact: ${subject}`,
       html: `
         <h2>New Contact Form Submission</h2>
@@ -46,11 +41,8 @@ export default async function handler(req, res) {
       `,
       replyTo: email,
     }
-
-    // Send email
     await transporter.sendMail(mailOptions)
 
-    // Send auto-reply to user
     const autoReplyOptions = {
       from: process.env.SMTP_USER,
       to: email,
