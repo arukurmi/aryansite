@@ -16,6 +16,65 @@
       'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
     background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
     min-height: 100vh;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  .light body {
+    background: linear-gradient(135deg, #f9fafb 0%, #ffffff 100%);
+  }
+
+  /* Light theme text colors */
+  .light h1,
+  .light h2,
+  .light h3,
+  .light h4,
+  .light h5,
+  .light h6 {
+    color: #1f2937 !important;
+  }
+
+  .light p,
+  .light span,
+  .light li {
+    color: #374151 !important;
+  }
+
+  .light .text-white {
+    color: #1f2937 !important;
+  }
+
+  .light .text-gray-300 {
+    color: #4b5563 !important;
+  }
+
+  .light .text-gray-400 {
+    color: #6b7280 !important;
+  }
+
+  .light .text-gray-500 {
+    color: #9ca3af !important;
+  }
+
+  /* Light theme backgrounds */
+  .light .bg-dark-800 {
+    background-color: #ffffff !important;
+  }
+
+  .light .bg-dark-700 {
+    background-color: #f3f4f6 !important;
+  }
+
+  .light .bg-dark-900 {
+    background-color: #f9fafb !important;
+  }
+
+  /* Light theme borders */
+  .light .border-dark-700 {
+    border-color: #e5e7eb !important;
+  }
+
+  .light .border-dark-600 {
+    border-color: #d1d5db !important;
   }
 
   /* Custom scrollbar */

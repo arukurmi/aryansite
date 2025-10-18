@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import ThemeToggle from '../ui/ThemeToggle'
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
@@ -48,6 +49,7 @@ export default function Header() {
           </div>
 
           <div className="hidden md:flex items-center space-x-4">
+            <ThemeToggle />
             <a
               href="https://drive.google.com/file/d/1886vZeTRqPPvchbldM-3D5KE_KChNOs1/view?usp=sharing"
               target="_blank"

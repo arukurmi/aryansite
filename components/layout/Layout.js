@@ -10,7 +10,7 @@ export default function Layout({ children, className = '' }) {
   }, [])
 
   return (
-    <div className={`min-h-screen bg-dark-900 ${className}`}>
+    <div className={`min-h-screen bg-dark-900 dark:bg-dark-900 light:bg-light-100 transition-colors duration-300 ${className}`}>
       {/* Simple background for blog pages */}
       {!className.includes('blog') && (
         <>
