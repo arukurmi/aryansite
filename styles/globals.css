@@ -497,3 +497,218 @@ pre code {
     font-size: 1.25rem;
   }
 }
+
+/* Light theme styles */
+.light body {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  color: #1a202c;
+}
+
+.light h1, .light h2, .light h3, .light h4, .light h5, .light h6 {
+  color: #2d3748;
+}
+
+.light p, .light span, .light div {
+  color: #4a5568;
+}
+
+.light .text-white {
+  color: #2d3748 !important;
+}
+
+.light .bg-dark-900 {
+  background-color: #ffffff !important;
+}
+
+.light .bg-dark-800 {
+  background-color: #f7fafc !important;
+}
+
+.light .bg-dark-700 {
+  background-color: #edf2f7 !important;
+}
+
+.light .bg-dark-600 {
+  background-color: #e2e8f0 !important;
+}
+
+.light .border-dark-700 {
+  border-color: #e2e8f0 !important;
+}
+
+.light .border-dark-600 {
+  border-color: #cbd5e0 !important;
+}
+
+.light .text-gray-300 {
+  color: #4a5568 !important;
+}
+
+.light .text-gray-400 {
+  color: #718096 !important;
+}
+
+.light .hover\:text-primary-400:hover {
+  color: #3182ce !important;
+}
+
+.light .btn-primary {
+  background: linear-gradient(135deg, #3182ce 0%, #2c5aa0 100%);
+  color: white;
+}
+
+.light .btn-primary:hover {
+  background: linear-gradient(135deg, #2c5aa0 0%, #2a4d8a 100%);
+}
+
+.light .card {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.light .tech-badge {
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid #cbd5e0;
+  color: #4a5568;
+}
+
+.light .section-title {
+  color: #2d3748;
+}
+
+.light .gradient-text {
+  background: linear-gradient(135deg, #3182ce 0%, #2c5aa0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Light theme header */
+.light .bg-dark-900\/95 {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+}
+
+.light .backdrop-blur-md {
+  backdrop-filter: blur(12px);
+}
+
+.light .border-b {
+  border-bottom-color: #e2e8f0 !important;
+}
+
+/* Light theme blog content */
+.light .blog-content {
+  color: #4a5568;
+}
+
+.light .blog-content h1,
+.light .blog-content h2,
+.light .blog-content h3,
+.light .blog-content h4,
+.light .blog-content h5,
+.light .blog-content h6 {
+  color: #2d3748;
+}
+
+.light .blog-content strong {
+  color: #2d3748;
+}
+
+.light .blog-content em {
+  color: #4a5568;
+}
+
+.light .blog-content a {
+  color: #3182ce;
+}
+
+.light .blog-content a:hover {
+  color: #2c5aa0;
+}
+
+/* Beautiful Sun/Moon Toggle Styles */
+#theme-toggle-button {
+  font-size: 12px;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.5em;
+  height: 2.5em;
+  cursor: pointer;
+}
+
+#toggle {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+#container,
+#patches,
+#stars,
+#button,
+#sun,
+#moon,
+#cloud {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 0.25s;
+}
+
+/* night sky background */
+#toggle:checked + svg #container {
+  fill: #2b4360;
+}
+
+/* move button to right when checked */
+#toggle:checked + svg #button {
+  transform: translate(28px, 2.333px);
+}
+
+/* show/hide sun and moon based on checkbox state */
+/* Default: show sun (light mode), hide moon (dark mode) */
+#sun {
+  opacity: 1;
+}
+
+#moon {
+  opacity: 0;
+}
+
+/* When checked (dark mode): hide sun, show moon */
+#toggle:checked + svg #sun {
+  opacity: 0;
+}
+
+#toggle:checked + svg #moon {
+  opacity: 1;
+}
+
+/* show or hide background items on checkbox state */
+/* Default: show cloud (light mode), hide stars (dark mode) */
+#cloud {
+  opacity: 1;
+}
+
+#stars {
+  opacity: 0;
+}
+
+/* When checked (dark mode): hide cloud, show stars */
+#toggle:checked + svg #cloud {
+  opacity: 0;
+}
+
+#toggle:checked + svg #stars {
+  opacity: 1;
+}
+
+/* Make SVG fit properly within the button */
+#theme-toggle-button svg {
+  width: 100%;
+  height: 100%;
+  max-width: 3.5em;
+  max-height: 2.5em;
+}
