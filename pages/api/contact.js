@@ -11,6 +11,7 @@ export default async function handler(req, res) {
     return res.status(400).json({ message: 'All fields are required' })
   }
 
+  // Basic email format validation
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
   if (!emailRegex.test(email)) {
     return res.status(400).json({ message: 'Invalid email format' })
@@ -41,6 +42,7 @@ export default async function handler(req, res) {
       `,
       replyTo: email,
     }
+    // Send the email to the site owner
     await transporter.sendMail(mailOptions)
 
     const autoReplyOptions = {
@@ -59,7 +61,9 @@ export default async function handler(req, res) {
 
     res.status(200).json({ message: 'Email sent successfully' })
   } catch (error) {
+    // Log the error for debugging purposes
     console.error('Email error:', error)
     res.status(500).json({ message: 'Failed to send email' })
   }
 }
+// add more comments to it
