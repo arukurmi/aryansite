@@ -5,14 +5,18 @@ export default function ExperienceSection() {
   const experiences = [
     {
       company: "GoKwik",
-      role: "Software Developer",
-      duration: "Current",
-      description: "Full-time software development role focusing on scalable solutions and modern technologies.",
-      tech: ["Node.js", "React", "TypeScript", "PostgreSQL"],
+      role: "Software Development Engineer",
+      duration: "Aug 2024 - Present · Bangalore",
+      description: "Working in the Payments Pod and on GoKwik's MCP, building reliable infra, secure protocols, and data-accurate systems at scale.",
+      tech: ["NestJS", "PostgreSQL", "Metabase", "AWS", "Kafka"],
       highlights: [
-        "Building scalable microservices",
-        "Implementing modern frontend solutions",
-        "Optimizing database performance"
+        "Shipped end-to-end split settlements infra, reducing Account Receivables (AR) delays from 30+ days to < 5 days.",
+        "Revamped settlement data ingestion infra, cutting daily ingestion time by ~94% across 10,000+ merchants.",
+        "Delivered 99.99% accurate settlement data via batch optimizations and safe error retries, reducing operational overhead by 70%.",
+        "Improved automated reconciliation pipeline accuracy from ~70% to 99%, fixing critical gaps in anomaly detection.",
+        "Owned end-to-end MCP server build with context routing, OAuth-secured flows, and structured protocol handling.",
+        "Delivered MCP documentation and tooling for easy setup in both local and remote modes for internal teams and merchants.",
+        "Mentored 2 engineers and led org-wide knowledge transfer sessions on MCP architecture."
       ]
     },
     {
