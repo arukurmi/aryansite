@@ -14,9 +14,9 @@ export default function ExperienceSection() {
         "Revamped settlement data ingestion infra, cutting daily ingestion time by ~94% across 10,000+ merchants.",
         "Delivered 99.99% accurate settlement data via batch optimizations and safe error retries, reducing operational overhead by 70%.",
         "Improved automated reconciliation pipeline accuracy from ~70% to 99%, fixing critical gaps in anomaly detection.",
-        // "Owned end-to-end MCP server build with context routing, OAuth-secured flows, and structured protocol handling.",
-        // "Delivered MCP documentation and tooling for easy setup in both local and remote modes for internal teams and merchants.",
-        // "Mentored 2 engineers and led org-wide knowledge transfer sessions on MCP architecture."
+        "Owned end-to-end MCP server build with context routing, OAuth-secured flows, and structured protocol handling.",
+        "Delivered MCP documentation and tooling for easy setup in both local and remote modes for internal teams and merchants.",
+        "Mentored 2 engineers and led org-wide knowledge transfer sessions on MCP architecture."
       ]
     },
     {
