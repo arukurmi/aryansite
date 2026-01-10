@@ -11,7 +11,7 @@ export default function ExperienceSection() {
       tech: ["NestJS", "PostgreSQL", "Metabase", "AWS", "Kafka"],
       highlights: [
         "Shipped end-to-end split settlements infra, reducing Account Receivables (AR) delays from 30+ days to < 5 days.",
-        // "Revamped settlement data ingestion infra, cutting daily ingestion time by ~94% across 10,000+ merchants.",
+        "Revamped settlement data ingestion infra, cutting daily ingestion time by ~94% across 10,000+ merchants.",
         "Delivered 99.99% accurate settlement data via batch optimizations and safe error retries, reducing operational overhead by 70%.",
         "Improved automated reconciliation pipeline accuracy from ~70% to 99%, fixing critical gaps in anomaly detection.",
         "Owned end-to-end MCP server build with context routing, OAuth-secured flows, and structured protocol handling.",
