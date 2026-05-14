@@ -31,18 +31,6 @@ export default function ExperienceSection() {
         "Handled email and SMS notifications for 150k+ users",
         "Designed low-level architecture for referral program"
       ]
-    },
-    {
-      company: "Internships",
-      role: "Developer",
-      duration: "Multiple",
-      description: "Business Tech Labs & Fintract Global - Gained experience in Spring Boot, HTML, CSS, and product design.",
-      tech: ["Spring Boot", "HTML", "CSS", "Figma"],
-      highlights: [
-        "Full-stack development experience",
-        "Product design and user experience",
-        "Cross-functional team collaboration"
-      ]
     }
   ]
 
