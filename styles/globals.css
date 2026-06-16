@@ -48,12 +48,12 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    background: linear-gradient(135deg, #0ea5e9, #3b82f6);
+    background: linear-gradient(135deg, #3b82f6, #3b82f6);
     border-radius: 4px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(135deg, #0284c7, #2563eb);
+    background: linear-gradient(135deg, #2563eb, #2563eb);
   }
 }
 
@@ -119,8 +119,8 @@
 }
 
 @keyframes glow {
-  0%, 100% { box-shadow: 0 0 5px #0ea5e9, 0 0 10px #0ea5e9, 0 0 15px #0ea5e9; }
-  50% { box-shadow: 0 0 10px #0ea5e9, 0 0 20px #0ea5e9, 0 0 30px #0ea5e9; }
+  0%, 100% { box-shadow: 0 0 5px #3b82f6, 0 0 10px #3b82f6, 0 0 15px #3b82f6; }
+  50% { box-shadow: 0 0 10px #3b82f6, 0 0 20px #3b82f6, 0 0 30px #3b82f6; }
 }
 
 @keyframes typing {
@@ -130,7 +130,7 @@
 
 @keyframes blink-caret {
   from, to { border-color: transparent; }
-  50% { border-color: #0ea5e9; }
+  50% { border-color: #3b82f6; }
 }
 
 /* Particle background effect */
@@ -146,7 +146,7 @@
 
 .particle {
   position: absolute;
-  background: radial-gradient(circle, #0ea5e9 1px, transparent 1px);
+  background: radial-gradient(circle, #3b82f6 1px, transparent 1px);
   animation: float 6s ease-in-out infinite;
 }
 
@@ -378,12 +378,12 @@ pre code {
 }
 
 .blog-content a {
-  color: #0ea5e9;
+  color: #3b82f6;
   text-decoration: underline;
 }
 
 .blog-content a:hover {
-  color: #0284c7;
+  color: #2563eb;
 }
 
 /* Tables inside blog posts (e.g. cheat sheets) */
@@ -447,7 +447,7 @@ pre code {
 }
 
 .prose blockquote {
-  border-left: 4px solid #0ea5e9;
+  border-left: 4px solid #3b82f6;
   padding-left: 1rem;
   margin: 1rem 0;
   font-style: italic;
@@ -455,12 +455,12 @@ pre code {
 }
 
 .prose a {
-  color: #0ea5e9;
+  color: #3b82f6;
   text-decoration: underline;
 }
 
 .prose a:hover {
-  color: #0284c7;
+  color: #2563eb;
 }
 
 .prose strong {
@@ -563,7 +563,10 @@ pre code {
   background-color: var(--lt-surface-2) !important;
 }
 
-/* Translucent surfaces used with /50, /30 opacities */
+/* Translucent surfaces used with /50, /30 opacities (cards, header, footer) */
+.light .bg-dark-900\/95,
+.light .bg-dark-900\/50,
+.light .bg-dark-900\/30,
 .light .bg-dark-800\/50,
 .light .bg-dark-800\/30 {
   background-color: var(--lt-surface) !important;
