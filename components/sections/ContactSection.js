@@ -1,8 +1,9 @@
 import { useState, useRef } from 'react'
-import emailjs from '@emailjs/browser'
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/Card'
 import Button from '../ui/Button'
 import TechBadge from '../ui/TechBadge'
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 export default function ContactSection() {
   const form = useRef()
@@ -14,6 +15,7 @@ export default function ContactSection() {
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState(null) // 'success', 'error', null
+  const [statusMessage, setStatusMessage] = useState('')
 
   const handleInputChange = (e) => {
     const { name, value } = e.target
@@ -23,23 +25,48 @@ export default function ContactSection() {
     }))
   }
 
+  const validate = () => {
+    if (formData.name.trim().length < 2) return 'Please enter your name.'
+    if (!EMAIL_REGEX.test(formData.email.trim())) return 'Please enter a valid email address.'
+    if (!formData.subject) return 'Please select a subject.'
+    if (formData.message.trim().length < 10) return 'Please write a message (at least 10 characters).'
+    return null
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
+
+    const validationError = validate()
+    if (validationError) {
+      setSubmitStatus('error')
+      setStatusMessage(validationError)
+      return
+    }
+
     setIsSubmitting(true)
     setSubmitStatus(null)
+    setStatusMessage('')
 
     try {
-      const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || 'your_service_id'
-      const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || 'your_template_id'
-      const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || 'your_public_key'
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      })
+      const data = await res.json()
 
-      await emailjs.sendForm(serviceId, templateId, form.current, publicKey)
-      
-      setSubmitStatus('success')
-      setFormData({ name: '', email: '', subject: '', message: '' })
+      if (res.ok && data.ok) {
+        setSubmitStatus('success')
+        setStatusMessage(data.message)
+        setFormData({ name: '', email: '', subject: '', message: '' })
+      } else {
+        setSubmitStatus('error')
+        setStatusMessage(data.message || 'Something went wrong. Please try again.')
+      }
     } catch (error) {
-      console.error('EmailJS error:', error)
+      console.error('Contact form error:', error)
       setSubmitStatus('error')
+      setStatusMessage('Network error. Please try again or email me directly.')
     } finally {
       setIsSubmitting(false)
     }
@@ -228,7 +255,7 @@ export default function ContactSection() {
                       <div className="flex items-center space-x-2">
                         <i className="fas fa-check-circle text-green-400"></i>
                         <p className="text-green-400 font-medium">
-                          Message sent successfully! I'll get back to you soon.
+                          {statusMessage || "Message sent successfully! I'll get back to you soon."}
                         </p>
                       </div>
                     </div>
@@ -239,7 +266,7 @@ export default function ContactSection() {
                       <div className="flex items-center space-x-2">
                         <i className="fas fa-exclamation-circle text-red-400"></i>
                         <p className="text-red-400 font-medium">
-                          Sorry, there was an error sending your message. Please try again or contact me directly.
+                          {statusMessage || 'Sorry, there was an error sending your message. Please try again or contact me directly.'}
                         </p>
                       </div>
                     </div>
