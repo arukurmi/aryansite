@@ -20,16 +20,30 @@ export default function ExperienceSection() {
       ]
     },
     {
-      company: "CoinDCX & Brane",
-      role: "Software Developer",
-      duration: "2 Years",
-      description: "Built KYC backend service with Onfido API for international onboarding, supporting over 10,000 users.",
-      tech: ["Node.js", "Ruby on Rails", "PostgreSQL", "Redis", "Docker"],
+      company: "Brane Enterprises",
+      role: "Associate Solution Developer · Platform Integrations",
+      duration: "Jan 2024 - Jul 2024 · Bangalore",
+      description: "Worked on Brane's no-code full-stack platform, building platform integrations and improving search and reliability.",
+      tech: ["Java", "JUnit", "TiDB"],
       highlights: [
-        "Improved latency by 60% with indexing and Redis caching",
-        "Implemented Grafana dashboards for logging and metrics",
-        "Handled email and SMS notifications for 150k+ users",
-        "Designed low-level architecture for referral program"
+        "Integrated faceted search into Java-based modules, enabling efficient multi-criteria filtering and faster data retrieval.",
+        "Built a reporting system for the no-code platform and raised test coverage to 98% on the core repo using JUnit.",
+        "Migrated the search persistence layer to TiDB, improving performance by 20% and saving $100K in annual platform fees."
+      ]
+    },
+    {
+      company: "CoinDCX",
+      role: "Software Development Engineer · Auth & User Engagement",
+      duration: "Jun 2022 - Dec 2023 · Bangalore",
+      description: "Owned KYC, authentication, and user-engagement backends serving hundreds of thousands of international users.",
+      tech: ["Node.js", "Ruby on Rails", "Python", "AdminJS", "Sidekiq", "PostgreSQL"],
+      highlights: [
+        "Optimized KYC workflows with Onfido APIs, automating verification for 250K+ international users with resilient async processing and failure handling.",
+        "Built an internal AdminJS dashboard to monitor 1M+ user records, improving operational visibility and reducing engineering dependency.",
+        "Wrote production-grade data migration scripts (Ruby/Python) maintaining integrity of 10M+ user records with validation and rollback-safe handling.",
+        "Shipped Node.js authentication APIs for SSO-based identity federation, improving login reliability across product flows.",
+        "Implemented Sidekiq async workers for Email/SMS notifications serving 800K+ users with reliable retry-backed delivery.",
+        "Maintained 98%+ test coverage via TDD, improving release stability and reducing regressions."
       ]
     }
   ]
