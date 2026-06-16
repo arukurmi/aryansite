@@ -425,6 +425,56 @@ pre code {
   color: #0284c7;
 }
 
+/* Tables inside blog posts (e.g. cheat sheets) */
+.blog-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.95rem;
+  display: block;
+  overflow-x: auto;
+}
+
+.blog-content thead {
+  background: #1e293b;
+}
+
+.blog-content th,
+.blog-content td {
+  border: 1px solid #334155;
+  padding: 0.6rem 0.9rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.blog-content th {
+  color: #38bdf8;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.blog-content tbody tr:nth-child(even) {
+  background: rgba(148, 163, 184, 0.06);
+}
+
+/* Light theme blog tables */
+.light .blog-content thead {
+  background: #eff6ff;
+}
+
+.light .blog-content th,
+.light .blog-content td {
+  border-color: #dbe3ef;
+}
+
+.light .blog-content th {
+  color: #2563eb;
+}
+
+.light .blog-content tbody tr:nth-child(even) {
+  background: #f6f8fc;
+}
+
 .prose ul,
 .prose ol {
   margin-bottom: 1rem;
