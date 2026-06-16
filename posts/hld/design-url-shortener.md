@@ -1,7 +1,7 @@
 ---
 title: "Design a URL Shortener like bit.ly - High Level Design"
 excerpt: "Learn how to design a scalable URL shortener service that can handle millions of requests per day with proper system architecture."
-date: "2024-01-10"
+date: "2025-12-10"
 category: "hld"
 tags: ["system-design", "scalability", "url-shortener", "distributed-systems", "caching"]
 author: "Aryansh Kurmi"

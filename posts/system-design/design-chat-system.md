@@ -1,7 +1,7 @@
 ---
 title: "Design a Real-Time Chat System - System Design"
 excerpt: "Learn how to design a scalable real-time chat system that can handle millions of concurrent users with WebSockets, message queuing, and distributed architecture."
-date: "2024-01-05"
+date: "2025-12-05"
 category: "system-design"
 tags: ["system-design", "real-time", "websockets", "message-queues", "distributed-systems"]
 author: "Aryansh Kurmi"
