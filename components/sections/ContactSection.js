@@ -151,7 +151,7 @@ export default function ContactSection() {
             <div>
               <h4 className="text-lg font-semibold text-white mb-4">Currently Working With</h4>
               <div className="flex flex-wrap gap-2">
-                {['Node.js', 'React', 'TypeScript', 'PostgreSQL', 'Redis', 'Docker', 'Next.js'].map((tech) => (
+                {['TypeScript', 'Node.js', 'AI Agents', 'LLMs', 'MCP', 'PostgreSQL', 'Docker'].map((tech) => (
                   <TechBadge key={tech} size="sm">
                     {tech}
                   </TechBadge>

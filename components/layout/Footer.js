@@ -49,8 +49,8 @@ export default function Footer() {
               <span className="text-white font-bold text-lg">Aryansh Kurmi</span>
             </div>
             <p className="text-gray-400 text-sm leading-relaxed">
-              Electrical Engineering Grad turned Software Developer. 
-              Building amazing things with code, one commit at a time.
+              Software Developer building AI-native systems — agents, LLM
+              workflows, and MCP tooling — and shipping with AI every day.
             </p>
             <div className="flex space-x-4">
               {socialLinks.map((social) => (

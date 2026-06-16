@@ -23,7 +23,7 @@ export default function HeroSection() {
     setTimeout(typeWriter, 1000)
   }, [])
 
-  const techStack = ['Node.js', 'React', 'TypeScript', 'PostgreSQL', 'Redis', 'Docker']
+  const techStack = ['TypeScript', 'Node.js', 'AI Agents', 'LLMs', 'MCP', 'PostgreSQL', 'Docker']
 
   return (
     <section className="min-h-screen flex items-center justify-center relative">
@@ -38,9 +38,9 @@ export default function HeroSection() {
             </h1>
             
             <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
-              Electrical Engineering Grad turned Software Developer. 
+              Software Developer building AI-native systems.
               <br className="hidden md:block" />
-              <span className="text-primary-400 font-semibold">Funny, sarcastic, and always up for a challenge.</span>
+              <span className="text-primary-400 font-semibold">Shipping agents, LLM workflows, and MCP tooling into production — and using AI to build, every single day.</span>
             </p>
           </div>
 
