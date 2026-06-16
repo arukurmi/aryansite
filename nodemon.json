@@ -1,0 +1,7 @@
+{
+  "watch": ["next.config.js", ".env", ".env.local", ".env.development", ".env.development.local"],
+  "ext": "js,mjs,cjs,json",
+  "exec": "next dev",
+  "delay": "500",
+  "verbose": true
+}
