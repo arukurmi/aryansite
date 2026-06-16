@@ -1,8 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    appDir: true,
-  },
   pageExtensions: ['js', 'jsx', 'md', 'mdx'],
   webpack: (config, { isServer }) => {
     if (!isServer) {

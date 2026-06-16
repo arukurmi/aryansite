@@ -1,7 +1,7 @@
 ---
 title: "Stripe Programming Round Interview Experience"
 excerpt: "A walkthrough of Stripe's programming round — from the take-home-style assessment to a live 60-minute problem-solving session built around a 3-part shipping-cost problem that scales from a simple min-sum into a full DP. With the full problem, my actual solutions, and the optimal ones."
-date: "2026-06-17"
+date: "2026-05-17"
 category: "interview-experiences"
 tags: ["interview", "stripe", "problem-solving", "dynamic-programming", "javascript", "algorithms"]
 author: "Aryansh Kurmi"
@@ -244,17 +244,7 @@ function minCostPart3Memo(factories) {
 
 ## 💬 Last 10 Minutes — the Q&A I underused
 
-I asked exactly one question — *"What is Stripe doing with AI?"* — got a general answer, and that was the end of the segment. One vague question leaves the strongest part of the round on the table.
-
-The last 10 minutes aren't courtesy; they're your chance to show strategic thinking, genuine curiosity, and culture fit. Questions I should have had ready:
-
-- *"I couldn't finish Part 3 in time — afterwards I implemented the DP solution. Would you be open to a 2-minute walkthrough of my approach?"* (Shows you kept working on it.)
-- *"What does the first 90 days look like for someone joining this team, and what would a successful ramp look like to you?"*
-- *"What's the biggest technical challenge the team is facing right now that this hire is meant to help solve?"*
-- *"How does engineering at Stripe balance moving fast against the reliability that financial infrastructure demands?"*
-- *"Beyond tooling like Copilot, are there teams building AI-native products — and is that on the infra side or the product side?"*
-
-**Rules of thumb I'm taking forward:** go in with **5 questions prepared**, use 2–3, save the rest for the thank-you note. Make at least one **company-specific** (Stripe's reliability culture). Never ask about comp, leave, or remote in a technical round — that's a recruiter conversation.
+I asked exactly one question — *"Beyond tooling like Copilot, are there teams building AI-native products — and is that on the infra side or the product side?"* — discussed around that, and that was the end of the segment.
 
 ## 🎯 Overall reflection
 
