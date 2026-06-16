@@ -5,9 +5,52 @@ import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/Ca
 import TechBadge from '../../components/ui/TechBadge'
 import Button from '../../components/ui/Button'
 
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
 export default function BlogIndex({ posts, categories }) {
   const [selectedCategory, setSelectedCategory] = useState('all')
   const [searchQuery, setSearchQuery] = useState('')
+  const [email, setEmail] = useState('')
+  const [subscribeStatus, setSubscribeStatus] = useState(null) // 'success' | 'error' | null
+  const [subscribeMessage, setSubscribeMessage] = useState('')
+  const [isSubscribing, setIsSubscribing] = useState(false)
+
+  const handleSubscribe = async (e) => {
+    e.preventDefault()
+
+    if (!EMAIL_REGEX.test(email.trim())) {
+      setSubscribeStatus('error')
+      setSubscribeMessage('Please enter a valid email address.')
+      return
+    }
+
+    setIsSubscribing(true)
+    setSubscribeStatus(null)
+    setSubscribeMessage('')
+
+    try {
+      const res = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.trim() }),
+      })
+      const data = await res.json()
+
+      if (res.ok && data.ok) {
+        setSubscribeStatus('success')
+        setSubscribeMessage(data.message)
+        setEmail('')
+      } else {
+        setSubscribeStatus('error')
+        setSubscribeMessage(data.message || 'Something went wrong. Please try again.')
+      }
+    } catch (error) {
+      setSubscribeStatus('error')
+      setSubscribeMessage('Network error. Please try again.')
+    } finally {
+      setIsSubscribing(false)
+    }
+  }
 
   const filteredPosts = posts.filter(post => {
     const matchesCategory = selectedCategory === 'all' || post.category === selectedCategory
@@ -150,16 +193,23 @@ export default function BlogIndex({ posts, categories }) {
                 <p className="text-gray-400 mb-6">
                   Get notified when I publish new posts about system design, architecture, and development.
                 </p>
-                <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+                <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
                   <input
                     type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     placeholder="Enter your email"
                     className="flex-1 px-4 py-3 bg-dark-700 border border-dark-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all duration-300"
                   />
-                  <Button className="whitespace-nowrap">
-                    Subscribe
+                  <Button type="submit" loading={isSubscribing} disabled={isSubscribing} className="whitespace-nowrap">
+                    {isSubscribing ? 'Subscribing...' : 'Subscribe'}
                   </Button>
-                </div>
+                </form>
+                {subscribeStatus && (
+                  <p className={`mt-4 text-sm font-medium ${subscribeStatus === 'success' ? 'text-green-400' : 'text-red-400'}`}>
+                    {subscribeMessage}
+                  </p>
+                )}
               </CardContent>
             </Card>
           </div>
