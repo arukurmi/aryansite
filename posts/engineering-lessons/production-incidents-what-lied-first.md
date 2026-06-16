@@ -1,7 +1,7 @@
 ---
 title: "What Lied First: 5 Real Production Incidents and Their Engineering Lessons"
 excerpt: "Big outages are rarely about a system going down — they're about one part of the system lying while everything else looks green. Five public postmortems from Google, AWS, Atlassian, Cloudflare, and GitLab, and the concrete engineering lessons from each."
-date: "2026-06-17"
+date: "2025-11-17"
 category: "engineering-lessons"
 tags: ["postmortems", "reliability", "incidents", "sre", "system-design", "on-call"]
 author: "Aryansh Kurmi"
