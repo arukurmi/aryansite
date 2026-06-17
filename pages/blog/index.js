@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import Layout from '../../components/layout/Layout'
-import { getAllPosts, getAllCategories } from '../../lib/blog'
+import { getAllPostSummaries, getAllCategories } from '../../lib/blog'
 import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/Card'
 import TechBadge from '../../components/ui/TechBadge'
 import Button from '../../components/ui/Button'
@@ -68,12 +68,6 @@ export default function BlogIndex({ posts, categories }) {
       month: 'long',
       day: 'numeric'
     })
-  }
-
-  const getReadingTime = (content) => {
-    const wordsPerMinute = 200
-    const words = content.split(' ').length
-    return Math.ceil(words / wordsPerMinute)
   }
 
   return (
@@ -163,7 +157,7 @@ export default function BlogIndex({ posts, categories }) {
                         ))}
                       </div>
                       <span className="text-gray-500 text-sm">
-                        {getReadingTime(post.content)} min read
+                        {post.readingTime} min read
                       </span>
                     </div>
                   </CardContent>
@@ -220,7 +214,7 @@ export default function BlogIndex({ posts, categories }) {
 }
 
 export async function getStaticProps() {
-  const posts = await getAllPosts()
+  const posts = await getAllPostSummaries()
   const categories = await getAllCategories()
   
   return {

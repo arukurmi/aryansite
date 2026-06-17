@@ -197,7 +197,7 @@ export default function BlogPost({ post, relatedPosts }) {
                             {formatDate(relatedPost.date)}
                           </span>
                           <span className="text-gray-500 text-xs">
-                            {getReadingTime(relatedPost.content)} min read
+                            {relatedPost.readingTime} min read
                           </span>
                         </div>
                       </CardContent>
