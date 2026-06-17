@@ -1,7 +1,7 @@
 ---
 title: "LLD Of a Crypto Wallet"
 excerpt: "A low-level design round from a well-known crypto company: design a multi-asset crypto wallet with correct, concurrency-safe transaction handling. Full Java design — project structure, entities, DTOs, controllers, services, a double-entry ledger, transaction state machine, idempotency, and concurrency control."
-date: "2026-06-17"
+date: "2026-03-10"
 category: "interview-experiences"
 tags: ["interview", "lld", "system-design", "java", "spring-boot", "crypto", "concurrency"]
 author: "Aryansh Kurmi"
