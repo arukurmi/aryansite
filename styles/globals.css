@@ -584,6 +584,12 @@ pre code {
   color: var(--lt-blue) !important;
 }
 
+/* Kill dark-grey hover backgrounds in light mode (theme toggle, etc.) */
+.light .hover\:bg-dark-700:hover,
+.light .hover\:bg-dark-600:hover {
+  background-color: var(--lt-surface-2) !important;
+}
+
 .light .hover\:border-primary-500:hover {
   border-color: var(--lt-blue) !important;
 }
