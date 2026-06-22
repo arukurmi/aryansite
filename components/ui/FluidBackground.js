@@ -107,7 +107,7 @@ export default function FluidBackground() {
   }, []);
 
   return (
-    <div className="fixed top-0 left-0 w-full h-full z-0 pointer-events-none overflow-hidden opacity-40 contrast-75 brightness-75">
+    <div className="fixed top-0 left-0 w-full h-full z-0 pointer-events-none overflow-hidden opacity-50 contrast-75 brightness-90">
       <canvas ref={canvasRef} className="w-full h-full" />
     </div>
   );
