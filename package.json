@@ -29,7 +29,8 @@
     "rehype-highlight": "^7.0.2",
     "remark": "^15.0.1",
     "remark-gfm": "^4.0.1",
-    "remark-html": "^16.0.1"
+    "remark-html": "^16.0.1",
+    "webgl-fluid": "^0.4.0"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.0",

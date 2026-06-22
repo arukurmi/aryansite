@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react'
 import Button from '../ui/Button'
 import TechBadge from '../ui/TechBadge'
+import FluidBackground from '../ui/FluidBackground'
 
 export default function HeroSection() {
   const [isLoaded, setIsLoaded] = useState(false)
   const [currentText, setCurrentText] = useState('')
+  const [isFluidMode, setIsFluidMode] = useState(false)
   const fullText = "Hi! I'm Aryansh Kurmi"
 
   useEffect(() => {
@@ -26,10 +28,12 @@ export default function HeroSection() {
   const techStack = ['TypeScript', 'Node.js', 'AI Agents', 'LLMs', 'MCP', 'PostgreSQL', 'Docker']
 
   return (
-    <section className="min-h-screen flex items-center justify-center relative">
-      <div className="container mx-auto px-4 py-16">
-        <div className="text-center">
-          {/* Hero Content */}
+    <>
+      {isFluidMode && <FluidBackground />}
+      <section className="min-h-screen flex items-center justify-center relative z-10">
+        <div className="container mx-auto px-4 py-16">
+          <div className="text-center">
+            {/* Hero Content */}
           <div className={`transition-all duration-1000 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
             <h1 className="text-6xl md:text-8xl font-bold mb-6">
               <span className="gradient-text typing-animation">
@@ -79,6 +83,19 @@ export default function HeroSection() {
             </Button>
           </div>
 
+          {/* Fun Toggle Button */}
+          <div className={`mt-6 flex justify-center transition-all duration-1000 delay-1000 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+            <Button
+              variant="secondary"
+              size="md"
+              className="text-md px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white border-0 transition-all duration-300 transform hover:scale-105 shadow-lg shadow-blue-500/30"
+              onClick={() => setIsFluidMode(!isFluidMode)}
+            >
+              <i className="fas fa-palette mr-2"></i>
+              {isFluidMode ? "Go back to that boring blue" : "Are you bored with the plain blue background?"}
+            </Button>
+          </div>
+
           {/* Scroll Indicator */}
           <div className={`mt-16 transition-all duration-1000 delay-1000 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
             <div className="animate-bounce">
@@ -88,5 +105,6 @@ export default function HeroSection() {
         </div>
       </div>
     </section>
+    </>
   )
 }
