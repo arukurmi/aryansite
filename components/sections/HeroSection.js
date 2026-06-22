@@ -83,19 +83,6 @@ export default function HeroSection() {
             </Button>
           </div>
 
-          {/* Fun Toggle Button */}
-          <div className={`mt-6 flex justify-center transition-all duration-1000 delay-1000 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-            <Button
-              variant="secondary"
-              size="md"
-              className="text-md px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white border-0 transition-all duration-300 transform hover:scale-105 shadow-lg shadow-blue-500/30"
-              onClick={() => setIsFluidMode(!isFluidMode)}
-            >
-              <i className="fas fa-palette mr-2"></i>
-              {isFluidMode ? "Go back to that boring blue" : "Are you bored with the plain blue background?"}
-            </Button>
-          </div>
-
           {/* Scroll Indicator */}
           <div className={`mt-16 transition-all duration-1000 delay-1000 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
             <div className="animate-bounce">
@@ -105,6 +92,17 @@ export default function HeroSection() {
         </div>
       </div>
     </section>
+
+    {/* Subtle Floating Toggle Button */}
+    <div className={`fixed bottom-6 right-6 z-50 transition-all duration-1000 delay-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
+      <button
+        className="text-xs md:text-sm px-4 py-2 bg-dark-800/40 hover:bg-dark-700/60 backdrop-blur-md text-gray-400 hover:text-white rounded-full border border-dark-600/50 shadow-lg transition-all duration-300 flex items-center group"
+        onClick={() => setIsFluidMode(!isFluidMode)}
+      >
+        <i className={`fas fa-palette mr-2 ${isFluidMode ? 'text-primary-400' : 'text-gray-500 group-hover:text-primary-400'} transition-colors`}></i>
+        {isFluidMode ? "Go back to the plain background" : "Bored with the plain background?"}
+      </button>
+    </div>
     </>
   )
 }
