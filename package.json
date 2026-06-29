@@ -4,10 +4,10 @@
   "description": "Aryansh Kurmi's developer portfolio with blog",
   "private": true,
   "scripts": {
-    "predev": "lsof -ti tcp:3000 | xargs kill -9 2>/dev/null || true",
-    "dev": "next dev",
+    "predev": "PORT=$(grep '^PORT=' .env 2>/dev/null | cut -d= -f2) && lsof -ti tcp:${PORT:-3000} | xargs kill -9 2>/dev/null || true",
+    "dev": "dotenv -e .env -- sh -c 'next dev -p ${PORT:-3000}'",
     "build": "next build",
-    "start": "next start",
+    "start": "dotenv -e .env -- sh -c 'next start -p ${PORT:-3000}'",
     "lint": "next lint",
     "export": "next export"
   },
@@ -16,6 +16,7 @@
     "@mdx-js/loader": "^3.0.0",
     "@mdx-js/react": "^3.0.0",
     "@next/mdx": "^14.0.0",
+    "@supabase/supabase-js": "^2.108.2",
     "@tailwindcss/forms": "^0.5.10",
     "@tailwindcss/typography": "^0.5.19",
     "@vercel/analytics": "^2.0.1",
@@ -30,10 +31,12 @@
     "remark": "^15.0.1",
     "remark-gfm": "^4.0.1",
     "remark-html": "^16.0.1",
+    "resend": "^6.16.0",
     "webgl-fluid": "^0.4.0"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.0",
+    "dotenv-cli": "^11.0.0",
     "eslint": "^8.0.0",
     "eslint-config-next": "^14.0.0",
     "postcss": "^8.4.0",

@@ -221,6 +221,7 @@ export default function ContactSection() {
                       <option value="consulting">Consulting</option>
                       <option value="speaking">Speaking Engagement</option>
                       <option value="question">General Question</option>
+                      <option value="feature-request">Feature Request</option>
                       <option value="other">Other</option>
                     </select>
                   </div>
