@@ -8,15 +8,15 @@ export default function ExperienceSection() {
       role: "Software Development Engineer",
       duration: "Aug 2024 - Present · Bangalore",
       description: "Working in the Payments Pod and on GoKwik's MCP, building reliable infra, secure protocols, and data-accurate systems at scale.",
-      tech: ["NestJS", "PostgreSQL", "Metabase", "AWS", "Kafka"],
+      tech: ["NestJS", "Go", "PostgreSQL", "RabbitMQ", "AWS"],
       highlights: [
-        "Shipped end-to-end split settlements infra, reducing Account Receivables (AR) delays from 30+ days to < 5 days.",
-        "Revamped settlement data ingestion infra, cutting daily ingestion time by ~94% across 10,000+ merchants.",
-        "Delivered 99.99% accurate settlement data via batch optimizations and safe error retries, reducing operational overhead by 70%.",
-        "Improved automated reconciliation pipeline accuracy from ~70% to 99%, fixing critical gaps in anomaly detection.",
-        "Owned end-to-end MCP server build with context routing, OAuth-secured flows, and structured protocol handling.",
-        "Delivered MCP documentation and tooling for easy setup in both local and remote modes for internal teams and merchants.",
-        "Mentored 2 engineers and led org-wide knowledge transfer sessions on MCP architecture."
+        "Own the settlements (payout) engine end-to-end — an idempotent, retry-safe ingestion pipeline with row-level fault isolation, sustaining 99.99% data correctness across all payouts.",
+        "Pioneered Pay-After-Delivery, a new event-driven checkout method over RabbitMQ (NPCI + Plada) with delivery-triggered one-time-mandate auto-debit; shipped in ~3 days vs a ~10-day estimate via agentic workflows; extensible for a recurring Subscribe-and-Save model.",
+        "Lead payments on-call through our Black Friday sale — auto-scaled payment microservices to ~3,000 QPS peak and 6M+ transactions across 10,000+ merchants (vs ~2M+ baseline) at zero downtime.",
+        "Built and hosted GoKwik's MCP server (context routing, OAuth-secured flows, structured protocol handling) plus a mock GoKwik MCP for team enablement.",
+        "Hardened 17 NestJS/Node payment microservices with circuit-breaker and graceful-shutdown patterns; optimized the Jenkins CI pipeline for a 96% build-time reduction.",
+        "Built a Go + AWS SQS/Lambda self-serve bulk-upload platform — removed ~2,000 manual merchant updates per month and saved BizOps ~40 hours/week.",
+        "Drove agentic-coding adoption across the pod (Claude Code/CLI, sub-agents, Greptile, Codex); lifted settlement test coverage 16%→100% with test-generation agents; mentored engineers and led Sev-1/2 RCAs (60+ critical, 200+ minor)."
       ]
     },
     {
@@ -28,7 +28,7 @@ export default function ExperienceSection() {
       highlights: [
         "Integrated faceted search into Java-based modules, enabling efficient multi-criteria filtering and faster data retrieval.",
         "Built a reporting system for the no-code platform and raised test coverage to 98% on the core repo using JUnit.",
-        "Migrated the search persistence layer to TiDB, improving performance by 20% and saving $100K in annual platform fees."
+        "Migrated the search persistence layer to TiDB, improving performance by 20% and saving $40K in annual platform fees."
       ]
     },
     {
