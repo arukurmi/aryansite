@@ -244,6 +244,18 @@ export const projects = [
         src: '/proof/smart-triage-hub.png',
         alt: 'Smart Triage Hub sign-in',
       },
+      {
+        src: '/proof/smart-triage-hub-1.png',
+        alt: 'Smart Triage Hub View your Pull Requests',
+      },
+      {
+        src: '/proof/smart-triage-hub-2.png',
+        alt: 'Smart Triage Hub Dashboard',
+      },
+      {
+        src: '/proof/smart-triage-hub-3.png',
+        alt: 'Smart Triage Hub AI Triage',
+      },
     ],
     links: {
       live: 'https://smart-triage-hub.vercel.app/',
