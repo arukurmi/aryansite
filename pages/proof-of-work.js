@@ -41,7 +41,7 @@ export default function ProofOfWork() {
             <p className="text-gray-400 mb-8">
               Measurable outcomes I owned, one metric at a time.
             </p>
-            <div className="grid lg:grid-cols-2 gap-8 items-start">
+            <div className="grid lg:grid-cols-2 gap-8">
               {companies.map((company) => (
                 <CompanyProofCard key={company.id} company={company} />
               ))}
@@ -55,7 +55,7 @@ export default function ProofOfWork() {
             <p className="text-gray-400 mb-8">
               Shipped and verifiable — screenshots and live deployments.
             </p>
-            <div className="grid md:grid-cols-2 gap-8 items-start">
+            <div className="grid md:grid-cols-2 gap-8">
               {projects.map((project) => (
                 <ProjectProofCard key={project.id} project={project} />
               ))}

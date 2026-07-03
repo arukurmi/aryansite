@@ -8,7 +8,7 @@ export default function ProjectProofCard({ project }) {
   const shots = project.screenshots
 
   return (
-    <Card hover={false} className="flex flex-col">
+    <Card hover={false} className="flex flex-col h-full">
       <CardHeader>
         <CardTitle className="text-primary-400">{project.name}</CardTitle>
         <p className="text-white font-semibold">{project.tagline}</p>
