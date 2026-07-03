@@ -14,7 +14,8 @@
   body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
       'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    /* night sky */
+    background: linear-gradient(180deg, #0a1124 0%, #0f1b3a 60%, #16244d 100%);
     min-height: 100vh;
     transition: background-color 0.3s ease, color 0.3s ease;
   }
@@ -513,7 +514,8 @@ pre code {
    Light theme — white + blue + slate ink (see palette vars above)
    ============================================================ */
 .light body {
-  background: linear-gradient(135deg, var(--lt-white) 0%, var(--lt-page) 100%);
+  /* day sky */
+  background: linear-gradient(180deg, #8ecdf5 0%, #c6e6fa 55%, #eaf6ff 100%);
   color: var(--lt-ink);
 }
 
@@ -767,4 +769,129 @@ pre code {
   height: 100%;
   max-width: 3.5em;
   max-height: 2.5em;
+}
+
+/* ============================================================
+   Sky World — night/day backdrop (SkyBackground.js)
+   ============================================================ */
+.sky {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.sky-night,
+.sky-day {
+  position: absolute;
+  inset: 0;
+  transition: opacity 0.6s ease;
+}
+
+.sky-night { opacity: 1; }
+.sky-day { opacity: 0; }
+.light .sky-night { opacity: 0; }
+.light .sky-day { opacity: 1; }
+
+.sky-star {
+  position: absolute;
+  border-radius: 9999px;
+  background: #dbeafe;
+  opacity: 0.7;
+  animation: sky-twinkle 4s ease-in-out infinite;
+}
+
+@keyframes sky-twinkle {
+  0%, 100% { opacity: 0.15; }
+  50% { opacity: 0.85; }
+}
+
+.sky-moon {
+  position: absolute;
+  top: 8%;
+  right: 10%;
+  width: 90px;
+  height: 90px;
+  border-radius: 9999px;
+  background: radial-gradient(circle at 38% 38%, #f1f5f9 0%, #cbd5e1 55%, #94a3b8 100%);
+  box-shadow: 0 0 60px 18px rgba(203, 213, 225, 0.18);
+  opacity: 0.9;
+}
+
+.sky-sun {
+  position: absolute;
+  top: 2%;
+  left: 3%;
+  width: 300px;
+  height: 300px;
+  border-radius: 9999px;
+  /* pure gradient falloff — a box-shadow here rings against the sky gradient */
+  background: radial-gradient(
+    circle,
+    #fff9dd 0%,
+    #ffefad 16%,
+    rgba(255, 238, 173, 0.5) 32%,
+    rgba(255, 240, 180, 0.18) 48%,
+    rgba(255, 240, 180, 0) 68%
+  );
+}
+
+.sky-cloud {
+  position: absolute;
+  left: 0;
+  transform: translateX(-260px) scale(var(--cloud-scale, 1));
+  animation: sky-drift linear infinite;
+  will-change: transform;
+}
+
+@keyframes sky-drift {
+  from { transform: translateX(-260px) scale(var(--cloud-scale, 1)); }
+  to { transform: translateX(calc(100vw + 260px)) scale(var(--cloud-scale, 1)); }
+}
+
+/* night clouds: faint moonlit gray wisps */
+.sky-cloud g { fill: #94a3b8; }
+.sky-cloud-l1 { opacity: 0.05; filter: blur(6px); }
+.sky-cloud-l2 { opacity: 0.08; filter: blur(4px); }
+.sky-cloud-l3 { opacity: 0.1; filter: blur(3px); }
+
+/* day clouds: soft white */
+.light .sky-cloud g { fill: #ffffff; }
+.light .sky-cloud-l1 { opacity: 0.55; filter: blur(5px); }
+.light .sky-cloud-l2 { opacity: 0.75; filter: blur(3px); }
+.light .sky-cloud-l3 { opacity: 0.9; filter: blur(2px); }
+
+@media (prefers-reduced-motion: reduce) {
+  .sky-cloud { animation: none; transform: translateX(20vw) scale(var(--cloud-scale, 1)); }
+  .sky-star { animation: none; opacity: 0.5; }
+}
+
+/* ============================================================
+   Proof-of-work charts — theme-aware colors + bar animation
+   ============================================================ */
+.chart-value { fill: #60a5fa; }
+.chart-muted-label { fill: #94a3b8; }
+.chart-faint-label { fill: #64748b; }
+.chart-bar-before { fill: #475569; }
+.chart-axis { stroke: #334155; }
+
+.light .chart-value { fill: #2563eb; }
+.light .chart-muted-label { fill: #475569; }
+.light .chart-faint-label { fill: #64748b; }
+.light .chart-bar-before { fill: #cbd5e1; }
+.light .chart-axis { stroke: #cbd5e1; }
+
+.chart-bar {
+  transform-box: fill-box;
+  transform-origin: center bottom;
+  animation: chart-bar-grow 0.9s ease-out backwards;
+}
+
+@keyframes chart-bar-grow {
+  from { transform: scaleY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chart-bar { animation: none; }
 }

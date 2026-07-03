@@ -11,7 +11,10 @@ const nextConfig = {
     return config;
   },
   images: {
-    domains: ['img.shields.io'],
+    remotePatterns: [
+      { protocol: 'https', hostname: 'img.shields.io' },
+      { protocol: 'https', hostname: 'raw.githubusercontent.com', pathname: '/arukurmi/**' },
+    ],
   },
   async headers() {
     return [
