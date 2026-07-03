@@ -206,6 +206,37 @@ export const companies = [
 
 export const projects = [
   {
+    id: 'northstar-nomad',
+    name: 'Northstar Nomad',
+    tagline: 'Weather-aware travel calendar for free weekends',
+    proofPoints: [
+      'A calendar that auto-detects weekends and Indian long weekends, then fills each with the best flight/bike/bus trip — scored by 12-month weather profiles, trip length, and road distance from the chosen home city.',
+      'Date-range planning, budget/vibe filters, BookMyShow-style city picker with geolocation, and in-house auth (bcrypt + JWT) with per-user trip plans and post-trip check-ins.',
+      'Built agentically in 34 phases — spec, plan, and one clean git commit per phase.',
+    ],
+    screenshots: [
+      {
+        src: '/proof/northstar-landing.png',
+        alt: 'Northstar Nomad animated night-sky landing page',
+      },
+      {
+        src: '/proof/northstar-calendar.png',
+        alt: 'Northstar Nomad calendar with glowing weekends and trip teasers',
+      },
+      {
+        src: '/proof/northstar-cta.png',
+        alt: 'Northstar Nomad destination detail with plan-this-trip CTA',
+      },
+      {
+        src: '/proof/northstar-profile.png',
+        alt: 'Northstar Nomad profile with planned trips',
+      },
+    ],
+    links: {
+      github: 'https://github.com/arukurmi/NorthStar-Nomad',
+    },
+  },
+  {
     id: 'log-zilla',
     name: 'Log Zilla',
     tagline: 'Self-hosted real-time log observability',
