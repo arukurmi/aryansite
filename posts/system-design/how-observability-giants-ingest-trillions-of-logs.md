@@ -238,7 +238,7 @@ If you retain one screenful from this post, make it this — it's the answer to 
 
 What strikes me most, having read all three companies' engineering write-ups back to back, is the *convergence*. Three companies, three eras, three different products — errors, metrics, logs — and they all arrived at the same machine: push agents, a durable log, columnar files on cheap storage, a transactional metadata brain, and massively parallel reads. When independent teams under different constraints converge on one shape, that shape is telling you something true about the physics of the problem.
 
-That convergence is also why this architecture is so learnable — and so buildable. The pattern scales *down* as well as it scales up: swap Kafka for a lightweight forwarder, ClickHouse for SQLite, the scatter-gather fleet for a single query endpoint, and the same skeleton becomes something one person can build in a week. Which is exactly what I did next — that story is its own post.
+That convergence is also why this architecture is so learnable — and so buildable. The pattern scales *down* as well as it scales up: swap Kafka for a lightweight forwarder, ClickHouse for SQLite, the scatter-gather fleet for a single query endpoint, and the same skeleton becomes something one person can build in a week. Which is exactly what I did next — that story is its own post: [Log-zilla, built with Claude agents](/blog/building-log-zilla-with-claude-agents).
 
 ## Sources and further reading
 
