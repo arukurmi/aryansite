@@ -72,3 +72,42 @@ Walk through it left to right:
 **Stream processors.** Consumers pull batches off Kafka and do the real work: parse the raw log line, extract structured fields, enrich with metadata (which host, which service, which customer tier), apply the customer's pipelines and exclusion filters, and write to storage **in large batches** — because every storage engine in this space loves big sequential writes and hates tiny random ones.
 
 **Columnar storage and the query engine.** Where the magic lives, and where the three platforms differ most. That's the next three sections.
+
+## Datadog: Husky and the exactly-once trick
+
+Datadog has publicly documented three generations of its event store, and the current one — **Husky** — is the most instructive architecture in this whole space.
+
+The first generation was per-customer ElasticSearch-style clusters. It worked until multi-tenancy killed it: one noisy customer could degrade a whole cluster, and rebalancing tenants across clusters became a full-time operational nightmare. The second generation improved isolation but still coupled compute and storage — to store more you had to buy more query capacity, and vice versa.
+
+Husky, the third generation, makes the move that defines modern data infrastructure: **it separates storage from compute completely**. The design has three independent planes:
+
+```
+                     ┌────────────────────────┐
+        Kafka ──────▶│  Writers (ingestion)   │──┐
+                     └────────────────────────┘  │ write immutable
+                                                 │ columnar fragments
+                     ┌────────────────────────┐  ▼
+                     │  Compactors            │ ┌──────────────────┐
+                     │  (merge small files    │◀│  Blob storage    │
+                     │   into big ones)       │▶│  (S3-style)      │
+                     └────────────────────────┘ └──────────────────┘
+                                                 ▲
+                     ┌────────────────────────┐  │ read fragments
+                     │  Readers (query)       │──┘
+                     └────────────────────────┘
+                              │
+                     all three coordinate through
+                     ┌────────────────────────┐
+                     │  FoundationDB          │
+                     │  (transactional        │
+                     │   metadata store)      │
+                     └────────────────────────┘
+```
+
+**Writers** consume from Kafka and write small immutable columnar files to cheap blob storage. **Compactors** continuously merge those small files into larger, better-compressed, better-sorted ones (the same LSM-tree idea that powers RocksDB and Cassandra, but with S3 as the disk). **Readers** serve queries by fetching only the column fragments a query needs. Each plane scales independently: an ingest spike scales writers without touching query capacity; a heavy dashboard day scales readers without touching ingest.
+
+The glue is **FoundationDB**, a strictly-serializable transactional key-value store, which holds the *metadata*: which files exist, what time range and tenant each covers, which files replaced which after compaction. The actual data — the trillions of events — lives in blob storage, dumb and cheap. The metadata — small but requiring real transactions — lives in FoundationDB. This split (transactional brain, object-store body) is quietly becoming the standard shape of every modern data platform; you can see the same idea in Snowflake and in Apache Iceberg.
+
+FoundationDB also enables Husky's neatest trick: **exactly-once ingestion without stateful writers**. Events are routed deterministically — a given event's tenant ID and timestamp always land on the same Kafka partition — and the file-commit into FoundationDB is transactional. If a writer crashes and its work is retried, the second attempt's commit is deduplicated at the metadata layer. Customers never see duplicate log lines, yet no writer holds fragile local state. When an interviewer asks "how would you achieve exactly-once delivery?", *deterministic routing plus idempotent transactional commit* is the grown-up answer, and Husky is the reference implementation.
+
+The result, per Datadog's engineering blog: a query engine with real-time access to something on the order of **100 trillion events**.
