@@ -169,3 +169,28 @@ Sentry's workload is slightly different — errors and crash reports rather than
 **Snuba + ClickHouse** is the storage brain. Snuba is Sentry's query service sitting in front of **ClickHouse**, the open-source columnar database originally built at Yandex to power web-analytics at billions-of-rows scale. ClickHouse is the star: it compresses repetitive event data brutally well, scans hundreds of millions of rows per second per core, and — critically — *wants* big batched inserts. Snuba's consumers oblige, batching events off Kafka and committing offsets only after a batch lands in ClickHouse, giving **at-least-once** delivery into an idempotent store.
 
 If Husky is "what you build with 100 engineers and infinite scale requirements," Snuba-on-ClickHouse is "what you build with 10 engineers and excellent taste." For most companies designing a log platform in an interview, the ClickHouse-shaped answer is the right one.
+
+## Why columnar? The one idea that explains everything
+
+All three platforms converged on columnar storage, and it's worth understanding *why* deeply, because it's the single highest-leverage idea in this whole domain.
+
+A row store (Postgres, MySQL) lays out data record by record: all fields of log #1, then all fields of log #2. A column store lays out data field by field: *all* the timestamps together, *all* the service names together, *all* the messages together. Two enormous wins follow:
+
+**Compression becomes ridiculous.** A column of service names is `checkout, checkout, checkout, payments, checkout...` — the same few strings repeated millions of times. Dictionary-encode it and each value costs a couple of bits. Timestamps are near-sequential, so delta encoding stores tiny differences instead of full values. Real-world observability data routinely compresses **10–40x** in columnar form. At trillions of events, compression ratio isn't a nice-to-have — it *is* the cost model. Every point of compression is millions of dollars of storage.
+
+**Queries read only what they touch.** `count of ERROR logs by service over the last hour` needs three columns: timestamp, level, service. In a row store you'd drag every log's full payload — the big message string, all the metadata — through the disk and page cache just to look at three fields. A column store reads three thin, pre-compressed strips and skips everything else. Combine that with time-partitioning (data physically organized by hour/day, so a one-hour query touches one partition and ignores a petabyte of history) and min/max metadata per file block (skip any block whose range can't match), and "scan a trillion events" becomes "actually read a few gigabytes."
+
+The trade-off is exactly the observability workload's shape: columnar stores are terrible at point updates and single-row reads — and we never do either. Immutable, append-only, analytical: the workload and the storage format are a perfect marriage. This is why ClickHouse, Husky's fragments, and NRDB's storage are all variations on the same layout.
+
+## Consistency: what these systems actually promise
+
+Here's a question that separates people who have thought about this from people who haven't: **is Datadog strongly consistent?**
+
+The answer is no — and it shouldn't be. Every platform in this space chooses **eventual consistency on the read path with durable-once semantics on the write path**, and the reasoning is worth being able to articulate:
+
+- **Durability is non-negotiable; visibility is negotiable.** Once the intake gateway acks your agent, the event will not be lost — it's replicated in Kafka. But there is a window (typically single-digit seconds) before it's queryable, while it moves through processing into storage. Customers tolerate a 5-second indexing delay; they do not tolerate lost logs.
+- **Read-after-write per tenant doesn't matter here.** In your banking app, if you write then read, you must see your write. But nobody writes a log line and then instantly queries for that exact line; the "writer" (a server) and the "reader" (a human) are different actors on different timescales. Observability can relax the constraint that costs normal databases the most.
+- **Delivery is at-least-once, made safe by idempotency or dedup.** Kafka consumers process in batches and retry on failure, so the same event may be processed twice. Sentry handles this with at-least-once into ClickHouse; Husky upgrades it to effectively exactly-once via deterministic routing plus transactional metadata commits. Either way, the *customer-visible* guarantee is "every event appears, once."
+- **The one place strong consistency is required: metadata.** Which storage files are live, tenant configuration, API keys, quota state — this is where Husky uses FoundationDB's strict serializability and Sentry uses Postgres. The pattern to remember: **eventually consistent data plane, strongly consistent control plane.** Almost every large system decomposes this way.
+
+In CAP terms: for the ingest path these systems choose availability — intake keeps accepting bytes even when downstream is degraded, because refusing a customer's logs during *their* incident is the worst possible failure. The backlog drains later; freshness degrades before durability does.
