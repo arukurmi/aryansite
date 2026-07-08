@@ -194,3 +194,29 @@ The answer is no — and it shouldn't be. Every platform in this space chooses *
 - **The one place strong consistency is required: metadata.** Which storage files are live, tenant configuration, API keys, quota state — this is where Husky uses FoundationDB's strict serializability and Sentry uses Postgres. The pattern to remember: **eventually consistent data plane, strongly consistent control plane.** Almost every large system decomposes this way.
 
 In CAP terms: for the ingest path these systems choose availability — intake keeps accepting bytes even when downstream is degraded, because refusing a customer's logs during *their* incident is the worst possible failure. The backlog drains later; freshness degrades before durability does.
+
+## The numbers: throughput, latency, and where the money goes
+
+System design without numbers is vibes. Here are the ones that matter, and how to reason about them.
+
+**API hit rates.** Agents batch aggressively — a Datadog agent flushes every ~10 seconds, an SDK buffers events — so "trillions of events per day" does *not* mean trillions of HTTP requests. A million monitored hosts flushing batched payloads every 10 seconds is on the order of **100,000 intake requests/second**, each carrying hundreds or thousands of events, compressed. That's a big number but a *tractable* one: a stateless gateway fleet behind a load balancer handles it comfortably. The lesson generalizes: **batching at the edge is what converts an impossible request rate into a manageable one.** If your design has every event as its own HTTP request, you've already lost.
+
+**Latency budgets.** Three different latencies matter, and conflating them is a classic interview mistake:
+
+| Path | Target | Why |
+|---|---|---|
+| Intake ack (agent → 202) | < 100 ms | Don't make customers' machines hold buffers |
+| Ingest-to-queryable | seconds (~5–30s) | Live debugging; alerting freshness |
+| Query (dashboard/search) | ~50 ms median, seconds at p99 | NRDB's published median is ~45 ms |
+
+Note what's *fast* and what's *allowed to be slow*: the ack is instant because it does nothing; queryability lags a few seconds because processing is async; queries are fast because storage is columnar and massively parallel. The architecture is exactly a machine for placing latency where it's cheapest.
+
+**Storage tiers, or where the money goes.** At hundreds of trillions of events, the dominant cost is storage and the dominant design activity is refusing to store things expensively:
+
+- **Hot (minutes–days):** on SSD, fully indexed or aggressively cached — the tier serving live dashboards and incident debugging.
+- **Warm (days–weeks):** compressed columnar files on object storage, queryable with a bit more latency.
+- **Cold (months–years):** compressed archives in S3/Glacier for compliance; "rehydrate" on demand — which is why Datadog's log archives make you wait minutes to query last year's logs.
+
+Datadog's pricing makes the economics visible: ingestion is priced separately from *indexing*, because storing a compressed log in blob storage costs almost nothing while making it instantly searchable costs real CPU and SSD. Their "Logging without Limits" is precisely this decoupling, productized: ingest everything, index only what you'll plausibly query, rehydrate the rest if an audit comes.
+
+**Cardinality: the silent killer.** One more number-shaped concept that interviews love: metrics platforms die not from *volume* but from **cardinality** — the count of unique label combinations. `requests_total{service="checkout"}` is one time series; add a `user_id` label with 10M users and you've created 10M series, each with its own index entry and storage stream. This is why Datadog charges per custom metric series, why Prometheus documentation begs you not to label by user ID, and why every metrics backend has cardinality-limiting machinery. Logs are more forgiving (they're not pre-indexed per combination), which is exactly why "just log it and search later" platforms and "pre-aggregate into metrics" platforms coexist: they occupy two ends of the cardinality-vs-query-speed trade-off.
