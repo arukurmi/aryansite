@@ -109,3 +109,25 @@ Around the search sit three toggle pills that control the console's *relationshi
 ![Log-zilla in light theme](https://raw.githubusercontent.com/arukurmi/Log-zilla/main/screenshots/dashboard-light.png)
 
 And yes, a proper light theme, because a log console gets stared at for hours and disagreeing with your own tool's aesthetics is a real productivity tax. The sun/moon switch lives top-right.
+
+## How Claude agents actually built it
+
+Here's the part that changed how I work: I wrote almost none of Log-zilla's code by hand. The project was built **agentically** — me as architect, product owner, and reviewer; Claude agents as the implementation team. Not one monolithic "write me a log viewer" prompt, but a structured workflow with specialized agents, the same way you'd staff a small team.
+
+**The spec came first, and the spec was mine.** The research post plus the translation table above became the working spec: components, boundaries, the data flow, what each piece owns. This is the step people skip when agentic coding goes badly. An agent given "build a log dashboard" produces a plausible-looking demo with the architecture of a hackathon project. An agent given "Fluent Bit tags and forwards; the intake endpoint only writes; SQLite is the single source of truth; the console never queries anything but the query endpoint" produces *the system you designed*. Agents amplify the clarity — or the vagueness — of what you hand them.
+
+**Work was decomposed into agent-sized phases.** The pipeline decomposes on exactly the boundaries in the diagram: the forwarding layer, the intake path, the storage layer, the query DSL, the live-tail wiring, the console UI, the Docker packaging, the CLI scripts. Each phase went to an agent as a self-contained brief — what to build, what it's allowed to touch, what "done" means — and ended in its own clean commit. Small phases matter for the same reason small PRs matter, plus one more: an agent, like a new team member, does dramatically better work when the task fits in its head all at once.
+
+**A planning agent went first, and review agents went last.** Before implementation, a planner agent turned each brief into a concrete plan — files, interfaces, edge cases — which I sanity-checked before any building started. Catching a wrong assumption at the plan stage costs one paragraph of correction; catching it after is a rewrite. After implementation, separate review agents — ones that had no stake in the code just written — went over each phase for correctness and design smells, and a fresh pair of agent eyes reliably caught things the implementing agent was blind to. If that sounds like plan review and code review from ordinary engineering — that's the point. The rituals survive; the teammates changed.
+
+**My job was the judgment calls.** Every trade-off in this post — SQLite over a "cooler" store, Fluent Bit over hand-rolling, the DSL staying tiny, working-directory service names — was a decision I made and the agents executed. The agents were consistently excellent at the how and consistently indifferent to the should. That division of labor is, I think, the actual shape of this new way of building: the human owns the constraints and the taste; the agents own the typing.
+
+The punchline is the ratio. Log-zilla — forwarder integration, storage, a query language, a real-time console, theming, Docker packaging, install scripts, documentation — was built in **days, not weeks**, as an evenings-and-weekend project. The bottleneck was never code generation; it was me deciding what I wanted clearly enough to brief it.
+
+## What I'd tell you to steal
+
+- **Study a giant, then shrink it.** "Read how Datadog works, build the laptop version" taught me more about observability than either the reading or the building would have alone. The translation table — big thing → small thing → *why the swap is safe* — is where the learning lives. Steal the format for any domain.
+- **Constraints are the deliverable.** In agentic development, the highest-leverage artifacts are the spec, the phase boundaries, and the definition of done. Get those right and the code almost writes itself — literally, these days.
+- **Keep the boring rituals.** Plan before building, review after, one concern per phase, one clean commit per phase. Agents don't make engineering discipline obsolete; they make it the *only* part left that's genuinely yours.
+
+Log-zilla is open source — code, Docker setup, and the quick-start script are on [GitHub](https://github.com/arukurmi/Log-zilla). Run `logzilla npm start` on your messiest multi-service project and let the kaiju eat.
