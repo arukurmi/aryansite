@@ -83,3 +83,29 @@ A few design decisions worth narrating:
 **History is a feature, not an afterthought.** The single biggest ergonomic win over terminal scrollback: the SQLite file lives on a Docker volume, so logs survive restarts of the server *and* of the services being watched. This morning's stack trace is still there after lunch. There's a Purge control for deleting by source and age — because on a laptop, *you* are also the retention policy. (That's the storage-tiering section of the big post, collapsed to one button.)
 
 **Everything ships as one container.** `docker run`, mount a volume, done. The quick-start script builds the image, starts the server, installs the CLI, and prints usage — the whole platform is one process plus one file.
+
+## The console and the query DSL
+
+Storage is table stakes; the console is the product. The bar I set: finding a log line in Log-zilla should feel closer to Datadog's log explorer than to `grep`.
+
+![Event inspector with one-click filters](https://raw.githubusercontent.com/arukurmi/Log-zilla/main/screenshots/log-details.png)
+
+Click any event and an inspector opens with the structured view — every attribute copyable, and every attribute convertible into a filter with one click. That one interaction is quietly the most Datadog-like thing in the project: you never *type* your first filter, you *click* your way into it from a concrete example, then refine.
+
+Refinement happens in a small query DSL:
+
+| Query | Matches |
+|---|---|
+| `key:"value"` | field equals value |
+| `key:*value*` | field contains value |
+| `-key:value` | field does **not** equal value |
+| `"text"` | any field contains text |
+| `"a" "b"` | both terms, in any fields |
+
+Designing this was a lesson in restraint. The first instinct is to expose something SQL-shaped — powerful, and utterly wrong for the debugging loop, where you're iterating on a filter every few seconds while half your brain holds the actual bug. Key-value pairs, wildcards, and negation cover essentially every real query I make against local logs. It's a deliberately tiny subset of Datadog's search syntax — and the muscle memory transfers in both directions.
+
+Around the search sit three toggle pills that control the console's *relationship with time*: **live** (auto-refresh as events arrive), **follow** (pin the scroll to the newest line), and **pulse** (the activity graph across the top). The activity graph earns its pixels: a spike in the error band is visible peripherally before you've read a single line — the same "aggregate first, drill down second" pattern that makes real observability dashboards work.
+
+![Log-zilla in light theme](https://raw.githubusercontent.com/arukurmi/Log-zilla/main/screenshots/dashboard-light.png)
+
+And yes, a proper light theme, because a log console gets stared at for hours and disagreeing with your own tool's aesthetics is a real productivity tax. The sun/moon switch lives top-right.
