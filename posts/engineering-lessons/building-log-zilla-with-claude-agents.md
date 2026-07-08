@@ -47,3 +47,39 @@ Two of these rows deserve a defense, because both look like sacrilege.
 **SQLite instead of a columnar store.** The research post argues columnar is *the* idea — so why row-oriented SQLite? Because the property that makes columnar essential at Datadog's scale (compression and scan cost across trillions of rows) doesn't bind at a few million rows, while the properties SQLite gives me for free — zero operations, a single file I can back up with `cp`, history that survives restarts, real indexes — are exactly what localhost needs. The deeper lesson from the giants was never "use columnar"; it was **append-only, immutable, time-partitioned, indexed on what you filter by**. SQLite does all of that. Architecture is about knowing which constraint produced each decision, so you know which decisions to drop when the constraint disappears.
 
 **Fluent Bit instead of a hand-rolled tailer.** I could have written a hundred-line script that reads stdout and POSTs it. But the agent is the part of the pipeline with the nastiest edge cases — partial lines, multiline stack traces, timestamp formats, backpressure when the server is down — and it's precisely the part the industry has already solved. Fluent Bit is what actual production fleets run at the edge. Using it meant the "agent" box in my diagram had production-grade batching, retry, and buffering on day one, for free — the same reason the giants' agents batch and buffer before pushing.
+
+## The pipeline, end to end
+
+Here's the whole machine. If you've read the big-platform post, this diagram should feel like déjà vu — it's the universal pipeline with every box shrunk:
+
+```
+  YOUR TERMINAL                              LOG-ZILLA (Docker, port 5454)
+                                             ┌──────────────────────────────┐
+  logzilla npm start          batched HTTP   │  ┌────────┐    ┌───────────┐ │
+  go run . | logzilla   ────────────────────▶│  │ Intake │───▶│  SQLite   │ │
+        │                                    │  └───┬────┘    │ (volume,  │ │
+        ▼                                    │      │         │  survives │ │
+  ┌────────────┐                             │      │         │ restarts) │ │
+  │ Fluent Bit │  parse, tag source &        │      ▼         └─────┬─────┘ │
+  │ (embedded) │  severity, buffer, retry    │  ┌────────┐          │       │
+  └────────────┘  (Lua processors)           │  │Socket.io│     ┌───▼─────┐ │
+                                             │  └───┬────┘     │  Query   │ │
+                                             │      │          │  DSL     │ │
+                                             │      ▼          └───┬─────┘ │
+                                             │  ┌──────────────────▼─────┐ │
+                                             │  │  React console: live    │ │
+                                             │  │  tail, search, filters, │ │
+                                             │  │  activity graph, themes │ │
+                                             │  └────────────────────────┘ │
+                                             └──────────────────────────────┘
+```
+
+A few design decisions worth narrating:
+
+**Service identity comes from the working directory.** Datadog's agent tags every event with host and service metadata so the platform can tell tenants and services apart. Log-zilla's equivalent: run `logzilla npm start` inside `payments-service/` and every line is tagged `payments-service` — zero configuration, and the console auto-discovers a new stream the moment a new service starts talking. The best config is the config you never write.
+
+**The write path never blocks the read path.** Straight from the giants' playbook: the intake path acks fast and stays decoupled from the UI. Events land in SQLite in batches; Socket.io fans them out to any open console. If no browser is open, nothing is wasted; if three are open, they all stay live. My "ingest-to-queryable" latency is well under a second — which feels magical until you remember I have exactly one tenant and the "queue" is a function call.
+
+**History is a feature, not an afterthought.** The single biggest ergonomic win over terminal scrollback: the SQLite file lives on a Docker volume, so logs survive restarts of the server *and* of the services being watched. This morning's stack trace is still there after lunch. There's a Purge control for deleting by source and age — because on a laptop, *you* are also the retention policy. (That's the storage-tiering section of the big post, collapsed to one button.)
+
+**Everything ships as one container.** `docker run`, mount a volume, done. The quick-start script builds the image, starts the server, installs the CLI, and prints usage — the whole platform is one process plus one file.
