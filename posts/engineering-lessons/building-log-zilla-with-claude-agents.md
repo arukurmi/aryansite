@@ -18,3 +18,11 @@ This post is me cashing that claim. Meet **Log-zilla** — the kaiju that eats y
 Prefix any command with `logzilla` — or pipe anything into it — and every service on your machine streams into one searchable console at `localhost:5454`. Structured search, severity filters, a live activity graph, history that survives restarts. It is, deliberately, a Datadog-shaped machine at 1/1,000,000th the scale.
 
 The other half of the story is *how* it got built: I wrote almost none of the code by hand. I acted as the architect and reviewer, and a team of Claude agents did the building. More on that below.
+
+## The itch
+
+My normal working state is four or five terminal tabs, each running a service — an API, a worker, a frontend dev server, maybe a database container chattering to itself. When something breaks, the evidence is *somewhere* in those tabs. Usually it scrolled past twenty minutes ago. Usually in the tab I wasn't watching. Terminal scrollback is the worst observability tool ever shipped, and every developer uses it daily.
+
+The tools that fix this properly — Datadog, New Relic — are built for production fleets, priced for companies, and absurd overkill for `localhost`. The lightweight end of the spectrum (`docker logs`, `tail -f`, piping through `grep`) has no history, no structure, no cross-service view. There's a gap in the middle: **production-grade log ergonomics, laptop-grade footprint**. That gap is exactly the size of a side project.
+
+And I had just spent weeks studying how the giants do it. The research post wasn't meant as homework for a build, but halfway through writing it I realized I had accidentally produced a spec. Every box in the "universal pipeline" diagram — agent, gateway, buffer, processor, columnar store, query engine — has a laptop-sized equivalent. The design work was already done; the giants had done it for me. I just had to choose the right small thing for each big thing.
