@@ -220,3 +220,32 @@ Note what's *fast* and what's *allowed to be slow*: the ack is instant because i
 Datadog's pricing makes the economics visible: ingestion is priced separately from *indexing*, because storing a compressed log in blob storage costs almost nothing while making it instantly searchable costs real CPU and SSD. Their "Logging without Limits" is precisely this decoupling, productized: ingest everything, index only what you'll plausibly query, rehydrate the rest if an audit comes.
 
 **Cardinality: the silent killer.** One more number-shaped concept that interviews love: metrics platforms die not from *volume* but from **cardinality** — the count of unique label combinations. `requests_total{service="checkout"}` is one time series; add a `user_id` label with 10M users and you've created 10M series, each with its own index entry and storage stream. This is why Datadog charges per custom metric series, why Prometheus documentation begs you not to label by user ID, and why every metrics backend has cardinality-limiting machinery. Logs are more forgiving (they're not pre-indexed per combination), which is exactly why "just log it and search later" platforms and "pre-aggregate into metrics" platforms coexist: they occupy two ends of the cardinality-vs-query-speed trade-off.
+
+## The whiteboard summary
+
+If you retain one screenful from this post, make it this — it's the answer to "design a log analytics platform" compressed to its skeleton:
+
+1. **Push-based agents** batch, compress, and retry at the edge. Batching converts an impossible request rate into a manageable one. (Pull/scrape à la Prometheus is for inside your own network.)
+2. **A stateless intake gateway** authenticates, rate-limits per tenant, and acks the moment bytes are durably in Kafka. Nothing expensive happens synchronously.
+3. **Kafka is the shock absorber**: durability before processing, decoupling of ingest from storage, fan-out to storage + alerting + live tail. Backpressure becomes consumer lag, not dropped data.
+4. **Stream processors** parse, enrich, and write in large batches to **columnar storage**, which delivers 10–40x compression and reads only the columns a query touches. Time-partition everything.
+5. **Storage and compute separate** (Husky's writers/compactors/readers over blob storage), coordinated by a small **strongly consistent metadata store** (FoundationDB). Eventually consistent data plane, strongly consistent control plane.
+6. **Queries are scatter-gather** across hundreds of parallel workers over pruned partitions — brute-force scans over columnar data beat maintaining indexes on everything (NRDB's bet, ~45 ms median).
+7. **Guarantees:** at-least-once delivery made customer-invisible by idempotent/transactional commits; seconds of ingest-to-queryable lag; durability is sacred, immediate visibility is not.
+8. **Multi-tenancy is a fairness problem**: per-tenant quotas at every stage, and **cellular architecture** to cap the blast radius of any failure.
+9. **Tier storage by age** (SSD → object storage → archive) and decouple "ingested" from "indexed" — that's where the economics live.
+10. **Watch cardinality** on the metrics side; it, not raw volume, is what kills time-series backends.
+
+What strikes me most, having read all three companies' engineering write-ups back to back, is the *convergence*. Three companies, three eras, three different products — errors, metrics, logs — and they all arrived at the same machine: push agents, a durable log, columnar files on cheap storage, a transactional metadata brain, and massively parallel reads. When independent teams under different constraints converge on one shape, that shape is telling you something true about the physics of the problem.
+
+That convergence is also why this architecture is so learnable — and so buildable. The pattern scales *down* as well as it scales up: swap Kafka for a lightweight forwarder, ClickHouse for SQLite, the scatter-gather fleet for a single query endpoint, and the same skeleton becomes something one person can build in a week. Which is exactly what I did next — that story is its own post.
+
+## Sources and further reading
+
+- [Introducing Husky, Datadog's third-generation event store](https://www.datadoghq.com/blog/engineering/introducing-husky/) and the follow-ups on [exactly-once ingestion](https://www.datadoghq.com/blog/engineering/husky-deep-dive/), [compaction](https://www.datadoghq.com/blog/engineering/husky-storage-compaction/), and [the query engine over 100 trillion events](https://www.datadoghq.com/blog/engineering/husky-query-architecture/)
+- [How Datadog runs Kafka at trillions-of-datapoints scale](https://www.datadoghq.com/blog/engineering/streaming-platform-kafka-custom-abstractions/)
+- [NRDB: the horsepower under the hood](https://docs.newrelic.com/docs/data-apis/get-started/nrdb-horsepower-under-hood/) and [three design principles behind NRDB](https://newrelic.com/blog/nerdlog/nrdb-design-principles)
+- [New Relic's cellular architecture whitepaper](https://newrelic.com/resources/white-papers/technical-advantage-whitepaper)
+- [Sentry's self-hosted data flow](https://develop.sentry.dev/self-hosted/data-flow/) and [application architecture overview](https://develop.sentry.dev/application-architecture/overview/)
+- [Snuba architecture overview](https://getsentry.github.io/snuba/architecture/overview.html)
+- [How to get stronger consistency out of a datastore (Sentry blog)](https://blog.sentry.io/how-to-get-stronger-consistency-out-of-a-datastore/)
