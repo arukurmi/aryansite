@@ -125,3 +125,47 @@ Two ideas make NRDB interesting.
 **Cells: the blast-radius weapon.** Instead of one gigantic shared platform, New Relic partitions its entire stack into **cells** — self-contained copies of the platform, each with its own ingest, storage, and query capacity, each hosting a subset of customers. Cells are stamped out from automated profiles: extra-large cells with the beefiest hardware for the heaviest customers, hardened cells for FedRAMP/HIPAA-regulated customers. When something goes catastrophically wrong — a bad deploy, a poison-pill payload, a hardware failure — the blast radius is one cell, not the whole company's customer base. Cross-cell communication happens through controlled "enclaves" built on Kafka. Cellular architecture is having a moment across the industry (AWS has championed it for years), and "how do you limit blast radius in a multi-tenant system?" is exactly the kind of question where answering "cells, like NRDB" earns you a follow-up smile.
 
 The trade-off, and it's a real one: multi-tenancy is a *fairness* problem. One tenant's monster query, or one tenant's 50x ingest spike, must not starve neighbors. NRDB handles this with per-tenant quotas, admission control on queries, and the cell boundaries themselves as the ultimate isolation. Every multi-tenant system design eventually becomes a scheduling-and-fairness design; the storage part is comparatively easy.
+
+## Sentry: Relay, Snuba, and ClickHouse
+
+Sentry is the most instructive of the three for one simple reason: **it's open source**. You can read the actual ingestion pipeline on GitHub, and even run the whole thing on your laptop with docker-compose. If you want to *truly* understand this post, self-hosting Sentry for a weekend teaches more than any blog.
+
+Sentry's workload is slightly different — errors and crash reports rather than raw log firehoses — but the architecture rhymes perfectly:
+
+```
+  SDK (in your app)
+        │  captures exception + stack trace, breadcrumbs
+        ▼
+  ┌───────────┐   fast ack, PII scrubbing,
+  │   Relay   │   rate limiting, normalization     (Rust)
+  └─────┬─────┘
+        ▼
+     Kafka  ──────────────────────────────┐
+        │                                 │
+        ▼                                 ▼
+  ┌──────────────────┐            ┌──────────────┐
+  │ ingest consumers │            │  live feeds  │
+  │ + symbolication  │            └──────────────┘
+  │ (minified JS /   │
+  │  native frames → │
+  │  readable code)  │
+  └─────┬────────────┘
+        ▼
+     Kafka (events topic)
+        │
+        ▼
+  ┌───────────┐        ┌────────────────┐
+  │   Snuba   │──────▶ │   ClickHouse   │  columnar, batched inserts
+  └───────────┘        └────────────────┘
+        │
+        ▼
+  post-processing: issue grouping, alert rules, notifications
+```
+
+**Relay** is the intake gateway, written in Rust for throughput, and it does something the other platforms' gateways don't emphasize: **PII scrubbing at the edge**. Error events are uniquely dangerous — a stack trace can embed request bodies, passwords, tokens — so Relay normalizes and scrubs *before* anything is stored. It acks the SDK immediately and forwards to Kafka; the app being monitored never waits on Sentry's storage layer.
+
+**The processing stage is where Sentry earns its keep.** Consumers pull events from Kafka and run *symbolication*: mapping minified JavaScript back through source maps, or raw native addresses back through debug symbols, into human-readable stack traces. Then *grouping*: fingerprinting the stack trace so that ten thousand occurrences of the same bug become one issue with a counter, not ten thousand rows in your triage queue. This is a good reminder that ingestion pipelines aren't just plumbing — the transformation stage is often the product.
+
+**Snuba + ClickHouse** is the storage brain. Snuba is Sentry's query service sitting in front of **ClickHouse**, the open-source columnar database originally built at Yandex to power web-analytics at billions-of-rows scale. ClickHouse is the star: it compresses repetitive event data brutally well, scans hundreds of millions of rows per second per core, and — critically — *wants* big batched inserts. Snuba's consumers oblige, batching events off Kafka and committing offsets only after a batch lands in ClickHouse, giving **at-least-once** delivery into an idempotent store.
+
+If Husky is "what you build with 100 engineers and infinite scale requirements," Snuba-on-ClickHouse is "what you build with 10 engineers and excellent taste." For most companies designing a log platform in an interview, the ClickHouse-shaped answer is the right one.
