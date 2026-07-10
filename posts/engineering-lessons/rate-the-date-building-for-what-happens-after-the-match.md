@@ -41,3 +41,27 @@ Stack those up and you get a precise product spec:
 4. The vocabulary should be a **neutral shared framework**, not free-form accusation (love languages as protocol).
 
 Rate the Date is that spec, implemented.
+
+## What the app actually does
+
+The stack is deliberately boring — a React + TypeScript frontend (Vite), a Node/Express backend, MongoDB, Cloudinary for avatars, Gemini for generation, email for delivery. All the interesting decisions are product decisions. The flow:
+
+**1. Link with exactly one partner.** You sign up, then send a partner request to your person. It lands in their email with a single-use confirmation link — the backend stores only a SHA-256 hash of the token, with a hard expiry (an unclaimed request self-deletes via a TTL index). This is the anti-dating-app move number one: the graph has no discovery, no browsing, no stack of alternatives. One node, one edge. The entire "market" the app serves is a market of two.
+
+**2. Rate your date.** On a regular cadence you score your partner 1–10 on each of the five love languages — how loved you felt through their words, their time, their touch, their acts, their gifts — and attach an optional free-text comment: the thing you couldn't say at dinner. Submissions are cooldown-limited (the API refuses back-to-back ratings) — more on why below.
+
+**3. Pick a tone.** This is my favorite control in the app. The letter can be `cute`, `constructive`, `serious`, `happy`, or `sad` — and the sender chooses. Internally each maps to a tone contract for the model; `sad` for instance is *"tender and vulnerable — expressing longing or unmet needs with compassion."* The sender is choosing how they want to be heard before a single word is drafted.
+
+**4. The app writes the letter.** Scores, comment, and tone go to Gemini with a system prompt that frames it as a compassionate relationship companion writing ~200 words from you to your partner. The model's job is precisely the encoding fix from the Gottman section: it takes "physical touch: 3/10" plus a raw comment and re-serializes them as an *I-feel* letter — need expressed with warmth, no accusation frame available.
+
+**5. Your partner gets a love letter.** Not a notification, not a dashboard alert — an email, styled like a valentine, "Dear ‹name›" at the top and your name at the bottom. They never see the numbers. The scores are instrumentation; the letter is the interface.
+
+**6. Both of you get a map over time.** Each rating also feeds a love-language report: your partner's inferred primary and secondary language, a confidence score, normalized per-language trends. Rate regularly and the app learns — and shows — what actually makes each of you feel loved, which is exactly the information couples routinely get wrong about each other.
+
+The pipeline in one line:
+
+```
+private honest scores → tone contract → AI re-encoding → valentine email → longitudinal love-language report
+```
+
+Everything sensitive in that pipeline — the raw comment and the generated letter body — is encrypted at rest with AES-256-GCM. That's not enterprise theater; it's load-bearing product design, and it's where the next section starts.
