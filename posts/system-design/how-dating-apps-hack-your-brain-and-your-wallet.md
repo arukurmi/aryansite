@@ -118,7 +118,7 @@ I don't think the people building these systems are cynical. I think objective f
 
 Which leaves the question I couldn't stop thinking about after this deep dive: dating apps spend billions of dollars of engineering on *getting two people into a relationship* — and approximately zero on what happens after. The hardest communication problems in a relationship start the day the app's job ends. What would it look like to build software for *that* side of the line — where the incentive is for the relationship to work?
 
-That question turned into a side project. More on it soon.
+That question turned into a side project — [Rate the Date, an app for the hardest sentence in any relationship](/blog/rate-the-date-building-for-what-happens-after-the-match), where I inverted every incentive in this post one by one.
 
 ---
 
