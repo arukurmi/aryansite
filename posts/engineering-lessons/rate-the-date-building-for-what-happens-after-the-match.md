@@ -79,3 +79,36 @@ Everything sensitive in that pipeline — the raw comment and the generated lett
 **The AI is a translator, not an author.** I want to be precise about what Gemini does here, because "AI writes your love letters" sounds dystopian and is the wrong reading. The model adds no facts. Scores and comment in; the same content out, re-encoded — first person, warm, need-shaped instead of blame-shaped. It's mechanically the job a couples therapist does in session when they catch "you never listen to me" and hand back "it sounds like you're saying you feel unheard — say it that way." Gottman's four horsemen are failures of *form*. A language model is a form engine. This might genuinely be the most natural fit for LLMs I've found: not generating content, but re-encoding true content so it survives transmission between two flooded nervous systems.
 
 **Hiding the numbers from the recipient is the whole product.** The rater sees scores; the partner gets prose. Show the partner "physical touch: 3/10" and you've built a report card — criticism with extra steps, horseman number one with a progress bar. The letter format makes the *need* legible while making the *judgment* invisible. And the longitudinal report closes the loop from the other side: over months, each partner gets an evidence-based picture of what the other actually responds to, replacing the single most common silent failure in couples — loving someone diligently in your language instead of theirs.
+
+## The inverted incentive table
+
+The cleanest way to see what this project is, is to put it next to the machine from [the last post](/blog/how-dating-apps-hack-your-brain-and-your-wallet):
+
+| | Dating apps | Rate the Date |
+|---|---|---|
+| Market served | Everyone single, forever if possible | Exactly two people |
+| Engagement goal | Maximize sessions | *Minimize* — a few minutes, every few days |
+| Reward schedule | Variable-ratio (slot machine) | Fixed cadence (ritual) |
+| Scarcity | Manufactured — metered matches, blurred likes | Real — there is one partner and one letter |
+| What's monetized | The gap between hope and outcome | Nothing (and that's structural, see below) |
+| Success event | Indistinguishable from churn | The relationship getting better |
+| Rejection handling | Hidden, to keep you swiping | N/A — the format makes rejection unexpressible |
+
+The swipe economy runs on a variable-ratio schedule because unpredictability maximizes compulsion. Rate the Date runs on a *fixed* schedule because predictability is what intimacy is made of — the letter that arrives regularly is a ritual; the match that arrives randomly is a jackpot. Same neurotransmitters, opposite architectures.
+
+Could this make money? Honestly — probably not at scale, and the reasons are instructive. Its success event is silence: a couple that communicates well eventually doesn't need the training wheels. Its market is two people who already found each other, so there's no network effect, no viral loop, no fear of missing out to monetize. Every property that makes dating apps a $6B industry is a property this product structurally refuses. Hinge markets "designed to be deleted" as a slogan while its parent company books the subscription revenue; a tool like this has to actually mean it. That's also why the category barely exists commercially — the incentive gradient points the other way, so nobody with a growth target builds here. Side projects don't have growth targets. That's what they're *for*.
+
+## What I actually learned
+
+The engineering was a weekend's worth of Express middleware, Mongoose schemas, and one Gemini prompt. The lasting lessons were all upstream of the code:
+
+1. **Read the psychology before the tech blog.** The observability project started from Datadog's architecture docs; this one started from Gottman. In both cases the research phase quietly produced the spec — every feature above is a direct compile of a finding into a mechanism.
+2. **The most valuable thing software can do with a hard human problem is change its shape, not solve it.** No app makes vulnerability safe. But an app can restructure the transaction — score instead of sentence, letter instead of confrontation, chosen tone instead of uncontrolled reception — until the courage required drops below the courage available.
+3. **Incentive alignment is a feature you can feel in the UI.** Every screen of a swipe app whispers *stay*. There's a strange calm in building a product whose best outcome is that its two users slowly stop needing it.
+
+The last post ended by asking what software for the *after* side of the match would look like. This is my answer: smaller, quieter, encrypted, and pointed at the one metric no dating app can afford to optimize — whether the two people are actually okay.
+
+---
+
+*Further reading on the research behind the design: [The Gottman Institute — The Four Horsemen](https://www.gottman.com/blog/the-four-horsemen-recognizing-criticism-contempt-defensiveness-and-stonewalling/), [The Gottman Institute — Flooding and conflict avoidance](https://www.gottman.com/blog/flooding-and-conflict-avoidance/), [Gottman's bids for connection](https://empathi.com/blog/what-is-the-gottman-bids-for-connection/), [TIME — Love languages may improve relationship satisfaction](https://time.com/6189958/love-languages-improve-relationship/), [NPR Planet Money — The dating app paradox](https://www.npr.org/sections/money/2024/02/13/1228749143/the-dating-app-paradox-why-dating-apps-may-be-worse-than-ever).*
+
