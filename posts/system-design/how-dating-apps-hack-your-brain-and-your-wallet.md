@@ -72,3 +72,38 @@ Two observations worth carrying out of this section:
 *Revenue per payer rising while payers fall* — Tinder's 2024 signature — is the fingerprint of a product squeezing a shrinking base harder rather than growing. It's what maturity looks like in an engagement business.
 
 *Hinge is the counter-trade.* Its brand is literally "designed to be deleted" — an explicit bet that aligning with the user's actual goal (leaving, successfully) builds the kind of word-of-mouth that swipe-forever products can't buy. And it's the only major app growing 40%+ right now. Hold that thought; it's the hinge (sorry) of the final section.
+
+## Pass 3: The engineering — 75 million people asking "who's near me?" at once
+
+Strip away the romance and a dating app is a deceptively hard systems problem: **a real-time, geo-constrained, two-sided recommendation engine where the inventory is people and the inventory swipes back.** Here's the skeleton every major app converges on.
+
+### The core query
+
+Every session starts with the same question: *given this user's location, radius, age/gender filters, and taste model, return an ordered stack of candidates — in under ~50ms.* That's a search problem, so the heart of Tinder is not a database of matches; it's a search cluster (Elasticsearch, in Tinder's case) holding user documents.
+
+The naive version — one giant index of every user on Earth — collapses immediately, because every query is intrinsically local. A user in Delhi will never be shown someone in São Paulo, yet a single global index makes every query pay for the whole planet.
+
+### Geosharding: partition the world, not the users
+
+Tinder's published solution is **geosharding** — splitting the index into geographically bound shards using Google's S2 library, which tiles the sphere with cells via a space-filling curve. The elegant part is *how* the shard boundaries are drawn: not by area, but by load. Dense cities get small shards; oceans and tundra get huge ones. The goal is shards with roughly equal query traffic, so no single hot shard (Manhattan) melts while others idle.
+
+The mechanics worth remembering:
+
+- A query for a user fans out only to the shards their search radius touches — usually one, occasionally a few at a border. Tinder reported the system handles **20× the computation** of the single-index design at the same latency.
+- People *move*. When your location update crosses a shard boundary, an abstraction layer migrates your document between shards — invisibly to the application code above it. That layer is the actual product of the project: application logic never knows geosharding exists.
+- Timezones create a global sine wave of load — every shard has rush hour at the local evening — so shard placement and replica counts follow the sun.
+
+### The ranking layer: your taste, learned from your thumb
+
+On top of retrieval sits scoring. Tinder's original ranker was a literal **Elo system** — chess ratings for desirability. Get right-swiped by someone with a high score, your score rises more. Tinder has since disavowed Elo in favor of a multi-layer model, but the successor systems still learn from the same signals: who you swipe on, who swipes on you, session times, message rates, photo dwell time. Every thumb-flick is a labeled training example — recall from Pass 1 that the interface was designed to make you produce thousands of them, cheaply.
+
+Two ranking subtleties that generalize beyond dating:
+
+- **Two-sided matching is the hard part.** Showing you people *you'll* like is easy; showing you people who'll like you *back* is the product. Every candidate is scored on predicted mutual probability, which means the app is quietly solving a bipartite matching problem under engagement constraints.
+- **The ranker's objective function is where the business model leaks into the architecture.** Rank purely on mutual-match probability and you maximize user success; rank on predicted sessions-per-week and you maximize revenue. The codebase has to pick. Nobody outside the company knows the exact blend — but Pass 2 tells you which way the gradient pushes.
+
+### The rest of the skeleton
+
+The remaining components are recognizable from any large consumer system, tuned for this domain: swipes land in a write-optimized queue (billions/day, tolerant of seconds of match-detection lag) with matches detected by key lookup on the reversed pair; chat is standard WebSocket fan-out, small rooms of exactly two; photos are CDN + on-upload ML pipelines (NSFW filtering, face detection, and increasingly, liveness/verification); and trust-and-safety runs async over everything — fake-profile classifiers, scam-language detection, ban-evasion fingerprinting. Unglamorous, and existential: the product is trust between strangers.
+
+
