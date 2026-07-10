@@ -20,3 +20,24 @@ Not because they don't have the words. Because saying "I don't feel like I matte
 Rate the Date doesn't try to make people braver. It changes the shape of the message so that bravery isn't required. You rate your partner privately on the five love languages, add what you couldn't say in person, pick a tone — and the app composes it into a letter your partner receives as warmth instead of an attack. A structured score goes in; a love letter comes out.
 
 Before the how, it's worth spending real time on the why — because every design decision in the app maps to a specific, well-documented failure mode in how couples communicate.
+
+## Why "just talk to them" is useless advice
+
+The best data we have on couple communication comes from John Gottman's "Love Lab" at the University of Washington — four decades, over 3,000 couples, wired up with heart-rate monitors and coded frame by frame while they argued. Two findings from that work explain why honest conversation between partners fails so predictably, and both of them shaped this app.
+
+**Finding one: it's not whether you raise problems, it's what the delivery does to the listener.** Gottman's team identified four communication patterns — criticism, contempt, defensiveness, stonewalling — that predict relationship failure with claimed accuracy above 90%. Look closely at the first one, because it's the killer: *criticism*, in Gottman's coding, isn't "raising a complaint." It's a complaint that arrives shaped as an attack on the person — "you never think about me" instead of "I felt alone on Tuesday." The content might be identical and legitimate. The *framing* decides whether the listener hears information or an indictment; an indictment triggers defensiveness, defensiveness invites contempt, and the spiral runs. In other words: **most relationship communication failures are encoding failures, not content failures.** The message is valid. The serialization format corrupts it in transit.
+
+**Finding two: relationships live or die on tiny, low-stakes signals, not big talks.** Gottman calls them *bids for connection* — "look at this," a touch, a sigh that hopes to be asked about. Whether partners notice and turn toward these micro-signals is among the most reliable predictors of who stays together. The implication runs opposite to folk wisdom: you don't fix a relationship with one Big Honest Conversation; you fix it with a steady cadence of small, received signals. Any tool in this space should be built for *rhythm*, not confrontation.
+
+And then there's the reason the conversation doesn't happen at all. Therapists who write about conflict avoidance keep circling the same word: **vulnerability**. Saying the true sentence — "I'm hurt and I don't know how to start this conversation" — requires being *seen* in a way that feels genuinely dangerous. Evolution tuned us to treat rejection by our closest ally as a survival threat; physiologically, Gottman's lab found partners in hard conversations go into literal fight-or-flight ("flooding": heart rate spikes, reasoning narrows, and the conversation is over even if it continues). So couples develop unspoken treaties: *we don't talk about that.* The hurt doesn't leave. It compounds, silently, at interest.
+
+One more piece: the **five love languages** — words of affirmation, quality time, physical touch, acts of service, receiving gifts. Academically, the framework is contested; the empirical base is thin and researchers argue about whether people truly have "one language." But recent work (including a PLOS ONE study linking satisfaction to partners using each other's preferred language) points to why it survives every debunking: its value isn't diagnostic, it's *linguistic*. It gives couples a shared, neutral, five-word vocabulary for needs that are otherwise unsayable. "My quality-time score for us is a 4 this month" is a sentence a hurt person can produce. "You've abandoned me" is not — even when they mean the same thing.
+
+Stack those up and you get a precise product spec:
+
+1. The hard message must be **restructured** so it can't arrive as criticism (fix the encoding).
+2. It should flow in a **regular, small cadence**, not rare explosive summits (build for bids, not battles).
+3. The sender must be shielded from raw exposure at the moment of sending (lower the vulnerability cost).
+4. The vocabulary should be a **neutral shared framework**, not free-form accusation (love languages as protocol).
+
+Rate the Date is that spec, implemented.
