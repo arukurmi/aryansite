@@ -106,4 +106,22 @@ Two ranking subtleties that generalize beyond dating:
 
 The remaining components are recognizable from any large consumer system, tuned for this domain: swipes land in a write-optimized queue (billions/day, tolerant of seconds of match-detection lag) with matches detected by key lookup on the reversed pair; chat is standard WebSocket fan-out, small rooms of exactly two; photos are CDN + on-upload ML pipelines (NSFW filtering, face detection, and increasingly, liveness/verification); and trust-and-safety runs async over everything — fake-profile classifiers, scam-language detection, ban-evasion fingerprinting. Unglamorous, and existential: the product is trust between strangers.
 
+## The paradox, restated as an engineering problem
+
+Put the three passes together and you get the full circuit:
+
+> The psychology manufactures compulsive engagement → engagement produces frustration with artificial limits → frustration converts to subscriptions and consumables → revenue funds a ranking system whose objective function must choose between your match and your next session.
+
+NPR's Planet Money called this **the dating app paradox**: the apps may be worse than ever *because* the business is working as designed. Every churn event is either a failure (user gave up) or a success (user found someone) — and the P&L cannot tell them apart. Both are lost revenue. So the economically rational product sits in the uncanny middle: enough hope to retain, never enough resolution to graduate.
+
+I don't think the people building these systems are cynical. I think objective functions are destiny. If your OKRs are sessions and payer conversion, a thousand well-meaning A/B tests will walk you to the slot machine one statistically significant step at a time. Hinge's growth is the market pricing in the alternative: alignment as a feature.
+
+Which leaves the question I couldn't stop thinking about after this deep dive: dating apps spend billions of dollars of engineering on *getting two people into a relationship* — and approximately zero on what happens after. The hardest communication problems in a relationship start the day the app's job ends. What would it look like to build software for *that* side of the line — where the incentive is for the relationship to work?
+
+That question turned into a side project. More on it soon.
+
+---
+
+*Sources and further reading: [Business of Apps — Bumble statistics](https://www.businessofapps.com/data/bumble-statistics/), [Match Group Q2 2024 shareholder letter](https://s203.q4cdn.com/993464185/files/doc_financials/2024/q2/Earnings-Letter-Q2-2024-vF.pdf), [TechCrunch — Match looks to Hinge as Tinder fails](https://techcrunch.com/2024/05/08/match-looks-to-hinge-as-tinder-fails-q1-2024/), [NPR Planet Money — The dating app paradox](https://www.npr.org/sections/money/2024/02/13/1228749143/the-dating-app-paradox-why-dating-apps-may-be-worse-than-ever), [Groundwork Collaborative — Swipe Right to Pay](https://groundworkcollaborative.org/work/swipe-right-to-pay-how-dating-apps-turned-love-into-a-subscription-service/), [Casino.org — How dating apps copied slots](https://www.casino.org/blog/how-dating-apps-copied-slots/), [LSE — How your brain's reward system powers online dating](https://blogs.lse.ac.uk/psychologylse/2024/06/03/swipe-right-for-love-how-your-brains-reward-system-powers-online-dating/), [Tinder Tech Blog — Geosharded recommendations, parts 1–2](https://medium.com/tinder/geosharded-recommendations-part-1-sharding-approach-d5d54e0ec77a), [ByteByteGo — How Tinder recommends to 75M users with geosharding](https://blog.bytebytego.com/p/how-tinder-recommends-to-75-million).*
+
 
