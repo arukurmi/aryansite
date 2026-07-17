@@ -42,6 +42,18 @@ export default function ProjectsSection() {
       }
     },
     {
+      name: "wardrobe.io",
+      tagline: "Your closet, indexed — in-browser ML wardrobe",
+      points: [
+        "Drop hundreds of outfit photos: SegFormer segmentation finds every garment in a Web Worker, and CLIP embeddings auto-dedupe the same tee across photos — with drag-to-merge and exact, transactional undo.",
+        "Privacy as architecture: all ML inference runs in the browser so photos never leave your machine; the local Express API uses zod-validated inputs and an FK-enforced SQLite (WAL) store, with one-file zip export."
+      ],
+      tech: ["React 19", "Transformers.js", "Express", "SQLite"],
+      links: {
+        github: "https://github.com/arukurmi/wardrobe.io"
+      }
+    },
+    {
       name: "ClaudeBar",
       tagline: "Live Claude-usage edge bar for macOS",
       points: [
