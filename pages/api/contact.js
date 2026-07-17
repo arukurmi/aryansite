@@ -1,3 +1,9 @@
+// Next parses up to 1 MB of JSON by default; a contact form never needs
+// more than a few KB, so shrink the attack/abuse surface.
+export const config = {
+  api: { bodyParser: { sizeLimit: '32kb' } },
+}
+
 import escapeHtml from '../../lib/escapeHtml'
 import { rateLimit, getClientIp } from '../../lib/rateLimit'
 

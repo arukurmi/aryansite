@@ -3,6 +3,11 @@
 // proper response. Swap the "TODO: persist" block for a real DB insert /
 // mailing-list call once that's available.
 
+// A subscribe payload is one email address — 8kb is generous.
+export const config = {
+  api: { bodyParser: { sizeLimit: '8kb' } },
+}
+
 import { rateLimit, getClientIp } from '../../lib/rateLimit'
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
