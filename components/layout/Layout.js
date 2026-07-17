@@ -15,7 +15,7 @@ export default function Layout({ children, className = '' }) {
       <Header />
 
       {/* Main Content */}
-      <main className={`relative z-10 transition-all duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
+      <main className={`relative z-10 transition-opacity duration-500 ease-out ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
         {children}
       </main>
 
