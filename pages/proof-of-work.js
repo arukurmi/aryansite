@@ -37,7 +37,6 @@ export default function ProofOfWork() {
 
           <section>
             <div className="text-center mb-14 md:mb-16">
-              <p className="eyebrow">In production · {companies.length} companies</p>
               <h2 className="subsection-title">
                 <span className="gradient-text">Experience</span>
               </h2>
