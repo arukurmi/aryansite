@@ -89,6 +89,18 @@
   .section-title {
     @apply text-4xl md:text-5xl font-bold text-white mb-8 text-center;
   }
+
+  /* Accent rule under every section title — echoes the gradient-text hues. */
+  .section-title::after {
+    content: '';
+    display: block;
+    width: 64px;
+    height: 3px;
+    margin: 1rem auto 0;
+    border-radius: 9999px;
+    background: linear-gradient(to right, #60a5fa, #2563eb);
+    opacity: 0.8;
+  }
   
   .typing-animation {
     @apply overflow-hidden border-r-2 border-primary-500 whitespace-nowrap;
