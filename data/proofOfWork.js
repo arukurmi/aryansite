@@ -313,6 +313,32 @@ export const projects = [
     },
   },
   {
+    id: 'wardrobe-io',
+    name: 'wardrobe.io',
+    tagline: 'Your closet, indexed — in-browser ML wardrobe',
+    proofPoints: [
+      'Drop hundreds of outfit photos and watch them break apart into every shirt, jean, and jacket you own: a SegFormer segmentation model finds each garment in a Web Worker, CLIP embeddings + cosine similarity dedupe the same tee across photos (≥0.92 auto-attaches, 0.80–0.92 asks first).',
+      'Drag-to-merge with exact undo — merges re-point pieces inside a transaction and log the exact set moved, so outfit references never break. Stats for most-worn, category breakdown, and cost-per-wear.',
+    ],
+    screenshots: [
+      {
+        src: '/proof/wardrobe-grid.png',
+        alt: 'wardrobe.io garment grid with category filters and dedupe counts',
+      },
+      {
+        src: '/proof/wardrobe-outfits.png',
+        alt: 'wardrobe.io outfits view with piece chips',
+      },
+      {
+        src: '/proof/wardrobe-stats.png',
+        alt: 'wardrobe.io stats — most worn and category breakdown',
+      },
+    ],
+    links: {
+      github: 'https://github.com/arukurmi/wardrobe.io',
+    },
+  },
+  {
     id: 'claudebar',
     name: 'ClaudeBar',
     tagline: 'Live Claude-usage edge bar for macOS',
