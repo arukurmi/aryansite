@@ -319,6 +319,7 @@ export const projects = [
     proofPoints: [
       'A whisper-thin, click-through bar hugging the screen edge that shows your Claude 5-hour session usage live — green when fresh, red near the wall — with the reset time riding the fill line.',
       'Polling that can’t silently die: hard request timeouts, a watchdog that restarts missed ticks, exponential backoff up to 10 minutes, and instant refresh on wake/unlock. Native Swift + AppKit, one ~200KB binary.',
+      'Security by subtraction: zero third-party dependencies (no supply chain to trust), reads the existing Claude Code OAuth token straight from the macOS Keychain — nothing new to log into, nothing stored on disk — and talks only to Anthropic’s own usage endpoint.',
     ],
     screenshots: [
       {
