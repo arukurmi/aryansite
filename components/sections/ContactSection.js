@@ -2,6 +2,7 @@ import { useState, useRef } from 'react'
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/Card'
 import Button from '../ui/Button'
 import TechBadge from '../ui/TechBadge'
+import Reveal from '../ui/Reveal'
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
@@ -106,7 +107,7 @@ export default function ContactSection() {
   return (
     <section id="contact" className="py-20">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
+        <Reveal className="text-center mb-16">
           <h2 className="section-title">
             <span className="gradient-text">Get In Touch</span>
           </h2>
@@ -114,7 +115,7 @@ export default function ContactSection() {
             Have a project in mind or just want to chat? I'd love to hear from you. 
             Send me a message and I'll respond as soon as possible.
           </p>
-        </div>
+        </Reveal>
 
         <div className="grid lg:grid-cols-2 gap-12">
           <div className="space-y-8">
