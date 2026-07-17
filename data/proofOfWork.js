@@ -319,6 +319,7 @@ export const projects = [
     proofPoints: [
       'Drop hundreds of outfit photos and watch them break apart into every shirt, jean, and jacket you own: a SegFormer segmentation model finds each garment in a Web Worker, CLIP embeddings + cosine similarity dedupe the same tee across photos (≥0.92 auto-attaches, 0.80–0.92 asks first).',
       'Drag-to-merge with exact undo — merges re-point pieces inside a transaction and log the exact set moved, so outfit references never break. Stats for most-worn, category breakdown, and cost-per-wear.',
+      'Privacy as architecture: all ML inference runs in the browser, so photos never leave your machine — the server is a local Express API with zod-validated inputs, an FK-enforced SQLite (WAL) store, and one-file zip export so your data stays portable and yours.',
     ],
     screenshots: [
       {
