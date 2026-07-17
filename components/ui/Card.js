@@ -8,7 +8,7 @@ const Card = forwardRef(({
   ...props 
 }, ref) => {
   const baseClasses = 'bg-dark-800/50 backdrop-blur-sm border border-dark-700 rounded-xl p-6 shadow-xl transition-all duration-300'
-  const hoverClasses = hover ? 'hover:scale-105 hover:shadow-glow' : ''
+  const hoverClasses = hover ? 'hover:-translate-y-1 hover:shadow-glow' : ''
   const glowClasses = glow ? 'shadow-glow' : ''
   
   const classes = `${baseClasses} ${hoverClasses} ${glowClasses} ${className}`

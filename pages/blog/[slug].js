@@ -174,7 +174,7 @@ export default function BlogPost({ post, relatedPosts }) {
                   {relatedPosts.map((relatedPost, index) => (
                     <Card
                       key={relatedPost.slug}
-                      className="hover:scale-105 transition-all duration-300 cursor-pointer group"
+                      className="hover:-translate-y-1 hover:shadow-glow transition-all duration-300 ease-out cursor-pointer group"
                       onClick={() => router.push(`/blog/${relatedPost.slug}`)}
                       style={{ animationDelay: `${index * 0.1}s` }}
                     >
