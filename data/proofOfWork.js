@@ -313,6 +313,32 @@ export const projects = [
     },
   },
   {
+    id: 'claudebar',
+    name: 'ClaudeBar',
+    tagline: 'Live Claude-usage edge bar for macOS',
+    proofPoints: [
+      'A whisper-thin, click-through bar hugging the screen edge that shows your Claude 5-hour session usage live — green when fresh, red near the wall — with the reset time riding the fill line.',
+      'Polling that can’t silently die: hard request timeouts, a watchdog that restarts missed ticks, exponential backoff up to 10 minutes, and instant refresh on wake/unlock. Native Swift + AppKit, one ~200KB binary.',
+    ],
+    screenshots: [
+      {
+        src: '/proof/claudebar-green.png',
+        alt: 'ClaudeBar fresh session — green fill with reset time',
+      },
+      {
+        src: '/proof/claudebar-orange.png',
+        alt: 'ClaudeBar mid session — orange fill',
+      },
+      {
+        src: '/proof/claudebar-red.png',
+        alt: 'ClaudeBar almost out — red fill and alarm emoji',
+      },
+    ],
+    links: {
+      github: 'https://github.com/arukurmi/LiveClaudeUsage',
+    },
+  },
+  {
     id: 'smokebud',
     name: 'smokeBud',
     tagline: 'A quiet 5-minute break with a virtual companion',
