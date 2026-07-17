@@ -6,7 +6,10 @@ export default function CompanyProofCard({ company }) {
   const [slideIndex, setSlideIndex] = useState(0)
 
   return (
-    <Card hover={false} className="flex flex-col h-full">
+    <Card
+      hover={false}
+      className="flex flex-col h-full hover:-translate-y-1 hover:border-primary-500/40 hover:shadow-glow"
+    >
       <CardHeader className="flex items-start justify-between">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 bg-gradient-to-r from-primary-500 to-primary-600 rounded-lg flex items-center justify-center shrink-0">
