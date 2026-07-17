@@ -38,8 +38,8 @@ export default function Footer() {
 
   return (
     <footer className="relative z-10 bg-transparent backdrop-blur-sm border-t border-dark-700">
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid md:grid-cols-3 gap-8">
+      <div className="container mx-auto px-4 py-16">
+        <div className="grid md:grid-cols-3 gap-8 md:gap-12">
           {/* Brand Section */}
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
@@ -120,7 +120,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom Section */}
-        <div className="mt-8 pt-8 border-t border-dark-700">
+        <div className="mt-12 pt-8 border-t border-dark-700">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p className="text-gray-500 text-sm">
               © {currentYear} Aryansh Kurmi. All rights reserved.
