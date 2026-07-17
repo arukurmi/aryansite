@@ -16,6 +16,11 @@
       scroll-behavior: auto;
     }
   }
+
+  /* Keep anchored sections clear of the fixed header on any native jump. */
+  :target {
+    scroll-margin-top: 6rem;
+  }
   
   body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',

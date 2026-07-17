@@ -32,8 +32,7 @@ export default function App({ Component, pageProps }) {
   // etc.). The links set scroll={false} so we own the scroll here — landing on
   // the section with a header offset instead of jumping to the top.
   useEffect(() => {
-    const scrollToHash = (url) => {
-      const hash = url.split('#')[1]
+    const scrollToHash = (hash) => {
       if (!hash) return
       // Wait for the destination page to paint before measuring.
       requestAnimationFrame(() =>
@@ -47,11 +46,17 @@ export default function App({ Component, pageProps }) {
       )
     }
 
-    router.events.on('routeChangeComplete', scrollToHash)
-    router.events.on('hashChangeComplete', scrollToHash)
+    const onRouteChange = (url) => scrollToHash(url.split('#')[1])
+
+    // Correct the landing spot for direct links / refreshes on a hash URL,
+    // which the browser would otherwise tuck under the fixed header.
+    scrollToHash(window.location.hash.slice(1))
+
+    router.events.on('routeChangeComplete', onRouteChange)
+    router.events.on('hashChangeComplete', onRouteChange)
     return () => {
-      router.events.off('routeChangeComplete', scrollToHash)
-      router.events.off('hashChangeComplete', scrollToHash)
+      router.events.off('routeChangeComplete', onRouteChange)
+      router.events.off('hashChangeComplete', onRouteChange)
     }
   }, [router])
 
