@@ -42,6 +42,18 @@ export default function ProjectsSection() {
       }
     },
     {
+      name: "smokeBud",
+      tagline: "A quiet 5-minute break with a virtual companion",
+      points: [
+        "A live-simulated \"2am fire escape\" scene — curl-noise smoke, a breathing ember, a companion on a slow drag cycle — with an anonymous live counter of everyone on a break right now.",
+        "Google sign-in via Auth.js v5 (no passwords stored), private per-user mood notes, and e2e tests that run against an isolated server with stubbed auth — real OAuth credentials never enter the test loop."
+      ],
+      tech: ["Next.js", "Auth.js", "Prisma", "Canvas"],
+      links: {
+        github: "https://github.com/arukurmi/smokeBud"
+      }
+    },
+    {
       name: "Rate the Date",
       tagline: "Couples-communication app",
       points: [
