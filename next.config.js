@@ -33,6 +33,16 @@ const nextConfig = {
             key: 'Referrer-Policy',
             value: 'origin-when-cross-origin',
           },
+          {
+            // Only meaningful over HTTPS; browsers ignore it on localhost.
+            key: 'Strict-Transport-Security',
+            value: 'max-age=63072000; includeSubDomains',
+          },
+          {
+            // The site never needs these powerful APIs — deny them outright.
+            key: 'Permissions-Policy',
+            value: 'camera=(), microphone=(), geolocation=(), payment=()',
+          },
         ],
       },
     ];
