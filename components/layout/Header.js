@@ -56,6 +56,7 @@ export default function Header() {
               <Link
                 key={item.name}
                 href={item.href}
+                scroll={!item.href.includes('#')}
                 className="text-gray-300 hover:text-primary-400 font-medium transition-colors duration-300 relative group"
               >
                 {item.name}
@@ -141,6 +142,7 @@ export default function Header() {
               <Link
                 key={item.name}
                 href={item.href}
+                scroll={!item.href.includes('#')}
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="block text-gray-300 hover:text-primary-400 font-medium transition-colors duration-300 py-2"
               >
