@@ -1,3 +1,5 @@
+import escapeHtml from '../../lib/escapeHtml'
+
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 const ALLOWED_SUBJECTS = [
@@ -48,6 +50,13 @@ async function sendEmailNotification(data) {
   const resend = new Resend(apiKey)
 
   const subjectLabel = SUBJECT_LABELS[data.subject] || data.subject
+  // Never interpolate raw user input into the email HTML — a crafted
+  // name/message could otherwise inject markup into the notification.
+  const safe = {
+    name: escapeHtml(data.name),
+    email: escapeHtml(data.email),
+    message: escapeHtml(data.message),
+  }
 
   await resend.emails.send({
     from: 'Portfolio Contact <onboarding@resend.dev>',
@@ -57,13 +66,13 @@ async function sendEmailNotification(data) {
       <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; background: #0f172a; color: #e2e8f0; border-radius: 8px;">
         <h2 style="color: #a78bfa; margin-top: 0;">New Contact Form Submission</h2>
         <table style="width: 100%; border-collapse: collapse;">
-          <tr><td style="padding: 8px 0; color: #94a3b8; width: 100px;">Name</td><td style="padding: 8px 0; font-weight: 600;">${data.name}</td></tr>
-          <tr><td style="padding: 8px 0; color: #94a3b8;">Email</td><td style="padding: 8px 0;"><a href="mailto:${data.email}" style="color: #a78bfa;">${data.email}</a></td></tr>
+          <tr><td style="padding: 8px 0; color: #94a3b8; width: 100px;">Name</td><td style="padding: 8px 0; font-weight: 600;">${safe.name}</td></tr>
+          <tr><td style="padding: 8px 0; color: #94a3b8;">Email</td><td style="padding: 8px 0;"><a href="mailto:${safe.email}" style="color: #a78bfa;">${safe.email}</a></td></tr>
           <tr><td style="padding: 8px 0; color: #94a3b8;">Subject</td><td style="padding: 8px 0;">${subjectLabel}</td></tr>
         </table>
         <div style="margin-top: 16px; padding: 16px; background: #1e293b; border-radius: 6px; border-left: 3px solid #a78bfa;">
           <p style="margin: 0; color: #94a3b8; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Message</p>
-          <p style="margin: 0; white-space: pre-wrap;">${data.message}</p>
+          <p style="margin: 0; white-space: pre-wrap;">${safe.message}</p>
         </div>
         <p style="margin-top: 16px; color: #64748b; font-size: 12px;">Submitted from aryanshkurmi.com</p>
       </div>
