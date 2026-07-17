@@ -26,21 +26,25 @@ export default function ProofOfWork() {
       <div className="min-h-screen pt-32 pb-20">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
+            <p className="eyebrow">Metrics-backed impact</p>
             <h1 className="section-title">
               <span className="gradient-text">Proof of Work</span>
             </h1>
-            <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+            <p className="lead">
               Not just claims — charts, numbers, and live links.
             </p>
           </div>
 
           <section className="mb-20">
-            <h2 className="text-2xl font-bold mb-2">
-              <span className="gradient-text">Experience</span>
-            </h2>
-            <p className="text-gray-400 mb-8">
-              Measurable outcomes I owned, one metric at a time.
-            </p>
+            <div className="text-center mb-10">
+              <p className="eyebrow">In production · {companies.length} companies</p>
+              <h2 className="subsection-title">
+                <span className="gradient-text">Experience</span>
+              </h2>
+              <p className="lead">
+                Measurable outcomes I owned, one metric at a time.
+              </p>
+            </div>
             <div className="grid lg:grid-cols-2 gap-8">
               {companies.map((company) => (
                 <CompanyProofCard key={company.id} company={company} />
@@ -49,12 +53,15 @@ export default function ProofOfWork() {
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold mb-2">
-              <span className="gradient-text">Projects</span>
-            </h2>
-            <p className="text-gray-400 mb-8">
-              Shipped and verifiable — screenshots and live deployments.
-            </p>
+            <div className="text-center mb-10">
+              <p className="eyebrow">Shipped &amp; verifiable · {projects.length} projects</p>
+              <h2 className="subsection-title">
+                <span className="gradient-text">Projects</span>
+              </h2>
+              <p className="lead">
+                Shipped and verifiable — screenshots and live deployments.
+              </p>
+            </div>
             <div className="grid md:grid-cols-2 gap-8">
               {projects.map((project) => (
                 <ProjectProofCard key={project.id} project={project} />
