@@ -1,5 +1,6 @@
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/Card'
 import TechBadge from '../ui/TechBadge'
+import Reveal from '../ui/Reveal'
 
 export default function ProjectsSection() {
   const projects = [
@@ -95,21 +96,21 @@ export default function ProjectsSection() {
   return (
     <section id="projects" className="py-20">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
+        <Reveal className="text-center mb-16">
           <h2 className="section-title">
             <span className="gradient-text">Projects</span>
           </h2>
           <p className="text-gray-400 text-lg max-w-2xl mx-auto">
             Things I've built — where solid engineering meets AI and agentic workflows.
           </p>
-        </div>
+        </Reveal>
 
         <div className="grid md:grid-cols-2 gap-8">
           {projects.map((project, index) => (
+            <Reveal key={project.name} delay={(index % 2) * 120} className="flex">
             <Card
-              key={project.name}
-              className="hover:scale-105 transition-all duration-300 flex flex-col"
-              style={{ animationDelay: `${index * 0.15}s` }}
+              hover={false}
+              className="hover:-translate-y-1.5 hover:border-primary-500/60 hover:shadow-glow flex flex-col w-full"
             >
               <CardHeader>
                 <CardTitle className="text-primary-400">{project.name}</CardTitle>
@@ -162,6 +163,7 @@ export default function ProjectsSection() {
                 </div>
               </CardContent>
             </Card>
+            </Reveal>
           ))}
         </div>
       </div>
