@@ -1,5 +1,6 @@
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/Card'
 import TechBadge from '../ui/TechBadge'
+import Reveal from '../ui/Reveal'
 import Button from '../ui/Button'
 
 export default function BlogSection({ recentPosts }) {
@@ -20,7 +21,7 @@ export default function BlogSection({ recentPosts }) {
   return (
     <section id="blog" className="py-20">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
+        <Reveal className="text-center mb-16">
           <h2 className="section-title">
             <span className="gradient-text">Latest Blog Posts</span>
           </h2>
@@ -28,7 +29,7 @@ export default function BlogSection({ recentPosts }) {
             Thoughts on system design, architecture, and development. 
             Learn from real-world examples and best practices.
           </p>
-        </div>
+        </Reveal>
         
         {recentPosts.length > 0 ? (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
