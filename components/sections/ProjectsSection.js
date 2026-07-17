@@ -42,6 +42,18 @@ export default function ProjectsSection() {
       }
     },
     {
+      name: "ClaudeBar",
+      tagline: "Live Claude-usage edge bar for macOS",
+      points: [
+        "A whisper-thin, click-through bar on the screen edge showing your Claude 5-hour session usage live — with watchdog-guarded polling, hard timeouts, and exponential backoff so it can't silently die.",
+        "Security by subtraction: zero third-party dependencies, credentials read from the macOS Keychain (never stored or re-entered), and network calls only to Anthropic's own usage endpoint. One ~200KB Swift binary."
+      ],
+      tech: ["Swift", "AppKit", "Keychain"],
+      links: {
+        github: "https://github.com/arukurmi/LiveClaudeUsage"
+      }
+    },
+    {
       name: "smokeBud",
       tagline: "A quiet 5-minute break with a virtual companion",
       points: [
