@@ -319,6 +319,7 @@ export const projects = [
     proofPoints: [
       'A "2am fire escape" scene rendered live on canvas — curl-noise wind field, breathing ember, and a companion who lights up, drags, and exhales on a slow cycle — while a live counter shows how many others are on a break right now.',
       'Streaks and private mood notes on a heat-strip calendar; AI-generated companion video clips drop in via a manifest contract, with the canvas scene as the always-on fallback.',
+      'Security-first auth: Google sign-in through Auth.js v5 with a Prisma adapter — no passwords stored, secrets kept in env. E2E tests run on an isolated server with a stubbed login provider, so real OAuth credentials never touch the test suite.',
     ],
     screenshots: [
       {
