@@ -2,6 +2,12 @@ import escapeHtml from '../../lib/escapeHtml'
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
+// Server-side size caps — the DB and the notification email shouldn't be
+// at the mercy of whatever a client script decides to POST.
+const MAX_NAME_LENGTH = 100
+const MAX_EMAIL_LENGTH = 254
+const MAX_MESSAGE_LENGTH = 5000
+
 const ALLOWED_SUBJECTS = [
   'job-opportunity',
   'collaboration',
@@ -90,15 +96,17 @@ export default async function handler(req, res) {
 
   const errors = {}
 
-  if (!name || !name.trim()) {
+  if (!name || typeof name !== 'string' || !name.trim()) {
     errors.name = 'Name is required'
   } else if (name.trim().length < 2) {
     errors.name = 'Name must be at least 2 characters'
+  } else if (name.trim().length > MAX_NAME_LENGTH) {
+    errors.name = `Name must be under ${MAX_NAME_LENGTH} characters`
   }
 
-  if (!email || !email.trim()) {
+  if (!email || typeof email !== 'string' || !email.trim()) {
     errors.email = 'Email is required'
-  } else if (!EMAIL_REGEX.test(email.trim())) {
+  } else if (email.trim().length > MAX_EMAIL_LENGTH || !EMAIL_REGEX.test(email.trim())) {
     errors.email = 'Please enter a valid email address'
   }
 
@@ -108,10 +116,12 @@ export default async function handler(req, res) {
     errors.subject = 'Please select a valid subject'
   }
 
-  if (!message || !message.trim()) {
+  if (!message || typeof message !== 'string' || !message.trim()) {
     errors.message = 'Message is required'
   } else if (message.trim().length < 10) {
     errors.message = 'Message must be at least 10 characters'
+  } else if (message.trim().length > MAX_MESSAGE_LENGTH) {
+    errors.message = `Message must be under ${MAX_MESSAGE_LENGTH} characters`
   }
 
   if (Object.keys(errors).length > 0) {
