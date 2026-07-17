@@ -350,16 +350,8 @@ export const projects = [
     ],
     screenshots: [
       {
-        src: '/proof/claudebar-green.png',
-        alt: 'ClaudeBar fresh session — green fill with reset time',
-      },
-      {
-        src: '/proof/claudebar-orange.png',
-        alt: 'ClaudeBar mid session — orange fill',
-      },
-      {
-        src: '/proof/claudebar-red.png',
-        alt: 'ClaudeBar almost out — red fill and alarm emoji',
+        src: '/proof/claudebar-states.png',
+        alt: 'ClaudeBar edge bar in its three states — green, orange, and red',
       },
     ],
     links: {
