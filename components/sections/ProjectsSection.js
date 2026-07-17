@@ -101,7 +101,8 @@ export default function ProjectsSection() {
             <span className="gradient-text">Projects</span>
           </h2>
           <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-            Things I've built — where solid engineering meets AI and agentic workflows.
+            Things I've built — where solid engineering meets AI and agentic workflows,
+            with security and privacy treated as features, not afterthoughts.
           </p>
         </Reveal>
 
