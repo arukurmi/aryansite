@@ -23,9 +23,9 @@ export default function ProofOfWork() {
         <meta name="twitter:card" content="summary" />
       </Head>
 
-      <div className="min-h-screen pt-32 pb-20">
+      <div className="min-h-screen pt-36 md:pt-40 pb-28 md:pb-36">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
+          <div className="text-center max-w-3xl mx-auto mb-24 md:mb-32">
             <p className="eyebrow">Metrics-backed impact</p>
             <h1 className="section-title">
               <span className="gradient-text">Proof of Work</span>
@@ -35,8 +35,8 @@ export default function ProofOfWork() {
             </p>
           </div>
 
-          <section className="mb-20">
-            <div className="text-center mb-10">
+          <section>
+            <div className="text-center mb-14 md:mb-16">
               <p className="eyebrow">In production · {companies.length} companies</p>
               <h2 className="subsection-title">
                 <span className="gradient-text">Experience</span>
@@ -45,15 +45,17 @@ export default function ProofOfWork() {
                 Measurable outcomes I owned, one metric at a time.
               </p>
             </div>
-            <div className="grid lg:grid-cols-2 gap-8">
+            <div className="grid lg:grid-cols-2 gap-8 lg:gap-10">
               {companies.map((company) => (
                 <CompanyProofCard key={company.id} company={company} />
               ))}
             </div>
           </section>
 
+          <hr className="section-divider w-full max-w-2xl mx-auto my-20 md:my-28" />
+
           <section>
-            <div className="text-center mb-10">
+            <div className="text-center mb-14 md:mb-16">
               <p className="eyebrow">Shipped &amp; verifiable · {projects.length} projects</p>
               <h2 className="subsection-title">
                 <span className="gradient-text">Projects</span>
@@ -62,7 +64,7 @@ export default function ProofOfWork() {
                 Shipped and verifiable — screenshots and live deployments.
               </p>
             </div>
-            <div className="grid md:grid-cols-2 gap-8">
+            <div className="grid md:grid-cols-2 gap-8 lg:gap-10">
               {projects.map((project) => (
                 <ProjectProofCard key={project.id} project={project} />
               ))}
