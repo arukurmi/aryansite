@@ -21,6 +21,26 @@
   :target {
     scroll-margin-top: 6rem;
   }
+
+  /* Visible keyboard focus for interactive elements (mouse focus unaffected). */
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible,
+  [tabindex]:focus-visible {
+    outline: 2px solid #60a5fa;
+    outline-offset: 3px;
+  }
+
+  .light a:focus-visible,
+  .light button:focus-visible,
+  .light input:focus-visible,
+  .light select:focus-visible,
+  .light textarea:focus-visible,
+  .light [tabindex]:focus-visible {
+    outline-color: #2563eb;
+  }
   
   body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
