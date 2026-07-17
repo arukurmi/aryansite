@@ -313,6 +313,36 @@ export const projects = [
     },
   },
   {
+    id: 'smokebud',
+    name: 'smokeBud',
+    tagline: 'A quiet 5-minute break with a virtual companion',
+    proofPoints: [
+      'A "2am fire escape" scene rendered live on canvas — curl-noise wind field, breathing ember, and a companion who lights up, drags, and exhales on a slow cycle — while a live counter shows how many others are on a break right now.',
+      'Streaks and private mood notes on a heat-strip calendar; AI-generated companion video clips drop in via a manifest contract, with the canvas scene as the always-on fallback.',
+    ],
+    screenshots: [
+      {
+        src: '/proof/smokebud-landing.png',
+        alt: 'smokeBud landing page with live smoke backdrop',
+      },
+      {
+        src: '/proof/smokebud-picker.png',
+        alt: 'smokeBud companion picker',
+      },
+      {
+        src: '/proof/smokebud-break-scene.png',
+        alt: 'smokeBud break scene — companion smoking over a sleeping city',
+      },
+      {
+        src: '/proof/smokebud-history.png',
+        alt: 'smokeBud history heat-strip calendar with streaks',
+      },
+    ],
+    links: {
+      github: 'https://github.com/arukurmi/smokeBud',
+    },
+  },
+  {
     id: 'rate-the-date',
     name: 'Rate the Date',
     tagline: 'Couples-communication app',
