@@ -1,4 +1,5 @@
 import escapeHtml from '../../lib/escapeHtml'
+import { rateLimit, getClientIp } from '../../lib/rateLimit'
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
@@ -90,6 +91,18 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', ['POST'])
     return res.status(405).json({ ok: false, message: 'Method not allowed' })
+  }
+
+  const { limited, retryAfterSeconds } = rateLimit({
+    key: `contact:${getClientIp(req)}`,
+    limit: 5,
+    windowMs: 10 * 60 * 1000,
+  })
+  if (limited) {
+    res.setHeader('Retry-After', retryAfterSeconds)
+    return res
+      .status(429)
+      .json({ ok: false, message: 'Too many messages — please try again in a few minutes.' })
   }
 
   const { name, email, subject, message } = req.body || {}
