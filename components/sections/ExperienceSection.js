@@ -1,5 +1,6 @@
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/Card'
 import TechBadge from '../ui/TechBadge'
+import Reveal from '../ui/Reveal'
 
 export default function ExperienceSection() {
   const experiences = [
@@ -51,14 +52,14 @@ export default function ExperienceSection() {
   return (
     <section id="experience" className="py-20">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
+        <Reveal className="text-center mb-16">
           <h2 className="section-title">
             <span className="gradient-text">Experience</span>
           </h2>
           <p className="text-gray-400 text-lg max-w-2xl mx-auto">
             Building amazing things with code, one commit at a time.
           </p>
-        </div>
+        </Reveal>
         
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {experiences.map((exp, index) => (
