@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/Card'
 import TechBadge from '../ui/TechBadge'
 import Reveal from '../ui/Reveal'
@@ -34,11 +35,14 @@ export default function BlogSection({ recentPosts }) {
         {recentPosts.length > 0 ? (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
             {recentPosts.map((post, index) => (
-              <Card
+              <Link
                 key={post.slug}
-                className="hover:-translate-y-1 hover:shadow-glow transition-all duration-300 ease-out cursor-pointer group"
-                onClick={() => window.location.href = `/blog/${post.slug}`}
+                href={`/blog/${post.slug}`}
+                className="block group"
                 style={{ animationDelay: `${index * 0.1}s` }}
+              >
+              <Card
+                className="h-full hover:-translate-y-1 hover:shadow-glow transition-all duration-300 ease-out cursor-pointer"
               >
                 <CardHeader>
                   <div className="flex items-center justify-between mb-2">
@@ -75,6 +79,7 @@ export default function BlogSection({ recentPosts }) {
                   </div>
                 </CardContent>
               </Card>
+              </Link>
             ))}
           </div>
         ) : (
