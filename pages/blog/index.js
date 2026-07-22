@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import Link from 'next/link'
 import Layout from '../../components/layout/Layout'
 import { getAllPostSummaries, getAllCategories } from '../../lib/blog'
 import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/Card'
@@ -123,11 +124,14 @@ export default function BlogIndex({ posts, categories }) {
           {filteredPosts.length > 0 ? (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {filteredPosts.map((post, index) => (
-                <Card
+                <Link
                   key={post.slug}
-                  className="hover:-translate-y-1 hover:shadow-glow transition-all duration-300 ease-out cursor-pointer group"
-                  onClick={() => window.location.href = `/blog/${post.slug}`}
+                  href={`/blog/${post.slug}`}
+                  className="block group"
                   style={{ animationDelay: `${index * 0.1}s` }}
+                >
+                <Card
+                  className="h-full hover:-translate-y-1 hover:shadow-glow transition-all duration-300 ease-out cursor-pointer"
                 >
                   <CardHeader>
                     <div className="flex items-center justify-between mb-2">
@@ -162,6 +166,7 @@ export default function BlogIndex({ posts, categories }) {
                     </div>
                   </CardContent>
                 </Card>
+                </Link>
               ))}
             </div>
           ) : (
