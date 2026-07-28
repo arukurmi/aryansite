@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import Layout from '../../components/layout/Layout'
 import { getAllPosts, getPostBySlug, getRelatedPosts } from '../../lib/blog'
+import { categoryLabel } from '../../lib/categories'
 import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/Card'
 import TechBadge from '../../components/ui/TechBadge'
 import Button from '../../components/ui/Button'
@@ -82,9 +83,7 @@ export default function BlogPost({ post, relatedPosts }) {
               <div className="mb-8">
                 <div className="flex items-center justify-between mb-4">
                   <TechBadge variant="primary" size="md">
-                    {post.category.split('-').map(word => 
-                      word.charAt(0).toUpperCase() + word.slice(1)
-                    ).join(' ')}
+                    {categoryLabel(post.category)}
                   </TechBadge>
                   <span className="text-gray-400 text-sm">
                     {formatDate(post.date)} • {getReadingTime(post.content)} min read

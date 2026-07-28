@@ -2,8 +2,6 @@ import { useState } from 'react'
 import Link from 'next/link'
 import Layout from '../../components/layout/Layout'
 import { getAllPostSummaries, getAllCategories } from '../../lib/blog'
-import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/Card'
-import TechBadge from '../../components/ui/TechBadge'
 import Button from '../../components/ui/Button'
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -15,6 +13,9 @@ export default function BlogIndex({ posts, categories }) {
   const [subscribeStatus, setSubscribeStatus] = useState(null) // 'success' | 'error' | null
   const [subscribeMessage, setSubscribeMessage] = useState('')
   const [isSubscribing, setIsSubscribing] = useState(false)
+
+  // Fast lookup of a category's display metadata (label, colours, icon).
+  const catBySlug = Object.fromEntries(categories.map((c) => [c.name, c]))
 
   const handleSubscribe = async (e) => {
     e.preventDefault()
@@ -53,164 +54,291 @@ export default function BlogIndex({ posts, categories }) {
     }
   }
 
-  const filteredPosts = posts.filter(post => {
+  const filteredPosts = posts.filter((post) => {
     const matchesCategory = selectedCategory === 'all' || post.category === selectedCategory
-    const matchesSearch = !searchQuery || 
-      post.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      post.excerpt?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      post.tags?.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
-    
+    const q = searchQuery.toLowerCase()
+    const matchesSearch =
+      !searchQuery ||
+      post.title?.toLowerCase().includes(q) ||
+      post.excerpt?.toLowerCase().includes(q) ||
+      post.tags?.some((tag) => tag.toLowerCase().includes(q))
+
     return matchesCategory && matchesSearch
   })
 
-  const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
+  const formatDate = (dateString) =>
+    new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
-      month: 'long',
-      day: 'numeric'
+      month: 'short',
+      day: 'numeric',
     })
+
+  const activeLabel =
+    selectedCategory === 'all' ? 'All Posts' : catBySlug[selectedCategory]?.displayName
+
+  // A single nav item, shared by the desktop sidebar and the mobile chip row.
+  const NavItem = ({ slug, label, count, icon, dot, active, onSelect, chip }) => {
+    if (chip) {
+      return (
+        <button
+          onClick={onSelect}
+          className={`flex-shrink-0 inline-flex items-center gap-2 px-3.5 py-2 rounded-full text-sm font-medium border transition-all duration-200 ${
+            active
+              ? 'bg-primary-500/20 text-primary-300 border-primary-500/40'
+              : 'bg-dark-800/60 text-gray-400 border-dark-700 hover:text-white hover:border-dark-600'
+          }`}
+        >
+          {icon ? <i className={`${icon} text-xs`} /> : <span className={`w-1.5 h-1.5 rounded-full ${dot || 'bg-gray-400'}`} />}
+          {label}
+          <span className="text-xs opacity-70">{count}</span>
+        </button>
+      )
+    }
+    return (
+      <button
+        onClick={onSelect}
+        className={`group w-full flex items-center gap-3 pl-3 pr-2.5 py-2.5 rounded-lg border-l-2 transition-all duration-200 ${
+          active
+            ? 'border-primary-400 bg-primary-500/10 text-white'
+            : 'border-transparent text-gray-400 hover:text-white hover:bg-dark-800/60'
+        }`}
+      >
+        <i
+          className={`${icon} w-4 text-center text-sm ${
+            active ? 'text-primary-300' : 'text-gray-500 group-hover:text-gray-300'
+          }`}
+        />
+        <span className="flex-1 text-left text-sm font-medium leading-tight">{label}</span>
+        <span
+          className={`text-xs tabular-nums px-1.5 py-0.5 rounded-md ${
+            active ? 'bg-primary-500/20 text-primary-200' : 'bg-dark-800 text-gray-500'
+          }`}
+        >
+          {count}
+        </span>
+      </button>
+    )
   }
 
   return (
     <Layout className="blog-page">
-      <div className="min-h-screen pt-32 pb-20">
+      <div className="min-h-screen pt-28 pb-20">
         <div className="container mx-auto px-4">
           {/* Header */}
-          <div className="text-center mb-16">
-            <h1 className="section-title">
-              <span className="gradient-text">Blog</span>
-            </h1>
-            <p className="text-gray-400 text-lg max-w-2xl mx-auto mb-8">
-              Thoughts on Low-Level Design, High-Level Design, System Architecture, and everything in between.
+          <header className="max-w-3xl mb-10">
+            <p className="text-primary-400 font-mono text-sm tracking-widest uppercase mb-3">
+              The Notebook
             </p>
-            
-            {/* Search Bar */}
-            <div className="max-w-md mx-auto mb-8">
-              <div className="relative">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">
+              <span className="gradient-text">Writing</span>
+            </h1>
+            <p className="text-gray-400 text-lg leading-relaxed">
+              Interview post-mortems, system-design deep dives, and the layer beneath the
+              answer I gave. Everything here started as a real question I had to answer out loud.
+            </p>
+          </header>
+
+          {/* Two-column: sticky index nav + results */}
+          <div className="grid lg:grid-cols-[240px_minmax(0,1fr)] gap-8 lg:gap-10">
+            {/* Sidebar (desktop) */}
+            <aside className="hidden lg:block">
+              <nav className="sticky top-24" aria-label="Blog categories">
+                <p className="px-3 mb-2 text-xs font-semibold uppercase tracking-wider text-gray-500">
+                  Browse
+                </p>
+                <div className="space-y-1">
+                  <NavItem
+                    slug="all"
+                    label="All Posts"
+                    icon="fa-solid fa-layer-group"
+                    count={posts.length}
+                    active={selectedCategory === 'all'}
+                    onSelect={() => setSelectedCategory('all')}
+                  />
+                  {categories.map((category) => (
+                    <NavItem
+                      key={category.name}
+                      slug={category.name}
+                      label={category.displayName}
+                      icon={category.icon}
+                      count={category.count}
+                      active={selectedCategory === category.name}
+                      onSelect={() => setSelectedCategory(category.name)}
+                    />
+                  ))}
+                </div>
+              </nav>
+            </aside>
+
+            {/* Results column */}
+            <div>
+              {/* Search */}
+              <div className="relative mb-5">
+                <i className="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" />
                 <input
                   type="text"
-                  placeholder="Search posts..."
+                  placeholder="Search posts, topics, tags…"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full px-4 py-3 bg-dark-800/50 border border-dark-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all duration-300"
+                  className="w-full pl-11 pr-4 py-3 bg-dark-800/50 border border-dark-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all duration-300"
                 />
-                <i className="fas fa-search absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+              </div>
+
+              {/* Category chips (mobile only) */}
+              <div className="lg:hidden -mx-4 px-4 mb-6 flex gap-2 overflow-x-auto pb-1 no-scrollbar">
+                <NavItem
+                  chip
+                  label="All"
+                  count={posts.length}
+                  icon="fa-solid fa-layer-group"
+                  active={selectedCategory === 'all'}
+                  onSelect={() => setSelectedCategory('all')}
+                />
+                {categories.map((category) => (
+                  <NavItem
+                    key={category.name}
+                    chip
+                    label={category.displayName}
+                    count={category.count}
+                    dot={category.dot}
+                    active={selectedCategory === category.name}
+                    onSelect={() => setSelectedCategory(category.name)}
+                  />
+                ))}
+              </div>
+
+              {/* Result meta line */}
+              <div className="flex items-baseline justify-between mb-5">
+                <h2 className="text-white font-semibold">
+                  {activeLabel}
+                  <span className="text-gray-500 font-normal ml-2">
+                    {filteredPosts.length} {filteredPosts.length === 1 ? 'post' : 'posts'}
+                  </span>
+                </h2>
+              </div>
+
+              {/* Cards */}
+              {filteredPosts.length > 0 ? (
+                <div className="grid sm:grid-cols-2 gap-5">
+                  {filteredPosts.map((post) => {
+                    const cat = catBySlug[post.category]
+                    return (
+                      <Link
+                        key={post.slug}
+                        href={`/blog/${post.slug}`}
+                        className="group relative flex flex-col overflow-hidden rounded-2xl border border-dark-700 bg-dark-800/40 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-dark-600 hover:shadow-glow focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/60"
+                      >
+                        {/* Category spine */}
+                        <span
+                          className={`absolute inset-y-0 left-0 w-1 ${cat?.dot || 'bg-primary-400'}`}
+                          aria-hidden="true"
+                        />
+
+                        <div className="flex flex-col flex-1 p-5 pl-6">
+                          {/* Top row */}
+                          <div className="flex items-center justify-between mb-3">
+                            <span
+                              className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${
+                                cat?.pill || 'bg-primary-500/15 text-primary-300 border border-primary-500/30'
+                              }`}
+                            >
+                              {cat?.icon && <i className={`${cat.icon} text-[10px]`} />}
+                              {cat?.displayName || post.category}
+                            </span>
+                            <span className="text-gray-500 text-xs whitespace-nowrap">
+                              {formatDate(post.date)}
+                            </span>
+                          </div>
+
+                          {/* Title */}
+                          <h3 className="text-lg font-bold text-white leading-snug mb-2 line-clamp-2 group-hover:text-primary-300 transition-colors duration-300">
+                            {post.title}
+                          </h3>
+
+                          {/* Excerpt */}
+                          <p className="text-gray-400 text-sm leading-relaxed line-clamp-3 mb-4 flex-1">
+                            {post.excerpt}
+                          </p>
+
+                          {/* Footer */}
+                          <div className="flex items-center justify-between gap-3 pt-3 border-t border-dark-700/70">
+                            <div className="flex flex-wrap gap-1.5 min-w-0">
+                              {post.tags?.slice(0, 2).map((tag) => (
+                                <span
+                                  key={tag}
+                                  className="text-[11px] text-gray-500 bg-dark-800/80 px-2 py-0.5 rounded-md truncate"
+                                >
+                                  #{tag}
+                                </span>
+                              ))}
+                            </div>
+                            <span className="flex items-center gap-1 text-xs text-gray-500 whitespace-nowrap">
+                              <i className="far fa-clock" />
+                              {post.readingTime} min
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Read affordance */}
+                        <span className="pointer-events-none absolute bottom-5 right-5 translate-x-2 opacity-0 text-primary-300 text-sm font-medium transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100">
+                          Read <i className="fas fa-arrow-right ml-0.5 text-xs" />
+                        </span>
+                      </Link>
+                    )
+                  })}
+                </div>
+              ) : (
+                <div className="text-center py-16 border border-dashed border-dark-700 rounded-2xl">
+                  <i className="fas fa-magnifying-glass text-4xl text-gray-600 mb-4" />
+                  <h3 className="text-xl font-bold text-white mb-2">No posts found</h3>
+                  <p className="text-gray-400">
+                    {searchQuery
+                      ? `Nothing matches “${searchQuery}”. Try another term.`
+                      : `No posts in this category yet.`}
+                  </p>
+                </div>
+              )}
+
+              {/* Newsletter Signup */}
+              <div id="newsletter" className="mt-16">
+                <div className="rounded-2xl border border-dark-700 bg-gradient-to-br from-dark-800/70 to-dark-900/40 p-8 text-center">
+                  <h3 className="text-2xl font-bold text-white mb-3">Stay Updated</h3>
+                  <p className="text-gray-400 mb-6 max-w-md mx-auto">
+                    Get notified when I publish new posts on system design, interviews, and what
+                    lives one layer down.
+                  </p>
+                  <form
+                    onSubmit={handleSubscribe}
+                    className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto"
+                  >
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="Enter your email"
+                      className="flex-1 px-4 py-3 bg-dark-700 border border-dark-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all duration-300"
+                    />
+                    <Button
+                      type="submit"
+                      loading={isSubscribing}
+                      disabled={isSubscribing}
+                      className="whitespace-nowrap"
+                    >
+                      {isSubscribing ? 'Subscribing...' : 'Subscribe'}
+                    </Button>
+                  </form>
+                  {subscribeStatus && (
+                    <p
+                      className={`mt-4 text-sm font-medium ${
+                        subscribeStatus === 'success' ? 'text-green-400' : 'text-red-400'
+                      }`}
+                    >
+                      {subscribeMessage}
+                    </p>
+                  )}
+                </div>
               </div>
             </div>
-
-            {/* Category Filter */}
-            <div className="flex flex-wrap justify-center gap-3 mb-8">
-              <Button
-                variant={selectedCategory === 'all' ? 'primary' : 'outline'}
-                size="sm"
-                onClick={() => setSelectedCategory('all')}
-              >
-                All ({posts.length})
-              </Button>
-              {categories.map((category) => (
-                <Button
-                  key={category.name}
-                  variant={selectedCategory === category.name ? 'primary' : 'outline'}
-                  size="sm"
-                  onClick={() => setSelectedCategory(category.name)}
-                >
-                  {category.displayName} ({category.count})
-                </Button>
-              ))}
-            </div>
-          </div>
-
-          {/* Posts Grid */}
-          {filteredPosts.length > 0 ? (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {filteredPosts.map((post, index) => (
-                <Link
-                  key={post.slug}
-                  href={`/blog/${post.slug}`}
-                  className="block group"
-                  style={{ animationDelay: `${index * 0.1}s` }}
-                >
-                <Card
-                  className="h-full hover:-translate-y-1 hover:shadow-glow transition-all duration-300 ease-out cursor-pointer"
-                >
-                  <CardHeader>
-                    <div className="flex items-center justify-between mb-2">
-                      <TechBadge variant="primary" size="sm">
-                        {categories.find(c => c.name === post.category)?.displayName}
-                      </TechBadge>
-                      <span className="text-gray-500 text-sm">
-                        {formatDate(post.date)}
-                      </span>
-                    </div>
-                    <CardTitle className="text-xl group-hover:text-primary-400 transition-colors duration-300">
-                      {post.title}
-                    </CardTitle>
-                  </CardHeader>
-                  
-                  <CardContent>
-                    <p className="text-gray-400 mb-4 line-clamp-3">
-                      {post.excerpt}
-                    </p>
-                    
-                    <div className="flex items-center justify-between">
-                      <div className="flex flex-wrap gap-2">
-                        {post.tags?.slice(0, 3).map((tag) => (
-                          <TechBadge key={tag} size="sm" variant="default">
-                            {tag}
-                          </TechBadge>
-                        ))}
-                      </div>
-                      <span className="text-gray-500 text-sm">
-                        {post.readingTime} min read
-                      </span>
-                    </div>
-                  </CardContent>
-                </Card>
-                </Link>
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-16">
-              <i className="fas fa-search text-6xl text-gray-600 mb-4"></i>
-              <h3 className="text-2xl font-bold text-white mb-2">No posts found</h3>
-              <p className="text-gray-400">
-                {searchQuery 
-                  ? `No posts match "${searchQuery}". Try a different search term.`
-                  : `No posts in the "${selectedCategory}" category yet.`
-                }
-              </p>
-            </div>
-          )}
-
-          {/* Newsletter Signup */}
-          <div id="newsletter" className="mt-20 text-center">
-            <Card className="max-w-2xl mx-auto">
-              <CardContent className="text-center">
-                <h3 className="text-2xl font-bold text-white mb-4">
-                  Stay Updated
-                </h3>
-                <p className="text-gray-400 mb-6">
-                  Get notified when I publish new posts about system design, architecture, and development.
-                </p>
-                <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Enter your email"
-                    className="flex-1 px-4 py-3 bg-dark-700 border border-dark-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all duration-300"
-                  />
-                  <Button type="submit" loading={isSubscribing} disabled={isSubscribing} className="whitespace-nowrap">
-                    {isSubscribing ? 'Subscribing...' : 'Subscribe'}
-                  </Button>
-                </form>
-                {subscribeStatus && (
-                  <p className={`mt-4 text-sm font-medium ${subscribeStatus === 'success' ? 'text-green-400' : 'text-red-400'}`}>
-                    {subscribeMessage}
-                  </p>
-                )}
-              </CardContent>
-            </Card>
           </div>
         </div>
       </div>
@@ -221,11 +349,11 @@ export default function BlogIndex({ posts, categories }) {
 export async function getStaticProps() {
   const posts = await getAllPostSummaries()
   const categories = await getAllCategories()
-  
+
   return {
     props: {
       posts,
-      categories
-    }
+      categories,
+    },
   }
 }

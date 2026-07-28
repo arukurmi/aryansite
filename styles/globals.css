@@ -106,6 +106,15 @@
   .gradient-text {
     @apply bg-gradient-to-r from-primary-400 to-primary-600 bg-clip-text text-transparent;
   }
+
+  /* Hide the scrollbar on the mobile category chip row while keeping scroll. */
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
   
   .tech-badge {
     @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-dark-700 text-primary-300 border border-dark-600 hover:border-primary-500 transition-all duration-300 hover:shadow-glow;

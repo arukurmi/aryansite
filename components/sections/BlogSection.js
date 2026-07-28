@@ -3,6 +3,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '../ui/Card'
 import TechBadge from '../ui/TechBadge'
 import Reveal from '../ui/Reveal'
 import Button from '../ui/Button'
+import { categoryLabel } from '../../lib/categories'
 
 export default function BlogSection({ recentPosts }) {
   const formatDate = (dateString) => {
@@ -47,9 +48,7 @@ export default function BlogSection({ recentPosts }) {
                 <CardHeader>
                   <div className="flex items-center justify-between mb-2">
                     <TechBadge variant="primary" size="sm">
-                      {post.category.split('-').map(word => 
-                        word.charAt(0).toUpperCase() + word.slice(1)
-                      ).join(' ')}
+                      {categoryLabel(post.category)}
                     </TechBadge>
                     <span className="text-gray-500 text-sm">
                       {formatDate(post.date)}
