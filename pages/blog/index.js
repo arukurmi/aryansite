@@ -138,8 +138,10 @@ export default function BlogIndex({ posts, categories }) {
             </p>
           </header>
 
-          {/* Two-column: sticky index nav + results */}
-          <div className="grid lg:grid-cols-[240px_minmax(0,1fr)] gap-8 lg:gap-10">
+          {/* Two-column: sticky index nav + results.
+              grid-cols-1 (= minmax(0,1fr)) keeps the single mobile column from
+              growing to the cards' max-content width and overflowing. */}
+          <div className="grid grid-cols-1 lg:grid-cols-[240px_minmax(0,1fr)] gap-8 lg:gap-10">
             {/* Sidebar (desktop) */}
             <aside className="hidden lg:block">
               <nav className="sticky top-24" aria-label="Blog categories">
@@ -219,7 +221,7 @@ export default function BlogIndex({ posts, categories }) {
 
               {/* Cards */}
               {filteredPosts.length > 0 ? (
-                <div className="grid sm:grid-cols-2 gap-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   {filteredPosts.map((post) => {
                     const cat = catBySlug[post.category]
                     return (
