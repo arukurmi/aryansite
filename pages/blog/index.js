@@ -85,7 +85,7 @@ export default function BlogIndex({ posts, categories }) {
           className={`flex-shrink-0 inline-flex items-center gap-2 px-3.5 py-2 rounded-full text-sm font-medium border transition-all duration-200 ${
             active
               ? 'bg-primary-500/20 text-primary-300 border-primary-500/40'
-              : 'bg-dark-800/60 text-gray-400 border-dark-700 hover:text-white hover:border-dark-600'
+              : 'bg-dark-800/50 text-gray-400 border-dark-700 hover:text-white hover:border-dark-600'
           }`}
         >
           {icon ? <i className={`${icon} text-xs`} /> : <span className={`w-1.5 h-1.5 rounded-full ${dot || 'bg-gray-400'}`} />}
@@ -99,8 +99,8 @@ export default function BlogIndex({ posts, categories }) {
         onClick={onSelect}
         className={`group w-full flex items-center gap-3 pl-3 pr-2.5 py-2.5 rounded-lg border-l-2 transition-all duration-200 ${
           active
-            ? 'border-primary-400 bg-primary-500/10 text-white'
-            : 'border-transparent text-gray-400 hover:text-white hover:bg-dark-800/60'
+            ? 'border-primary-500 bg-primary-500/10 text-white'
+            : 'border-transparent text-gray-400 hover:text-white hover:bg-dark-800/50'
         }`}
       >
         <i
@@ -111,7 +111,7 @@ export default function BlogIndex({ posts, categories }) {
         <span className="flex-1 text-left text-sm font-medium leading-tight">{label}</span>
         <span
           className={`text-xs tabular-nums px-1.5 py-0.5 rounded-md ${
-            active ? 'bg-primary-500/20 text-primary-200' : 'bg-dark-800 text-gray-500'
+            active ? 'bg-primary-500/20 text-primary-300' : 'bg-dark-700 text-gray-500'
           }`}
         >
           {count}
@@ -122,17 +122,15 @@ export default function BlogIndex({ posts, categories }) {
 
   return (
     <Layout className="blog-page">
-      <div className="min-h-screen pt-28 pb-20">
+      <div className="min-h-screen pt-36 md:pt-40 pb-24 md:pb-28">
         <div className="container mx-auto px-4">
-          {/* Header */}
-          <header className="max-w-3xl mb-10">
-            <p className="text-primary-400 font-mono text-sm tracking-widest uppercase mb-3">
-              The Notebook
-            </p>
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">
+          {/* Centered hero — matches the Proof of Work page's header treatment. */}
+          <header className="text-center max-w-3xl mx-auto mb-16 md:mb-20">
+            <p className="eyebrow">The Notebook</p>
+            <h1 className="section-title">
               <span className="gradient-text">Writing</span>
             </h1>
-            <p className="text-gray-400 text-lg leading-relaxed">
+            <p className="lead">
               Interview post-mortems, system-design deep dives, and the layer beneath the
               answer I gave. Everything here started as a real question I had to answer out loud.
             </p>
@@ -146,7 +144,7 @@ export default function BlogIndex({ posts, categories }) {
                 bare links hugging the corner. */}
             <aside className="hidden lg:block">
               <nav
-                className="sticky top-28 rounded-2xl border border-dark-700 bg-dark-800/60 backdrop-blur-sm p-3 shadow-xl shadow-black/30"
+                className="sticky top-28 rounded-2xl border border-dark-700 bg-dark-800/50 backdrop-blur-sm p-3 shadow-xl shadow-black/30"
                 aria-label="Blog categories"
               >
                 <p className="px-3 pt-1 pb-2 text-xs font-semibold uppercase tracking-wider text-gray-500">
@@ -233,11 +231,11 @@ export default function BlogIndex({ posts, categories }) {
                       <Link
                         key={post.slug}
                         href={`/blog/${post.slug}`}
-                        className="group relative flex flex-col overflow-hidden rounded-2xl border border-dark-700 bg-dark-800/40 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-dark-600 hover:shadow-glow focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/60"
+                        className="group relative flex flex-col overflow-hidden rounded-2xl border border-dark-700 bg-dark-800/50 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary-500/40 hover:shadow-glow focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/60"
                       >
                         {/* Category spine */}
                         <span
-                          className={`absolute inset-y-0 left-0 w-1 ${cat?.dot || 'bg-primary-400'}`}
+                          className={`absolute inset-y-0 left-0 w-1 ${cat?.dot || 'bg-primary-500'}`}
                           aria-hidden="true"
                         />
 
@@ -246,7 +244,7 @@ export default function BlogIndex({ posts, categories }) {
                           <div className="flex items-center justify-between mb-3">
                             <span
                               className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${
-                                cat?.pill || 'bg-primary-500/20 text-primary-200 border border-primary-400/40'
+                                cat?.pill || 'bg-primary-500/15 text-primary-300 border border-primary-500/25'
                               }`}
                             >
                               {cat?.icon && <i className={`${cat.icon} text-[10px]`} />}
@@ -268,12 +266,12 @@ export default function BlogIndex({ posts, categories }) {
                           </p>
 
                           {/* Footer */}
-                          <div className="flex items-center justify-between gap-3 pt-3 border-t border-dark-700/70">
+                          <div className="flex items-center justify-between gap-3 pt-3 border-t border-dark-700">
                             <div className="flex flex-wrap gap-1.5 min-w-0">
                               {post.tags?.slice(0, 2).map((tag) => (
                                 <span
                                   key={tag}
-                                  className="text-[11px] text-gray-500 bg-dark-800/80 px-2 py-0.5 rounded-md truncate"
+                                  className="text-[11px] text-gray-500 bg-dark-700 px-2 py-0.5 rounded-md truncate"
                                 >
                                   #{tag}
                                 </span>
@@ -303,7 +301,7 @@ export default function BlogIndex({ posts, categories }) {
 
               {/* Newsletter Signup */}
               <div id="newsletter" className="mt-16">
-                <div className="rounded-2xl border border-dark-700 bg-gradient-to-br from-dark-800/70 to-dark-900/40 p-8 text-center">
+                <div className="rounded-2xl border border-dark-700 bg-dark-800/50 backdrop-blur-sm p-8 text-center shadow-xl shadow-black/20">
                   <h3 className="text-2xl font-bold text-white mb-3">Stay Updated</h3>
                   <p className="text-gray-400 mb-6 max-w-md mx-auto">
                     Get notified when I publish new posts on system design, interviews, and what
