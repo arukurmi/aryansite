@@ -142,10 +142,14 @@ export default function BlogIndex({ posts, categories }) {
               grid-cols-1 (= minmax(0,1fr)) keeps the single mobile column from
               growing to the cards' max-content width and overflowing. */}
           <div className="grid grid-cols-1 lg:grid-cols-[240px_minmax(0,1fr)] gap-8 lg:gap-10">
-            {/* Sidebar (desktop) */}
+            {/* Sidebar (desktop) — a contained, elevated panel rather than
+                bare links hugging the corner. */}
             <aside className="hidden lg:block">
-              <nav className="sticky top-24" aria-label="Blog categories">
-                <p className="px-3 mb-2 text-xs font-semibold uppercase tracking-wider text-gray-500">
+              <nav
+                className="sticky top-28 rounded-2xl border border-dark-700 bg-dark-800/60 backdrop-blur-sm p-3 shadow-xl shadow-black/30"
+                aria-label="Blog categories"
+              >
+                <p className="px-3 pt-1 pb-2 text-xs font-semibold uppercase tracking-wider text-gray-500">
                   Browse
                 </p>
                 <div className="space-y-1">
@@ -157,6 +161,7 @@ export default function BlogIndex({ posts, categories }) {
                     active={selectedCategory === 'all'}
                     onSelect={() => setSelectedCategory('all')}
                   />
+                  <div className="my-2 h-px bg-dark-700" />
                   {categories.map((category) => (
                     <NavItem
                       key={category.name}
@@ -241,7 +246,7 @@ export default function BlogIndex({ posts, categories }) {
                           <div className="flex items-center justify-between mb-3">
                             <span
                               className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${
-                                cat?.pill || 'bg-primary-500/15 text-primary-300 border border-primary-500/30'
+                                cat?.pill || 'bg-primary-500/20 text-primary-200 border border-primary-400/40'
                               }`}
                             >
                               {cat?.icon && <i className={`${cat.icon} text-[10px]`} />}
@@ -280,11 +285,6 @@ export default function BlogIndex({ posts, categories }) {
                             </span>
                           </div>
                         </div>
-
-                        {/* Read affordance */}
-                        <span className="pointer-events-none absolute bottom-5 right-5 translate-x-2 opacity-0 text-primary-300 text-sm font-medium transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100">
-                          Read <i className="fas fa-arrow-right ml-0.5 text-xs" />
-                        </span>
                       </Link>
                     )
                   })}
