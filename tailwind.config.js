@@ -5,6 +5,9 @@ module.exports = {
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
     './app/**/*.{js,ts,jsx,tsx,mdx}',
+    // Category colour classes (pills, spines, dots) are declared here as
+    // complete literal strings and must be scanned so they aren't purged.
+    './lib/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
     extend: {
