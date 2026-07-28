@@ -2,7 +2,6 @@
 title: "How Datadog, New Relic and Sentry Ingest Trillions of Logs Without Falling Over"
 excerpt: "Every observability platform is secretly the same machine: an agent, a queue, a columnar store, and a query engine. A deep dive into how Datadog's Husky, New Relic's NRDB, and Sentry's Snuba actually work — push vs pull, consistency trade-offs, storage tiers, and the numbers that make interviewers nod."
 date: "2026-06-04"
-category: "system-design"
 tags: ["system-design", "observability", "logging", "datadog", "new-relic", "sentry", "kafka", "columnar-databases"]
 author: "Aryansh Kurmi"
 ---

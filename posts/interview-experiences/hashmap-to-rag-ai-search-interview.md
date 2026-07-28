@@ -2,7 +2,6 @@
 title: "From HashMap to RAG — What a 15-Minute Interview Taught Me About AI Search"
 excerpt: "A real interview question about cricket articles that started with a simple inverted-index answer and turned into a deep dive on retrieval-augmented generation, tool calling, MCP, and hash map internals. The question that looked like a trick was really testing how far I could think."
 date: "2026-06-23"
-category: "interview-experiences"
 tags: ["interview", "rag", "llm", "tool-calling", "mcp", "system-design", "data-structures"]
 author: "Aryansh Kurmi"
 ---

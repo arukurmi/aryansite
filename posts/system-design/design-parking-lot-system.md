@@ -2,7 +2,6 @@
 title: "Design a Parking Lot System - Low Level Design"
 excerpt: "Learn how to design a parking lot management system from scratch using object-oriented principles and design patterns."
 date: "2025-12-15"
-category: "lld"
 tags: ["system-design", "object-oriented-design", "design-patterns", "parking-system"]
 author: "Aryansh Kurmi"
 ---

@@ -2,7 +2,6 @@
 title: "Rate the Date: I Built an App for the Hardest Sentence in Any Relationship — 'Something's Wrong'"
 excerpt: "Dating apps spend billions getting two people together and nothing on what happens after. Rate the Date is my answer to the other side of the line: a private app where partners rate each other on the five love languages, and an AI turns those honest-but-unsayable scores into a letter your partner can actually hear. The psychology of why we can't say hard things, and the design decisions that route around it."
 date: "2025-08-12"
-category: "engineering-lessons"
 tags: ["side-project", "product-psychology", "relationships", "love-languages", "gemini", "node", "react", "encryption", "behavioral-design"]
 author: "Aryansh Kurmi"
 ---

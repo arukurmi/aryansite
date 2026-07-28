@@ -2,7 +2,6 @@
 title: "De Shaw Interview — Java Autoboxing & Unboxing"
 excerpt: "A De Shaw round where I was handed a deliberately tricky Integer vs int snippet. Here's the snippet, the answer I gave, and the full theory of why Java's autoboxing and unboxing make each line behave the way it does — including the Integer cache landmine."
 date: "2026-03-03"
-category: "interview-experiences"
 tags: ["interview", "de-shaw", "java", "autoboxing", "unboxing", "integer-cache"]
 author: "Aryansh Kurmi"
 ---

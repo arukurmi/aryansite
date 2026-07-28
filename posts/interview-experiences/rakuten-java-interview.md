@@ -2,7 +2,6 @@
 title: "Rakuten Java Interview Experience"
 excerpt: "A detailed walkthrough of a Java-focused Rakuten interview round covering core Java, OOP, collections, Spring Boot, Hibernate, concurrency, and tricky language questions — with complete answers and code."
 date: "2026-06-15"
-category: "interview-experiences"
 tags: ["interview", "rakuten", "java", "spring-boot", "hibernate", "concurrency"]
 author: "Aryansh Kurmi"
 ---

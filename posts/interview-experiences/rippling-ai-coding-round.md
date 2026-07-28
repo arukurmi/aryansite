@@ -2,7 +2,6 @@
 title: "Rippling Interview — AI-Powered Coding Round"
 excerpt: "A short writeup of Rippling's pipeline: a simple HackerRank assessment, then an AI-powered coding round where I built a corporate credit-card expense-policy engine end to end. The focus here is on how I ran the interview — nailing the entities and labels up front, talking through the design, and using AI to do most of the typing while I drove."
 date: "2026-03-16"
-category: "interview-experiences"
 tags: ["interview", "rippling", "ai-coding", "rule-engine", "javascript", "lld"]
 author: "Aryansh Kurmi"
 ---

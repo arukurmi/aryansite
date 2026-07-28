@@ -2,7 +2,6 @@
 title: "Stripe Programming Round Interview Experience"
 excerpt: "A walkthrough of Stripe's programming round — from the take-home-style assessment to a live 60-minute problem-solving session built around a 3-part shipping-cost problem that scales from a simple min-sum into a full DP. With the full problem, my actual solutions, and the optimal ones."
 date: "2026-05-17"
-category: "interview-experiences"
 tags: ["interview", "stripe", "problem-solving", "dynamic-programming", "javascript", "algorithms"]
 author: "Aryansh Kurmi"
 ---

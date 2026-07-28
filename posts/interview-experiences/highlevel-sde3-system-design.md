@@ -2,7 +2,6 @@
 title: "HighLevel SDE-3 System Design Interview"
 excerpt: "A real SDE-3 system design round at HighLevel — designing a multi-tenant CRM backend. The questions asked, where the discussion went, and what the right answers look like."
 date: "2026-06-08"
-category: "interview-experiences"
 tags: ["interview", "highlevel", "system-design", "sde-3", "multi-tenant", "backend"]
 author: "Aryansh Kurmi"
 ---

@@ -2,7 +2,6 @@
 title: "Swipe, Match, Pay: How Dating Apps Hack Your Brain, Print Money, and Are Actually Built"
 excerpt: "Tinder, Bumble, and Hinge are three of the most psychologically sophisticated products ever shipped. A deep dive into the slot-machine mechanics behind the swipe, the freemium funnel that turns loneliness into ~$6B a year, the quiet paradox at the heart of the business model — and the geosharded architecture that serves 75 million people their next maybe-soulmate in under 50ms."
 date: "2025-06-28"
-category: "system-design"
 tags: ["system-design", "product-psychology", "dating-apps", "tinder", "bumble", "hinge", "monetization", "behavioral-design", "freemium"]
 author: "Aryansh Kurmi"
 ---

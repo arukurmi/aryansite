@@ -2,7 +2,6 @@
 title: "How I Used Claude Code to Diagnose and Fix My Site's Latency"
 excerpt: "A case study in agentic engineering: instead of guessing at a 700ms page load, I drove an AI coding agent like a senior pair — anchoring it with constraints, demanding proof before any change, and forcing production verification. Here are the exact prompts I used, the agentic workflow, and the real optimizations that shipped."
 date: "2025-12-16"
-category: "engineering-lessons"
 tags: ["ai", "agentic-engineering", "prompt-engineering", "claude-code", "performance", "nextjs"]
 author: "Aryansh Kurmi"
 ---

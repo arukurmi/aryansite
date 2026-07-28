@@ -2,7 +2,6 @@
 title: "You Can't Benchmark a Dev Server: Dev vs UAT vs Production"
 excerpt: "A 700ms local page load sent me down a rabbit hole — and the real lesson had nothing to do with the page. Why dev, sandbox, and UAT environments are structurally incomparable to production, how to actually benchmark and load-test on AWS/Azure, and what a senior engineer looks for before trusting a single latency number."
 date: "2025-12-09"
-category: "engineering-lessons"
 tags: ["performance", "benchmarking", "load-testing", "aws", "azure", "production", "observability"]
 author: "Aryansh Kurmi"
 ---

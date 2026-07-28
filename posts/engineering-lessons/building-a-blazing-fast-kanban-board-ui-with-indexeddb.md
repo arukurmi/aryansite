@@ -2,7 +2,6 @@
 title: "Building a Blazing-Fast Kanban Board UI with IndexedDB"
 excerpt: "How I built a Kanban board that feels instant by pushing state into IndexedDB on the frontend and pairing it with a Linear-inspired sync engine on the backend. The architecture, the tradeoffs, and what I'd do differently."
 date: "2026-06-18"
-category: "engineering-lessons"
 tags: ["indexeddb", "local-first", "sync-engine", "frontend-architecture", "kanban", "performance"]
 author: "Aryansh Kurmi"
 ---

@@ -2,7 +2,6 @@
 title: "AGI Timelines: The Continual Learning Bottleneck and Why Agents Aren't Ready"
 excerpt: "AGI Timelines: The Continual Learning Bottleneck and Why Agents Aren't Ready"
 date: "2025-12-17"
-category: "engineering-lessons"
 tags: ["agi", "ai", "future-of-ai"]
 author: "Aryansh Kurmi"
 ---

@@ -2,7 +2,6 @@
 title: "Log-zilla: I Studied How Datadog and Sentry Work, Then Built My Own With Claude Agents"
 excerpt: "After deep-diving into Husky, NRDB, and Snuba, I shrank the same architecture down to something that runs on a laptop: a self-hosted log console that eats every localhost service's output. Here's the design, the trade-offs, and how a team of Claude agents wrote nearly all of it."
 date: "2026-06-29"
-category: "engineering-lessons"
 tags: ["observability", "logging", "side-project", "claude-code", "agentic-engineering", "fluent-bit", "sqlite", "docker"]
 author: "Aryansh Kurmi"
 ---
