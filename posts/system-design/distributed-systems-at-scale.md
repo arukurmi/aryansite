@@ -2,7 +2,7 @@
 title: "Everything That Breaks When You Scale (100M Transactions, 1M Queries a Second)"
 excerpt: "Idempotency, retries, state machines, backpressure, queue-based load levelling, and the failure modes nobody warns you about — explained without jargon."
 tags: ["distributed-systems", "scaling", "idempotency", "backpressure", "payments"]
-date: "2026-07-28"
+date: "2026-07-25"
 author: "Aryansh Kurmi"
 ---
 

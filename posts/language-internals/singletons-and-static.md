@@ -2,7 +2,7 @@
 title: "Singletons, `static`, and the Question I Failed"
 excerpt: "Write me a database singleton that can never be null. I couldn't. Here's the answer, and everything about the static keyword that makes it work."
 tags: ["java", "design-patterns", "jvm", "interviews"]
-date: "2026-07-28"
+date: "2026-07-13"
 author: "Aryansh Kurmi"
 ---
 

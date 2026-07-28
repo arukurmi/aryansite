@@ -2,7 +2,7 @@
 title: "How Postgres Actually Works (Explained Like You're New Here)"
 excerpt: "Pages, tuples, MVCC, xmin/xmax and WAL — explained with warehouses and sticky notes, plus the interview puzzle that catches almost everyone."
 tags: ["postgres", "databases", "mvcc", "interviews"]
-date: "2026-07-28"
+date: "2026-07-19"
 author: "Aryansh Kurmi"
 ---
 

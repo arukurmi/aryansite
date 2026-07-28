@@ -2,7 +2,7 @@
 title: "What Is a hashCode, Really? (And Why My HashSet Let Duplicates In)"
 excerpt: "Buckets, linked lists, treeification, and the equals/hashCode contract — explained with the interview question I got wrong."
 tags: ["java", "collections", "hashmap", "hashset", "interviews"]
-date: "2026-07-28"
+date: "2026-07-07"
 author: "Aryansh Kurmi"
 ---
 

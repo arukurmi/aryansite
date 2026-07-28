@@ -2,7 +2,7 @@
 title: "What Does `lock.lock()` Actually Do? (All the Way Down to the CPU)"
 excerpt: "An interviewer asked what the lock function compiles into — 'ultimately, what zeros and ones?' I had no answer. Here's the whole chain: ReentrantLock, AQS, CAS, cache coherence, and futexes."
 tags: ["java", "concurrency", "jvm", "cpu", "interviews"]
-date: "2026-07-28"
+date: "2026-07-16"
 author: "Aryansh Kurmi"
 ---
 

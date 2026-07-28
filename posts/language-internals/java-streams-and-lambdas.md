@@ -2,7 +2,7 @@
 title: "Java Streams and Lambdas, From Zero"
 excerpt: "What a lambda actually is, what a Stream actually is (it's not a collection), and the CSV question I fumbled in an interview — with all the code."
 tags: ["java", "streams", "lambda", "functional", "interviews"]
-date: "2026-07-28"
+date: "2026-07-10"
 author: "Aryansh Kurmi"
 ---
 

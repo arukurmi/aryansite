@@ -2,7 +2,7 @@
 title: "Array vs ArrayList vs LinkedList (And What `List` Actually Is)"
 excerpt: "The interviewer asked twice about LinkedList's advantage, because the standard answer is incomplete. Here's the full one, including why ArrayList wins even when Big-O says it shouldn't."
 tags: ["java", "collections", "data-structures", "interviews"]
-date: "2026-07-28"
+date: "2026-07-04"
 author: "Aryansh Kurmi"
 ---
 

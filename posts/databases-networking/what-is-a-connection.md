@@ -2,7 +2,7 @@
 title: "What Is a 'Connection', Really? (Postgres, Kafka and Redis)"
 excerpt: "An interviewer asked me three times what a database connection actually is. I couldn't answer. Here's the real answer — sockets, file descriptors, backend processes — plus how pooling works and why Kafka and Redis are completely different."
 tags: ["databases", "kafka", "redis", "networking", "connection-pool"]
-date: "2026-07-28"
+date: "2026-07-22"
 author: "Aryansh Kurmi"
 ---
 
