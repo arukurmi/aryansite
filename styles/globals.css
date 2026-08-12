@@ -545,6 +545,269 @@ pre code {
   background: #f6f8fc;
 }
 
+/* ============================================================
+   Diagram figures inside blog posts (.bc-* = blog content)
+   Used by posts that need to show an array/step visually rather
+   than as ASCII art. Everything is a plain <span>/<div>, so it
+   reflows on phones and stays readable in both themes.
+   ============================================================ */
+.blog-content .bc-fig {
+  margin: 2rem 0;
+  padding: 1.15rem 1rem 1rem;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  background: rgba(30, 41, 59, 0.5);
+}
+
+.light .blog-content .bc-fig {
+  border-color: var(--lt-border);
+  background: var(--lt-surface);
+  box-shadow: 0 4px 12px -6px rgba(37, 99, 235, 0.15);
+}
+
+.blog-content .bc-fig-title {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: #7dd3fc;
+  margin-bottom: 0.9rem;
+}
+
+.light .blog-content .bc-fig-title {
+  color: var(--lt-blue);
+}
+
+/* Horizontal overflow is contained here, never on the page body. */
+.blog-content .bc-scroll {
+  overflow-x: auto;
+  padding-bottom: 0.4rem;
+}
+
+.blog-content .bc-row {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  width: max-content;
+  min-width: 100%;
+}
+
+/* A value in the array (or a difference). */
+.blog-content .bc-cell {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.9rem;
+  height: 2.4rem;
+  padding: 0 0.55rem;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 0.88rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* A gap between two neighbours — deliberately smaller and pill-shaped
+   so it reads as "the space between", not as another element. */
+.blog-content .bc-gap {
+  min-width: 2.5rem;
+  height: 1.85rem;
+  font-size: 0.78rem;
+  border-radius: 999px;
+}
+
+/* Parity is the one thing this post needs colour for: blue = even,
+   amber = odd. Neutral is for plain array values. */
+.blog-content .bc-neutral {
+  background: rgba(148, 163, 184, 0.13);
+  border-color: rgba(148, 163, 184, 0.3);
+  color: #cbd5e1;
+}
+
+.blog-content .bc-even {
+  background: rgba(59, 130, 246, 0.16);
+  border-color: rgba(59, 130, 246, 0.42);
+  color: #93c5fd;
+}
+
+.blog-content .bc-odd {
+  background: rgba(245, 158, 11, 0.15);
+  border-color: rgba(245, 158, 11, 0.45);
+  color: #fcd34d;
+}
+
+.light .blog-content .bc-neutral {
+  background: var(--lt-surface-2);
+  border-color: var(--lt-border);
+  color: var(--lt-ink);
+}
+
+.light .blog-content .bc-even {
+  background: #e8f1ff;
+  border-color: #bcd5fa;
+  color: #1d4ed8;
+}
+
+.light .blog-content .bc-odd {
+  background: #fff4e0;
+  border-color: #f0d4a0;
+  color: #a16207;
+}
+
+/* Ring around the cells an operation actually touched. */
+.blog-content .bc-hl {
+  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.6);
+}
+
+.light .blog-content .bc-hl {
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.45);
+}
+
+/* A maximal same-parity run: a sealed box you may shuffle inside. */
+.blog-content .bc-run {
+  padding: 0.4rem 0.45rem 0.3rem;
+  border: 1px dashed rgba(148, 163, 184, 0.4);
+  border-radius: 10px;
+}
+
+.light .blog-content .bc-run {
+  border-color: #c7d4e8;
+}
+
+.blog-content .bc-run-cells {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.blog-content .bc-run-label,
+.blog-content .bc-step {
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+  color: #94a3b8;
+}
+
+/* Centred under its own box; the step label lines up with the cells instead,
+   so it doesn't drift into the empty space on a wide screen. */
+.blog-content .bc-run-label {
+  margin-top: 0.4rem;
+  text-align: center;
+}
+
+.light .blog-content .bc-run-label,
+.light .blog-content .bc-step {
+  color: var(--lt-ink-muted);
+}
+
+/* The parity boundary values can never cross. */
+.blog-content .bc-wall {
+  align-self: stretch;
+  width: 0;
+  margin: 0 0.5rem;
+  border-left: 2px dashed rgba(245, 158, 11, 0.65);
+}
+
+.light .blog-content .bc-wall {
+  border-left-color: #d9a441;
+}
+
+.blog-content .bc-step {
+  margin: 0.85rem 0;
+  font-weight: 600;
+}
+
+.blog-content .bc-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  margin-top: 0.9rem;
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
+
+.light .blog-content .bc-legend {
+  color: var(--lt-ink-muted);
+}
+
+.blog-content .bc-swatch {
+  display: inline-block;
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 3px;
+  margin-right: 0.35rem;
+  vertical-align: -1px;
+}
+
+/* The wall isn't a colour, it's a boundary — draw the legend key as the
+   dashed line it actually is, so it can't be mistaken for "odd gap". */
+.blog-content .bc-swatch-wall {
+  width: 0.25rem;
+  height: 0.95rem;
+  border-radius: 1px;
+  vertical-align: -3px;
+  background: repeating-linear-gradient(
+    to bottom,
+    #e0a13a 0 3px,
+    transparent 3px 6px
+  );
+}
+
+.blog-content .bc-fig figcaption {
+  margin-top: 0.9rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(148, 163, 184, 0.18);
+  font-size: 0.8rem;
+  line-height: 1.6;
+  color: #94a3b8;
+}
+
+.light .blog-content .bc-fig figcaption {
+  border-top-color: var(--lt-border);
+  color: var(--lt-ink-muted);
+}
+
+/* Phones: let the runs stack instead of hiding off the right edge. A wall
+   between two stacked boxes reads as a horizontal rule rather than a
+   vertical one, but it still says the same thing — nothing crosses it. */
+@media (max-width: 640px) {
+  .blog-content .bc-row {
+    flex-wrap: wrap;
+    width: 100%;
+    row-gap: 0.5rem;
+  }
+
+  .blog-content .bc-wall {
+    width: 100%;
+    margin: 0.1rem 0;
+    border-left: 0;
+    border-top: 2px dashed rgba(245, 158, 11, 0.65);
+  }
+
+  .light .blog-content .bc-wall {
+    border-top-color: #d9a441;
+  }
+}
+
+/* Phones: shrink the cells before resorting to a scrollbar. */
+@media (max-width: 480px) {
+  .blog-content .bc-fig {
+    padding: 1rem 0.75rem 0.85rem;
+  }
+
+  .blog-content .bc-cell {
+    min-width: 2.4rem;
+    height: 2.1rem;
+    padding: 0 0.4rem;
+    font-size: 0.78rem;
+  }
+
+  .blog-content .bc-gap {
+    min-width: 2.1rem;
+    height: 1.65rem;
+    font-size: 0.7rem;
+  }
+}
+
 .prose ul,
 .prose ol {
   margin-bottom: 1rem;
@@ -807,6 +1070,15 @@ pre code {
 
 .light .blog-content a:hover {
   color: #2c5aa0;
+}
+
+/* Inline `code` in light mode. The global `code` rule is a dark chip, which
+   reads as a hole punched in a white page. Fenced blocks keep the dark
+   treatment on purpose, so this deliberately skips `pre > code`. */
+.light .blog-content :not(pre) > code {
+  background: var(--lt-surface-2) !important;
+  color: #1d4ed8 !important;
+  border: 1px solid var(--lt-border);
 }
 
 /* Beautiful Sun/Moon Toggle Styles */
