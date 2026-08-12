@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import Layout from '../../components/layout/Layout'
+import Seo from '../../components/Seo'
 import { getAllPosts, getPostBySlug, getRelatedPosts } from '../../lib/blog'
 import { categoryLabel } from '../../lib/categories'
 import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/Card'
@@ -55,6 +56,14 @@ export default function BlogPost({ post, relatedPosts }) {
 
   return (
     <Layout className="blog-page">
+      <Seo
+        title={post.title}
+        description={post.excerpt}
+        path={`/blog/${post.slug}`}
+        type="article"
+        publishedTime={post.date}
+        tags={post.tags}
+      />
       <div className="min-h-screen">
         {/* Reading Progress Bar */}
         <div className="fixed top-0 left-0 w-full h-1 bg-dark-700 z-50">

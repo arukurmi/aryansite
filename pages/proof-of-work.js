@@ -1,5 +1,5 @@
-import Head from 'next/head'
 import Layout from '../components/layout/Layout'
+import Seo from '../components/Seo'
 import CompanyProofCard from '../components/proof/CompanyProofCard'
 import ProjectProofCard from '../components/proof/ProjectProofCard'
 import { companies, projects } from '../data/proofOfWork'
@@ -7,21 +7,11 @@ import { companies, projects } from '../data/proofOfWork'
 export default function ProofOfWork() {
   return (
     <Layout>
-      <Head>
-        <title>Proof of Work — Aryansh Kurmi</title>
-        <meta
-          name="description"
-          content="Metrics-backed proof of impact: 6M+ transactions at 99.99% correctness, 3,000 QPS BFCM peaks, KYC automation for 250K+ users, and shipped projects with live links."
-        />
-        <meta property="og:title" content="Proof of Work — Aryansh Kurmi" />
-        <meta
-          property="og:description"
-          content="Not just claims — charts, numbers, and live links. Impact at GoKwik and CoinDCX, plus shipped projects."
-        />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://arukurmi.vercel.app/proof-of-work" />
-        <meta name="twitter:card" content="summary" />
-      </Head>
+      <Seo
+        title="Proof of Work"
+        description="Metrics-backed proof of impact: 6M+ transactions at 99.99% correctness, 3,000 QPS BFCM peaks, KYC automation for 250K+ users, and shipped projects with live links."
+        path="/proof-of-work"
+      />
 
       <div className="min-h-screen pt-36 md:pt-40 pb-28 md:pb-36">
         <div className="container mx-auto px-4">

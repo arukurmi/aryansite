@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import Layout from '../../components/layout/Layout'
+import Seo from '../../components/Seo'
 import { getAllPostSummaries, getAllCategories } from '../../lib/blog'
 import Button from '../../components/ui/Button'
 
@@ -122,6 +123,11 @@ export default function BlogIndex({ posts, categories }) {
 
   return (
     <Layout className="blog-page">
+      <Seo
+        title="Writing"
+        description="Interview post-mortems, system-design deep dives, language internals, and contest problems taken apart until the trick is obvious."
+        path="/blog"
+      />
       <div className="min-h-screen pt-36 md:pt-40 pb-24 md:pb-28">
         <div className="container mx-auto px-4">
           {/* Centered hero — matches the Proof of Work page's header treatment. */}
