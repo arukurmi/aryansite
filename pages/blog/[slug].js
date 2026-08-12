@@ -78,14 +78,19 @@ export default function BlogPost({ post, relatedPosts }) {
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               {/* Back Button */}
+              {/* A real link, not router.back(). Now that posts carry proper
+                  metadata and a sitemap, most arrivals are from search or a
+                  shared link — and for those, history.back() leaves the site
+                  entirely (or does nothing on a fresh tab). */}
               <Button
+                as={Link}
+                href="/blog"
                 variant="ghost"
                 size="sm"
-                onClick={() => router.back()}
                 className="mb-8"
               >
                 <i className="fas fa-arrow-left mr-2"></i>
-                Back
+                All posts
               </Button>
 
               {/* Post Meta */}

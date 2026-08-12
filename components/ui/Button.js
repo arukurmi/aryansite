@@ -1,13 +1,16 @@
 import { forwardRef } from 'react'
 
-const Button = forwardRef(({ 
-  children, 
-  variant = 'primary', 
-  size = 'md', 
-  className = '', 
+const Button = forwardRef(({
+  children,
+  variant = 'primary',
+  size = 'md',
+  className = '',
   disabled = false,
   loading = false,
-  ...props 
+  // Lets a control that navigates render as the element that navigates —
+  // pass `as={Link}` with an href rather than faking it with an onClick.
+  as: Tag = 'button',
+  ...props
 }, ref) => {
   const baseClasses = 'inline-flex items-center justify-center font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none'
   
@@ -28,11 +31,17 @@ const Button = forwardRef(({
   
   const classes = `${baseClasses} ${variants[variant]} ${sizes[size]} ${className}`
   
+  const isNativeButton = Tag === 'button'
+
   return (
-    <button
+    <Tag
       ref={ref}
       className={classes}
-      disabled={disabled || loading}
+      // `disabled` is only a valid attribute on real buttons; on anything
+      // else it would leak into the DOM as an unknown attribute.
+      {...(isNativeButton
+        ? { disabled: disabled || loading }
+        : { 'aria-disabled': disabled || loading || undefined })}
       {...props}
     >
       {loading && (
@@ -42,7 +51,7 @@ const Button = forwardRef(({
         </svg>
       )}
       {children}
-    </button>
+    </Tag>
   )
 })
 
