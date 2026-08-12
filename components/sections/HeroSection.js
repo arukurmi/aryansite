@@ -2,25 +2,26 @@ import { useState, useEffect } from 'react'
 import Button from '../ui/Button'
 import TechBadge from '../ui/TechBadge'
 
+const FULL_TEXT = "Hi! I'm Aryansh Kurmi"
+
 export default function HeroSection() {
-  const [isLoaded, setIsLoaded] = useState(false)
   const [currentText, setCurrentText] = useState('')
-  const fullText = "Hi! I'm Aryansh Kurmi"
 
   useEffect(() => {
-    setIsLoaded(true)
-    
-    // Typing animation
+    // Typing animation. Purely decorative — the real heading text is always
+    // in the DOM (see the sr-only span below), so this drives a span that
+    // assistive tech ignores.
     let i = 0
+    let timer
     const typeWriter = () => {
-      if (i < fullText.length) {
-        setCurrentText(fullText.substring(0, i + 1))
+      if (i < FULL_TEXT.length) {
+        setCurrentText(FULL_TEXT.substring(0, i + 1))
         i++
-        setTimeout(typeWriter, 100)
+        timer = setTimeout(typeWriter, 100)
       }
     }
-    
-    setTimeout(typeWriter, 1000)
+    timer = setTimeout(typeWriter, 1000)
+    return () => clearTimeout(timer)
   }, [])
 
   const techStack = ['TypeScript', 'Node.js', 'AI Agents', 'LLMs', 'MCP', 'PostgreSQL', 'Docker']
@@ -31,9 +32,17 @@ export default function HeroSection() {
         <div className="container mx-auto px-4 py-16">
           <div className="text-center">
             {/* Hero Content */}
-          <div className={`transition-all duration-1000 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-            <h1 className="text-6xl md:text-8xl font-bold mb-6">
-              <span className="gradient-text typing-animation">
+          <div className="hero-rise">
+            {/* min-height reserves the line the typewriter is about to fill,
+                so the rest of the hero doesn't get shoved down when the first
+                character lands a second after paint. */}
+            <h1 className="text-6xl md:text-8xl font-bold mb-6 min-h-[3.75rem] md:min-h-[6rem]">
+              {/* The heading text ships in the HTML for crawlers, screen
+                  readers and no-JS visitors. The typewriter used to be the
+                  only source of it, which left the site's single <h1> empty
+                  in the prerendered markup until a 1s timer fired. */}
+              <span className="sr-only">{FULL_TEXT}</span>
+              <span className="gradient-text typing-animation" aria-hidden="true">
                 {currentText}
               </span>
             </h1>
@@ -46,7 +55,7 @@ export default function HeroSection() {
           </div>
 
           {/* Tech Stack */}
-          <div className={`transition-all duration-1000 delay-500 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+          <div className="hero-rise hero-rise-2">
             <div className="flex flex-wrap justify-center gap-3 mb-12">
               {techStack.map((tech, index) => (
                 <TechBadge
@@ -60,7 +69,7 @@ export default function HeroSection() {
           </div>
 
           {/* CTA Buttons */}
-          <div className={`flex flex-col sm:flex-row gap-4 justify-center transition-all duration-1000 delay-700 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center hero-rise hero-rise-3">
             <Button
               size="lg"
               className="text-lg px-8 py-4"
@@ -81,7 +90,7 @@ export default function HeroSection() {
           </div>
 
           {/* Scroll Indicator */}
-          <div className={`mt-16 transition-all duration-1000 delay-1000 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+          <div className="mt-16 hero-rise hero-rise-4">
             <div className="animate-bounce">
               <i className="fas fa-chevron-down text-primary-400 text-2xl"></i>
             </div>

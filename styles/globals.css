@@ -221,6 +221,30 @@
   }
 }
 
+/* Hero entrance. Deliberately an animation rather than a JS-toggled class:
+   it runs from the first paint, so the hero is never gated on hydration.
+   `backwards` holds the from-state during the stagger delay. */
+.hero-rise {
+  animation: hero-rise 1s ease-out backwards;
+}
+
+.hero-rise-2 { animation-delay: 0.3s; }
+.hero-rise-3 { animation-delay: 0.45s; }
+.hero-rise-4 { animation-delay: 0.6s; }
+
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    transform: translateY(2.5rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-rise {
+    animation: none;
+  }
+}
+
 /* Custom animations */
 @keyframes float {
   0%, 100% { transform: translateY(0px); }
