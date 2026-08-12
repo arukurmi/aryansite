@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
+import Link from 'next/link'
 import Layout from '../../components/layout/Layout'
 import Seo from '../../components/Seo'
 import { getAllPosts, getPostBySlug, getRelatedPosts } from '../../lib/blog'
 import { categoryLabel } from '../../lib/categories'
-import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/Card'
 import TechBadge from '../../components/ui/TechBadge'
 import Button from '../../components/ui/Button'
 
@@ -179,24 +179,21 @@ export default function BlogPost({ post, relatedPosts }) {
                   Related Posts
                 </h2>
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {relatedPosts.map((relatedPost, index) => (
-                    <Card
+                  {relatedPosts.map((relatedPost) => (
+                    <Link
                       key={relatedPost.slug}
-                      className="hover:-translate-y-1 hover:shadow-glow transition-all duration-300 ease-out cursor-pointer group"
-                      onClick={() => router.push(`/blog/${relatedPost.slug}`)}
-                      style={{ animationDelay: `${index * 0.1}s` }}
+                      href={`/blog/${relatedPost.slug}`}
+                      className="group block bg-dark-800/50 backdrop-blur-sm border border-dark-700 rounded-xl p-6 shadow-xl transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-glow focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/60"
                     >
-                      <CardHeader>
+                      <div className="mb-4">
                         <TechBadge variant="primary" size="sm" className="mb-2">
-                          {relatedPost.category.split('-').map(word => 
-                            word.charAt(0).toUpperCase() + word.slice(1)
-                          ).join(' ')}
+                          {categoryLabel(relatedPost.category)}
                         </TechBadge>
-                        <CardTitle className="text-lg group-hover:text-primary-400 transition-colors duration-300">
+                        <h3 className="text-xl font-bold text-white mb-2 text-lg group-hover:text-primary-400 transition-colors duration-300">
                           {relatedPost.title}
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent>
+                        </h3>
+                      </div>
+                      <div className="text-gray-300">
                         <p className="text-gray-400 text-sm line-clamp-2 mb-3">
                           {relatedPost.excerpt}
                         </p>
@@ -208,8 +205,8 @@ export default function BlogPost({ post, relatedPosts }) {
                             {relatedPost.readingTime} min read
                           </span>
                         </div>
-                      </CardContent>
-                    </Card>
+                      </div>
+                    </Link>
                   ))}
                 </div>
               </div>
