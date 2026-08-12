@@ -58,6 +58,36 @@ export default function Seo({
       )}
       {type === 'article' &&
         tags?.map((tag) => <meta property="article:tag" content={tag} key={tag} />)}
+
+      {type === 'article' && (
+        <script
+          type="application/ld+json"
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(articleSchema({ title, desc, url, publishedTime, tags })),
+          }}
+        />
+      )}
     </Head>
   )
+}
+
+// Structured data for a post. Google reads this to decide whether a result is
+// eligible for an article rich result, and to attribute the author and date
+// rather than guessing them out of the page text.
+function articleSchema({ title, desc, url, publishedTime, tags }) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    // Bare title, not the "— Aryansh Kurmi" tab form; Google truncates
+    // headline past ~110 characters.
+    headline: truncate(title, 110),
+    description: desc,
+    datePublished: publishedTime,
+    dateModified: publishedTime,
+    mainEntityOfPage: { '@type': 'WebPage', '@id': url },
+    author: { '@type': 'Person', name: SITE_NAME, url: SITE_URL },
+    publisher: { '@type': 'Person', name: SITE_NAME, url: SITE_URL },
+    ...(tags?.length ? { keywords: tags.join(', ') } : {}),
+  }
 }
