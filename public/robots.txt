@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# The API routes are POST-only side effects (contact, subscribe) with nothing
+# to index, and _next holds build artefacts.
+Disallow: /api/
+Disallow: /_next/
+
+Sitemap: https://arukurmi.vercel.app/sitemap.xml
