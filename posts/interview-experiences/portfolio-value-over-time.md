@@ -329,3 +329,12 @@ The follow-ups are where the round gets decided. Have these one-liners loaded:
 | **Selling a stock** | A sell is just a negative event: `delta[day] -= currentPrice`. Same machinery, no new code path. |
 | **Multiple lots of the same stock** | Treat each lot as its own step function. The deltas simply add. |
 | **Live queries while updates stream in** | Fenwick tree (BIT) or segment tree over compressed days — `O(log U)` per update and per query. |
+
+---
+
+## 🎯 What I'd tell myself before the round
+
+- **The nested `int[][][]` is set dressing.** Don't let the shape of the input pick your data structure. Ask what the *values* do over time — here, they hold flat and jump. That's a step function, and step functions want deltas.
+- **Say the brute force out loud first.** It buys you a correct baseline and a reason to optimise.
+- **When you reach for a second HashMap, stop.** Ask what each one is actually keyed on and what it stores. My reverse map stored a *count* where it needed a *value*, and that one noun was the whole gap between my answer and the intended one.
+- **A day where nothing happens should cost you nothing.** If your solution does work on quiet days, you haven't found the trick yet.
