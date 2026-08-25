@@ -93,3 +93,24 @@ class MonitoringServer
 ```
 
 Three additions, one job each: **something that keeps time**, **something that does work**, and **something that remembers what's already running**. Say that sentence out loud — it's the design in one line, and the rest is just filling it in.
+
+---
+
+## 🐌 Write the naive version on purpose
+
+Put the obvious answer on the board before the good one. It costs thirty seconds and it frames everything after it as an improvement rather than a first draft.
+
+```java
+// NAIVE — do not ship
+public void monitor() throws InterruptedException {
+    while (true) {
+        for (Server s : servers) {
+            Stats st = s.getStats();
+            database.write(s, st);
+        }
+        Thread.sleep(pollIntervalSec * 1000);
+    }
+}
+```
+
+> **Say this:** "That's the shape of the answer, and it's wrong in three specific ways. Let me go through them, because each one points at a piece of the real design."
