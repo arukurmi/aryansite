@@ -316,3 +316,16 @@ First pass → `lo = 2`, `hi = 4`, so `n = 3`.
 `delta = [100, 50, 10]` → prefix → `res = [100, 150, 160]`, mapping to days **2, 3, 4**.
 
 **One API call worth stating out loud:** when the start isn't `0`, returning a bare array forces the caller to remember *"index 0 means day `lo`."* Cleaner is to return `[day, value]` pairs — here `[[2,100],[3,150],[4,160]]` — so every row is self-describing. Mention both and pick the pair form. It shows you thought about the interface, not just the algorithm.
+
+---
+
+## 📈 Scale-ups to have ready
+
+The follow-ups are where the round gets decided. Have these one-liners loaded:
+
+| They ask | You say |
+|---|---|
+| **Sparse / real calendar dates**, huge range | Swap the `long[]` delta for a `TreeMap<Integer, Long>` and prefix-sum over the sorted keys only. `O(U log U)`, independent of the range. Don't allocate `hi − lo + 1` when only `~U` days matter. |
+| **Selling a stock** | A sell is just a negative event: `delta[day] -= currentPrice`. Same machinery, no new code path. |
+| **Multiple lots of the same stock** | Treat each lot as its own step function. The deltas simply add. |
+| **Live queries while updates stream in** | Fenwick tree (BIT) or segment tree over compressed days — `O(log U)` per update and per query. |
