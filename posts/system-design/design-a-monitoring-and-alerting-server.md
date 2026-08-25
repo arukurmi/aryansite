@@ -212,3 +212,26 @@ With it: a slow server gets skipped this tick and becomes eligible again the mom
 `ConcurrentHashMap.newKeySet()` gives you the atomic test-and-set. `add` returning `false` means "someone's already got it" in a single operation, with no lock and no check-then-act race.
 
 > **Note the identity assumption:** `Set<Server>` uses `equals`/`hashCode`. If `Server` implementations don't override them, this is identity-based — which is what you want here, and worth saying out loud so it's clearly a decision and not an accident.
+
+---
+
+## 🛡️ `pollOne` — isolate every failure
+
+```java
+void pollOne(Server s) {
+    try {
+        Stats st = s.getStats();
+        database.write(s, st);
+    } catch (Exception e) {
+        // log + raise alert; do NOT rethrow
+        alerting.raise(s, e);
+    } finally {
+        inFlight.remove(s);   // always, even on failure
+    }
+}
+```
+
+Two lines carry the weight:
+
+- **The `catch`** means one bad server produces an alert instead of a dead monitor. Note that a server failing to respond isn't an error to swallow — in a monitoring system it's *the actual product*. A failed poll should raise an alert, not just log.
+- **The `finally`** guarantees `inFlight` is cleared even when the call throws. Miss this and a server that errors once is never polled again — a permanent, silent blind spot that gets worse every time any server has a bad minute. This is the single easiest bug to write in this problem.
