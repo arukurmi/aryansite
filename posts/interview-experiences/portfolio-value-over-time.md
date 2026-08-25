@@ -68,3 +68,37 @@ Three behaviours in one tiny case: carry-forward, *not yet owned*, and a mid-ran
 - Can a stock be **sold**, or is it buy-and-hold?
 - Can the same stock be bought in multiple lots?
 - Full contiguous range, or arbitrary date queries?
+
+---
+
+## 🐌 First instinct — the brute force
+
+> **Like you're 5:** Every single evening, walk down the whole shelf and read every tag out loud, one toy at a time. It works. It's just a lot of walking.
+
+**What that really is:** for each day, for each stock, find its last price point on or before that day, and sum.
+
+```java
+long[] brute(int[][][] stocks, int D) {
+    long[] res = new long[D + 1];
+
+    for (int d = 0; d <= D; d++) {
+        long sum = 0;
+        for (int[][] stock : stocks) {
+            long last = -1;                 // -1 == not bought yet
+            for (int[] update : stock) {
+                if (update[0] <= d) last = update[1];
+                else break;                 // sorted, so we can stop
+            }
+            if (last >= 0) sum += last;
+        }
+        res[d] = sum;
+    }
+    return res;
+}
+```
+
+- **Time:** `O(D · N · K)` — every day rescans every stock's full update list.
+- **Space:** `O(D)` for the output only.
+- **Edge cases handled:** stock bought after day 0, empty stock list, single update.
+
+Say this one first. It's correct, it's fast to write, and it gives you something to improve *from* — which is the conversation the interviewer actually wants.
