@@ -223,3 +223,35 @@ Width 6, all zeros. Rule per point: `delta[day] += price − prev`, with `prev` 
 | `(5, 160)` | `delta[5] += 160 − 155` | `delta[5] = −145` | 160 |
 
 → **`delta = [355, 250, 20, 0, 10, −145]`**
+
+### Step 2 — the prefix sum
+
+| Day | `delta[d]` | `run = run + delta[d]` | `res[d]` |
+|---|---|---|---|
+| 0 | 355 | `0 + 355` | **355** |
+| 1 | 250 | `355 + 250` | **605** |
+| 2 | 20 | `605 + 20` | **625** |
+| 3 | 0 | `625 + 0` | **625** |
+| 4 | 10 | `625 + 10` | **635** |
+| 5 | −145 | `635 − 145` | **490** |
+
+`res = [355, 605, 625, 625, 635, 490]`
+
+**Look at day 3.** The delta is `0`, so `run` doesn't move — the value simply carries. That is the entire trick. You never re-add the stocks that didn't change; you only ever apply the difference.
+
+### Sanity check — the slow way
+
+Prices actually held on each day, summed directly:
+
+| Day | S0 | S1 | S2 | Total |
+|---|---|---|---|---|
+| 0 | 200 | – | 155 | **355** |
+| 1 | 400 | 50 | 155 | **605** |
+| 2 | 400 | 70 | 155 | **625** |
+| 3 | 400 | 70 *(held)* | 155 *(held)* | **625** |
+| 4 | 400 | 80 | 155 *(held)* | **635** |
+| 5 | 250 | 80 *(held)* | 160 | **490** |
+
+Matches exactly. ✅
+
+**The one sentence to remember:** *store the change on each day, then a running sum rebuilds the totals — because a portfolio's value only moves on days something changes.*
