@@ -114,3 +114,21 @@ public void monitor() throws InterruptedException {
 ```
 
 > **Say this:** "That's the shape of the answer, and it's wrong in three specific ways. Let me go through them, because each one points at a piece of the real design."
+
+---
+
+## 💥 Why the naive version breaks
+
+**1. It's sequential, so a cycle costs the sum of every latency.**
+
+With 100 servers averaging 50ms, one full pass is 5 seconds. Your poll interval is 1 second. You have already lost, and you lose worse every time someone adds a server. The cycle time is `Σ latency(i)`, and it grows linearly with the fleet.
+
+**2. One hung server freezes every server behind it.**
+
+This is **head-of-line blocking**. `getStats()` on server #7 hangs for 30 seconds, and servers #8 through #100 simply don't get monitored for 30 seconds. The failure mode is the exact opposite of what a monitoring system is for: the one moment something is wrong is the moment you go blind.
+
+**3. The sleep is after the work, so the period drifts.**
+
+The real period is `pollIntervalSec + workTime`, not `pollIntervalSec`. Every cycle you fall a little further behind, and the drift accumulates forever. After an hour your "1-second" samples are landing wherever they land, which quietly wrecks any rate calculation done on top of them downstream.
+
+> **The insight to state:** all three problems come from one mistake — the thing that keeps time is also the thing that does the work. Separate them and all three go away.
