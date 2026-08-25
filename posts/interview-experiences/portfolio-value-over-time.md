@@ -120,3 +120,18 @@ I reached for **two HashMaps and a Set**:
 **But the instinct underneath was right.** "Index the events by day" is exactly the correct idea. The fix is one word: store the **value change** on each day, not a stock count. Make that single substitution and both maps and the set collapse into one array — and that array *is* the optimal solution.
 
 That's usually how these rounds go. You're rarely miles off. You're one noun away.
+
+---
+
+## ✨ The trick — write down only what changed
+
+> **Like you're 5:** Don't read every tag every evening. Just keep a sticky note for each day that says *"the shelf got 50 rupees more expensive today"* or *"it got 150 cheaper today."* On days nobody touches anything, the sticky note says zero.
+
+**What that really is:** a **difference array** (a delta array). Since each stock's value is a step function, and the portfolio is a sum of step functions, you only ever need to record the *changes*:
+
+- For a stock's **first** point `(d₀, p₀)`: `delta[d₀] += p₀` — the whole price appears out of nowhere, because you just bought it.
+- For each later point `(dₖ, pₖ)` following `(dₖ₋₁, pₖ₋₁)`: `delta[dₖ] += pₖ − pₖ₋₁` — only the difference.
+
+Both cases are the same line of code if you initialise `prev = 0`, because `p₀ − 0 == p₀`. The "just bought" case falls out for free.
+
+`delta[d]` means exactly one thing: **how much the entire portfolio's value moves on day `d` compared to the day before.** A buy is a jump up. A price drop is a jump down. A day with no events is `0` — and *that zero is the carry-forward*, handled for free, with no code.
