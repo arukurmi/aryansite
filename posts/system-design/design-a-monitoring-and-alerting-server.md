@@ -235,3 +235,49 @@ Two lines carry the weight:
 
 - **The `catch`** means one bad server produces an alert instead of a dead monitor. Note that a server failing to respond isn't an error to swallow — in a monitoring system it's *the actual product*. A failed poll should raise an alert, not just log.
 - **The `finally`** guarantees `inFlight` is cleared even when the call throws. Miss this and a server that errors once is never polled again — a permanent, silent blind spot that gets worse every time any server has a bad minute. This is the single easiest bug to write in this problem.
+
+---
+
+## ⏳ The question they always ask: what if `getStats()` never returns?
+
+In the version above, that worker thread is stuck forever.
+
+Be honest about the partial mitigation before you fix it: it's **self-limiting**, because `inFlight` stops you from re-polling that server — so one hung target costs you exactly one thread, not a thread per second. But it burns that thread permanently, and enough hung servers exhaust the pool and take down monitoring for everything.
+
+**The clean answer:** a network client should carry its own connect and read timeout, so `getStats()` *cannot* hang unbounded. Fix it at the source.
+
+**If you can't rely on that**, enforce the timeout yourself with a second pool:
+
+```java
+ExecutorService calls = Executors.newFixedThreadPool(32);
+long timeoutMs = 500;
+
+void pollOne(Server s) {
+    Future<Stats> f = calls.submit(s::getStats);
+    try {
+        Stats st = f.get(timeoutMs, TimeUnit.MILLISECONDS);
+        database.write(s, st);
+    } catch (TimeoutException e) {
+        f.cancel(true);
+        alerting.raise(s, "unresponsive");
+    } catch (Exception e) {
+        alerting.raise(s, "poll failed");
+    } finally {
+        inFlight.remove(s);
+    }
+}
+```
+
+`pollOne` runs on `workers`, the actual `getStats()` runs on `calls`, and `f.get(timeout)` releases your worker after 500ms regardless of what the target is doing.
+
+**Set the timeout below the interval.** With a 1-second poll interval, a 500ms timeout means a poll can never outlive its own tick. If your timeout exceeds your interval, you've reintroduced the overlap problem the long way around.
+
+---
+
+## 🚩 The caveat to volunteer
+
+Say this before they catch it — volunteering the weakness in your own design is worth more than the design:
+
+> `cancel(true)` interrupts the thread, but interruption is **cooperative**. If `getStats()` is blocked on a socket read that doesn't respond to interrupts, the underlying thread keeps sitting there. I've freed my *worker*, but the *call* thread can still leak.
+
+Which is exactly why the client-side socket timeout is the better fix, and why this second-pool approach is a workaround rather than a solution. You've now traded "worker pool exhausts" for "call pool exhausts more slowly" — real progress, not a cure.
