@@ -198,3 +198,17 @@ void pollAll() {
 ```
 
 The loop does no I/O. It touches a concurrent set and hands work to a pool. On a fleet of 10,000 servers this is still microseconds.
+
+---
+
+## 🔒 The overlap guard
+
+`inFlight.add(s)` returning `false` is the guard against overlapping polls, and it's the detail that separates a working answer from a good one.
+
+Without it: server #7 takes 4 seconds to respond, your interval is 1 second, so by second 4 you have **four concurrent polls in flight against the same struggling server**. You're now DDoSing the thing you're supposed to be monitoring, and you're burning four pool threads on one target. As more servers degrade, the pool saturates and healthy servers stop getting polled. That's a self-inflicted cascading failure.
+
+With it: a slow server gets skipped this tick and becomes eligible again the moment its previous poll finishes. Load stays bounded at one outstanding call per server, and you get a free signal — a server that's frequently skipped is a server that's degrading.
+
+`ConcurrentHashMap.newKeySet()` gives you the atomic test-and-set. `add` returning `false` means "someone's already got it" in a single operation, with no lock and no check-then-act race.
+
+> **Note the identity assumption:** `Set<Server>` uses `equals`/`hashCode`. If `Server` implementations don't override them, this is identity-based — which is what you want here, and worth saying out loud so it's clearly a decision and not an accident.
