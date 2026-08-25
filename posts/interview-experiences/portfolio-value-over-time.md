@@ -34,3 +34,37 @@ int[][][] stocks;
 ```
 
 **On days vs. dates:** the input in the room talked about "the date it was bought at." Normalise it away immediately — pick any epoch as your zero and every real calendar date becomes an integer day. Say that out loud and move on; it's a one-line conversion, not the problem.
+
+---
+
+## 🏷️ Why it isn't trivial
+
+> **Like you're 5:** The tag doesn't disappear when the person who wrote it walks away. It stays on the toy until somebody swaps it. So a toy nobody has touched in three days is still worth something today.
+
+**What that really is:** each stock's value over time is a **step function** — it jumps at its update days and holds flat in between. This "carry-forward" is the whole behaviour of the problem, and it's the thing a naive solution forgets.
+
+Here's the smallest example that actually exercises it:
+
+```
+Stock A: [[0, 200]]
+Stock B: [[2, 50], [4, 60]]
+```
+
+| Day | A | B | Total |
+|---|---|---|---|
+| 0 | 200 | not held | **200** |
+| 1 | 200 | not held | **200** |
+| 2 | 200 | 50 | **250** |
+| 3 | 200 | 50 *(held)* | **250** |
+| 4 | 200 | 60 | **260** |
+
+`result = [200, 200, 250, 250, 260]`
+
+Three behaviours in one tiny case: carry-forward, *not yet owned*, and a mid-range price change.
+
+**Clarifying questions worth asking in the room** — half the signal in this problem is whether you untangle the ambiguity instead of coding the first reading:
+
+- Contiguous days `0..D`, or sparse real calendar dates? *(This is the big fork — it decides whether you get a dense array or need coordinate compression.)*
+- Can a stock be **sold**, or is it buy-and-hold?
+- Can the same stock be bought in multiple lots?
+- Full contiguous range, or arbitrary date queries?
