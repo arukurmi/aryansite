@@ -102,3 +102,21 @@ long[] brute(int[][][] stocks, int D) {
 - **Edge cases handled:** stock bought after day 0, empty stock list, single update.
 
 Say this one first. It's correct, it's fast to write, and it gives you something to improve *from* — which is the conversation the interviewer actually wants.
+
+---
+
+## 🙋 What I actually answered (and why it was wrong)
+
+This is the part worth reading.
+
+I reached for **two HashMaps and a Set**:
+
+1. a `Set` of all unique days,
+2. a map of *stock index → (day bought, price on that day)*,
+3. a reverse index of *day → number of stocks bought on that day*.
+
+**Where it breaks:** the reverse map counts **stocks**, not **value**. A count can't carry a price forward, and it can't represent a stock whose price *changed* rather than being bought. Run it against the three-stock case below and it falls apart the moment `Stock 0` goes from `200` to `250` on day 3 — no stock was bought that day, so the count doesn't move, but the portfolio value does.
+
+**But the instinct underneath was right.** "Index the events by day" is exactly the correct idea. The fix is one word: store the **value change** on each day, not a stock count. Make that single substitution and both maps and the set collapse into one array — and that array *is* the optimal solution.
+
+That's usually how these rounds go. You're rarely miles off. You're one noun away.
