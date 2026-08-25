@@ -174,3 +174,27 @@ Expect to be asked why you picked one. Know the difference cold:
 **The catch, and say it before they ask:** if a run of the task overruns the period, `scheduleAtFixedRate` doesn't run them concurrently — it queues the next one to start immediately after, and ticks pile up behind each other. That would be a real risk here, except it isn't, precisely *because* `pollAll` is non-blocking. Pointing out the hazard and then explaining why your design is immune to it is worth more than either half alone.
 
 > **⚠️ The gotcha almost nobody mentions:** if the scheduled task throws an uncaught exception, `scheduleAtFixedRate` **silently cancels the schedule forever**. No error, no restart — your monitor just quietly stops monitoring. That is a catastrophic failure mode for this system specifically. `pollAll` must never let an exception escape.
+
+---
+
+## 📤 `pollAll` — dispatch and get out
+
+```java
+void pollAll() {
+    try {
+        for (Server s : servers) {
+            // skip if a prior poll of this server is still running
+            if (!inFlight.add(s)) {
+                continue;
+            }
+            workers.submit(() -> pollOne(s));
+        }
+    } catch (Throwable t) {
+        // MUST NOT escape — an uncaught throw here permanently
+        // cancels the scheduled task and the monitor dies silently
+        log.error("pollAll tick failed", t);
+    }
+}
+```
+
+The loop does no I/O. It touches a concurrent set and hands work to a pool. On a fleet of 10,000 servers this is still microseconds.
