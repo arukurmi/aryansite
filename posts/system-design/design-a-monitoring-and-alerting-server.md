@@ -132,3 +132,28 @@ This is **head-of-line blocking**. `getStats()` on server #7 hangs for 30 second
 The real period is `pollIntervalSec + workTime`, not `pollIntervalSec`. Every cycle you fall a little further behind, and the drift accumulates forever. After an hour your "1-second" samples are landing wherever they land, which quietly wrecks any rate calculation done on top of them downstream.
 
 > **The insight to state:** all three problems come from one mistake — the thing that keeps time is also the thing that does the work. Separate them and all three go away.
+
+---
+
+## ⏱️ Split the clock from the workers
+
+So: a cheap **tick** that only dispatches, and a pool of threads that make the actual blocking calls.
+
+```java
+public void monitor() {
+    scheduler = Executors.newSingleThreadScheduledExecutor();
+    workers   = Executors.newFixedThreadPool(32);
+    inFlight  = ConcurrentHashMap.newKeySet();
+
+    scheduler.scheduleAtFixedRate(
+        this::pollAll,
+        0,                      // no initial delay
+        pollIntervalSec,
+        TimeUnit.SECONDS
+    );
+}
+```
+
+**The key trick:** `pollAll` never blocks. It submits one task per server and returns. The single scheduler thread finishes a tick in microseconds, so the cadence stays at exactly `pollIntervalSec` no matter how slow the servers are.
+
+That's the whole design. Everything below is hardening.
