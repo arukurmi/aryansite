@@ -69,3 +69,27 @@ The interfaces are opaque on purpose — `Stats` has no methods shown, `getStats
 - `Stats` is an **opaque value object**. I don't need to look inside it.
 
 The first assumption is the load-bearing one. Everything interesting in this problem follows from "the call can hang."
+
+---
+
+## 🧱 The shape before the code
+
+Sketch the class before you implement anything. You're adding three fields to that `// anything else you want` comment:
+
+```
+class MonitoringServer
+  - List<Server> servers            // given
+  - StatsDatabase database          // given
+  - long pollIntervalSec            // given
+
+  - ScheduledExecutorService scheduler   // fires the tick
+  - ExecutorService workers              // does the blocking calls
+  - Set<Server> inFlight                 // guards against overlap
+
+  + monitor()
+  + stop()
+  - pollAll()
+  - pollOne(Server)
+```
+
+Three additions, one job each: **something that keeps time**, **something that does work**, and **something that remembers what's already running**. Say that sentence out loud — it's the design in one line, and the rest is just filling it in.
