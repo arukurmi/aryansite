@@ -255,3 +255,64 @@ Prices actually held on each day, summed directly:
 Matches exactly. ✅
 
 **The one sentence to remember:** *store the change on each day, then a running sum rebuilds the totals — because a portfolio's value only moves on days something changes.*
+
+---
+
+## 📅 Killing the `D` parameter
+
+> **Like you're 5:** Nobody has to tell you which days to care about. The days are already written on the sticky notes. The first one is the first day anyone bought a toy, and the last one is the last day anyone changed a tag.
+
+**What that really is:** `D` shouldn't be an input at all. The timeline is a **property of the data**, not something the caller hands you. One pass over every `[day, price]` point gives you `lo` (earliest day — the portfolio starts here) and `hi` (latest day — nothing changes after). And `lo` doesn't have to be `0`; if nothing is bought until day 2, the timeline starts at day 2.
+
+The delta array becomes `hi − lo + 1` wide, and every day is offset to index `day − lo`. That offset is the only new wrinkle.
+
+```java
+long[] portfolio(int[][][] stocks) {
+    if (stocks == null || stocks.length == 0) return new long[0];
+
+    int lo = Integer.MAX_VALUE, hi = Integer.MIN_VALUE;
+    for (int[][] stock : stocks) {
+        for (int[] update : stock) {
+            lo = Math.min(lo, update[0]);
+            hi = Math.max(hi, update[0]);
+        }
+    }
+    if (lo > hi) return new long[0];          // every stock had zero updates
+
+    int n = hi - lo + 1;
+    long[] delta = new long[n];
+
+    for (int[][] stock : stocks) {
+        int prev = 0;
+        for (int[] update : stock) {
+            delta[update[0] - lo] += update[1] - prev;   // shift by lo
+            prev = update[1];
+        }
+    }
+
+    long[] res = new long[n];
+    long run = 0;
+    for (int i = 0; i < n; i++) {
+        run += delta[i];
+        res[i] = run;
+    }
+    return res;                                // res[i] is the value on day lo + i
+}
+```
+
+**Where the offset earns its keep.** With `lo = 0` the offset is invisible, so try a late start:
+
+```
+Stock A: [[2, 100]]
+Stock B: [[3,  50], [4, 60]]
+```
+
+First pass → `lo = 2`, `hi = 4`, so `n = 3`.
+
+- A `(2, 100)`: `delta[2−2] += 100` → `delta[0] = 100`
+- B `(3, 50)`: `delta[3−2] += 50` → `delta[1] = 50`
+- B `(4, 60)`: `delta[4−2] += 10` → `delta[2] = 10`
+
+`delta = [100, 50, 10]` → prefix → `res = [100, 150, 160]`, mapping to days **2, 3, 4**.
+
+**One API call worth stating out loud:** when the start isn't `0`, returning a bare array forces the caller to remember *"index 0 means day `lo`."* Cleaner is to return `[day, value]` pairs — here `[[2,100],[3,150],[4,160]]` — so every row is self-describing. Mention both and pick the pair form. It shows you thought about the interface, not just the algorithm.
