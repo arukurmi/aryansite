@@ -337,3 +337,30 @@ threads ≈ target throughput × average latency
 ```
 
 100 servers, 1s interval, 50ms average latency → `100 × 0.05 = 5` threads to keep up in steady state. You size above that for headroom and latency spikes. **The point isn't the number — it's that you derived it from the fleet size and the latency instead of guessing 32.**
+
+---
+
+## 🌍 Scaling it into a data system
+
+One box cannot poll a million URIs, and this is where the round turns from LLD into system design. Two axes:
+
+**Shard the targets.**
+
+Hash each server's id onto a consistent-hashing ring and let a coordinator — ZooKeeper, etcd, or a partition-assignment service — hand each monitoring instance its slice. Polling load and thread pools then spread horizontally, and the ring rebalances when an instance dies. Consistent hashing specifically (rather than `hash % N`) means losing one instance reshuffles only its slice instead of remapping the entire fleet.
+
+**Treat `StatsDatabase` as a time-series sink.**
+
+It isn't a row store, and one `write()` per poll per server is a round trip you cannot afford at scale.
+
+| Concern | What to do |
+|---|---|
+| Partitioning | Key on `(serverId, timeBucket)` — every query is "this target, this window" |
+| Write volume | **Batch** — accumulate samples and flush per interval, not per poll |
+| DB slowdown | Put a **bounded queue** in front of the writer |
+| Queue full | **Shed or coalesce** samples — never block the poller |
+
+That last row is the one that matters, and it's the sentence to land:
+
+> **Back-pressure must never reach the poll loop.** If the database gets slow and you let `write()` block your workers, DB latency silently becomes poll latency, your cadence collapses, and you go blind on the entire fleet — because your storage tier had a bad minute. Dropping a sample is recoverable. Losing your monitoring cadence during an incident is not.
+
+Bound the queue, drop on overflow, and emit a metric about the drops. Degrade the data, never the timing.
