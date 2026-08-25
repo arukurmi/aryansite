@@ -281,3 +281,30 @@ Say this before they catch it — volunteering the weakness in your own design i
 > `cancel(true)` interrupts the thread, but interruption is **cooperative**. If `getStats()` is blocked on a socket read that doesn't respond to interrupts, the underlying thread keeps sitting there. I've freed my *worker*, but the *call* thread can still leak.
 
 Which is exactly why the client-side socket timeout is the better fix, and why this second-pool approach is a workaround rather than a solution. You've now traded "worker pool exhausts" for "call pool exhausts more slowly" — real progress, not a cure.
+
+---
+
+## 🧵 Java 21 changes the answer
+
+The editor in the prompt says **Java 21**. That's not decoration — virtual threads are final in 21 ([JEP 444](https://openjdk.org/jeps/444)), and they make the two-pool workaround largely unnecessary.
+
+```java
+public void monitor() {
+    scheduler = Executors.newSingleThreadScheduledExecutor();
+    workers   = Executors.newVirtualThreadPerTaskExecutor();
+    inFlight  = ConcurrentHashMap.newKeySet();
+
+    scheduler.scheduleAtFixedRate(
+        this::pollAll, 0, pollIntervalSec, TimeUnit.SECONDS);
+}
+```
+
+**Why this matters here.** This workload is pure blocking I/O — the exact case virtual threads exist for. When `getStats()` blocks on a socket, the virtual thread **unmounts** from its carrier OS thread instead of pinning it. A hung server costs you a parked continuation on the heap, not one of your 32 OS threads. Ten thousand targets is ten thousand virtual threads, which is fine.
+
+**What it fixes:** pool sizing mostly stops being a question, and thread exhaustion from hung calls stops being the dominant failure mode.
+
+**What it does not fix:** you still need timeouts. Virtual threads make a hang cheap; they don't make it *end*. Keep `inFlight`, keep the try/catch/finally, keep the socket timeout. And keep a **semaphore** if you need to bound concurrent load on the *targets* — an unbounded executor will happily fire 10,000 simultaneous requests, which is a different way to hurt the fleet you're monitoring.
+
+**One honest note:** Java 21 also ships `StructuredTaskScope`, which fits this shape beautifully — but it's a **preview** API in 21, so flag it as "what I'd reach for once it's final" rather than proposing it as the answer. Knowing what's preview and what's final is itself a signal.
+
+> **The line to say:** "Given Java 21, I'd use a virtual-thread-per-task executor and drop the fixed pool. The blocking call is the whole workload, so this is the textbook case — but I'd keep the timeout, because a cheap hang is still a hang."
