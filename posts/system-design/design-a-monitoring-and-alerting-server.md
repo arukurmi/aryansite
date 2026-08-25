@@ -36,3 +36,21 @@ You're building the thing that watches everything else: a fleet of URIs, databas
 It reads like a `for` loop and a `Thread.sleep`. It isn't. `// anything else you want` is the interviewer telling you the fields you've been handed are deliberately not enough, and the entire round is about what you add.
 
 Here's the full design — what to say, what to write, and where the follow-ups go.
+
+---
+
+## 📋 Pin the requirements first
+
+Don't start typing. Two minutes writing requirements buys you the whole rest of the round, because every one of these becomes a design decision you get credit for later.
+
+**Functional requirements**
+
+- Poll every `Server` in `servers`, every `pollIntervalSec`
+- Each poll: call `getStats()`, then `database.write(server, stats)`
+- **Cadence must not drift** over time
+- One slow or hung server must **not delay or block** the others
+- A failing `getStats()` must **not kill the loop**
+- **No overlapping polls** of the same server
+- `monitor()` starts it; something must be able to stop it
+
+That fourth and sixth bullet are the ones candidates miss, and they're the ones the follow-ups live in.
