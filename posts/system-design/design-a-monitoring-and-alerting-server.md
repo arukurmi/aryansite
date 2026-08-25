@@ -54,3 +54,18 @@ Don't start typing. Two minutes writing requirements buys you the whole rest of 
 - `monitor()` starts it; something must be able to stop it
 
 That fourth and sixth bullet are the ones candidates miss, and they're the ones the follow-ups live in.
+
+---
+
+## 🎯 State your assumptions out loud
+
+The interfaces are opaque on purpose — `Stats` has no methods shown, `getStats()` has no contract. Don't ask four questions about it. State what you're assuming and move; if an assumption is wrong the interviewer will stop you, and that costs three seconds.
+
+> **Say this:** "The interfaces are opaque, so let me state my assumptions rather than ask — stop me if any are wrong."
+
+- `getStats()` is a **blocking network call**. It can be slow, and it can hang.
+- `database.write()` can **also block** — it's a network hop too.
+- **N may be large.** Hundreds now, and the design should survive thousands.
+- `Stats` is an **opaque value object**. I don't need to look inside it.
+
+The first assumption is the load-bearing one. Everything interesting in this problem follows from "the call can hang."
