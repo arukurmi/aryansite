@@ -135,3 +135,44 @@ That's usually how these rounds go. You're rarely miles off. You're one noun awa
 Both cases are the same line of code if you initialise `prev = 0`, because `p₀ − 0 == p₀`. The "just bought" case falls out for free.
 
 `delta[d]` means exactly one thing: **how much the entire portfolio's value moves on day `d` compared to the day before.** A buy is a jump up. A price drop is a jump down. A day with no events is `0` — and *that zero is the carry-forward*, handled for free, with no code.
+
+---
+
+## ➕ The running total
+
+> **Like you're 5:** You don't dump out your piggy bank and recount every coin each morning. You remember what it said yesterday, and you add whatever changed today.
+
+**What that really is:** a **prefix sum** over the delta array. One rule:
+
+```
+res[d] = res[d−1] + delta[d]
+```
+
+Today's total = yesterday's total + today's change. Walk left to right with a single running number.
+
+```java
+long[] portfolio(int[][][] stocks, int D) {
+    long[] delta = new long[D + 1];       // net value change per day
+
+    for (int[][] stock : stocks) {
+        int prev = 0;                     // 0 so the first point adds the full price
+        for (int[] update : stock) {
+            int day = update[0], price = update[1];
+            delta[day] += price - prev;   // only the change counts
+            prev = price;
+        }
+    }
+
+    long[] res = new long[D + 1];
+    long run = 0;
+    for (int i = 0; i <= D; i++) {
+        run += delta[i];                  // running total
+        res[i] = run;
+    }
+    return res;
+}
+```
+
+- **Time:** `O(U + D)` where `U` is the total number of updates — every update is touched exactly once.
+- **Space:** `O(D)` for the delta and the result.
+- **Why it's better:** no rescanning. Work is proportional to *events*, not to *days × stocks*.
