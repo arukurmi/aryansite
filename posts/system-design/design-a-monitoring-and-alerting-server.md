@@ -308,3 +308,32 @@ public void monitor() {
 **One honest note:** Java 21 also ships `StructuredTaskScope`, which fits this shape beautifully — but it's a **preview** API in 21, so flag it as "what I'd reach for once it's final" rather than proposing it as the answer. Knowing what's preview and what's final is itself a signal.
 
 > **The line to say:** "Given Java 21, I'd use a virtual-thread-per-task executor and drop the fixed pool. The blocking call is the whole workload, so this is the textbook case — but I'd keep the timeout, because a cheap hang is still a hang."
+
+---
+
+## 🛑 Shutdown and sizing
+
+Nobody asks for `stop()` and everybody should write it:
+
+```java
+public void stop() {
+    scheduler.shutdownNow();          // stop new ticks first
+    workers.shutdown();               // then drain in-flight polls
+    try {
+        workers.awaitTermination(5, TimeUnit.SECONDS);
+    } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();   // restore the flag
+    }
+}
+```
+
+Order matters — kill the clock before the workers, or you'll dispatch fresh work into a pool you're trying to drain.
+
+**If they push on pool sizing** (the pre-21 answer), the reasoning is Little's Law, not a magic number:
+
+```
+threads ≈ target throughput × average latency
+        = (N servers / pollIntervalSec) × avgLatencySec
+```
+
+100 servers, 1s interval, 50ms average latency → `100 × 0.05 = 5` threads to keep up in steady state. You size above that for headroom and latency spikes. **The point isn't the number — it's that you derived it from the fleet size and the latency instead of guessing 32.**
