@@ -364,3 +364,14 @@ That last row is the one that matters, and it's the sentence to land:
 > **Back-pressure must never reach the poll loop.** If the database gets slow and you let `write()` block your workers, DB latency silently becomes poll latency, your cadence collapses, and you go blind on the entire fleet — because your storage tier had a bad minute. Dropping a sample is recoverable. Losing your monitoring cadence during an incident is not.
 
 Bound the queue, drop on overflow, and emit a metric about the drops. Degrade the data, never the timing.
+
+---
+
+## 🎯 What this question is really testing
+
+- **Separate timekeeping from work.** Sequential loop, head-of-line blocking, and drift are three symptoms of the same mistake.
+- **`// anything else you want` is the question.** The given fields are deliberately insufficient; what you add *is* your answer.
+- **Every failure needs a boundary.** try/catch per poll, `finally` for the in-flight flag, and a `pollAll` that can never throw — because `scheduleAtFixedRate` kills the schedule if it does.
+- **Bound everything.** Concurrent polls per server, request timeouts, queue depth. Unbounded anything is the bug you ship.
+- **Read the environment.** The editor said Java 21. Half the classic answer to this problem is about working around OS-thread scarcity, and virtual threads make that half obsolete.
+- **A monitoring system fails differently.** For most services, degrading gracefully means serving stale data. Here it means going blind exactly when something is wrong — so cadence is the thing you protect above all else.
