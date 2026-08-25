@@ -157,3 +157,20 @@ public void monitor() {
 **The key trick:** `pollAll` never blocks. It submits one task per server and returns. The single scheduler thread finishes a tick in microseconds, so the cadence stays at exactly `pollIntervalSec` no matter how slow the servers are.
 
 That's the whole design. Everything below is hardening.
+
+---
+
+## 📐 `scheduleAtFixedRate` vs `scheduleWithFixedDelay`
+
+Expect to be asked why you picked one. Know the difference cold:
+
+| | Measures from | Period |
+|---|---|---|
+| `scheduleAtFixedRate` | **start** of the previous run | Fixed — `t=0, 1, 2, 3…` regardless of how long the task takes |
+| `scheduleWithFixedDelay` | **end** of the previous run | Drifts — `runtime + delay` each cycle |
+
+`scheduleWithFixedDelay` is the naive `sleep` with better manners; it has the same drift bug. You want `scheduleAtFixedRate` because you want samples on a real timeline.
+
+**The catch, and say it before they ask:** if a run of the task overruns the period, `scheduleAtFixedRate` doesn't run them concurrently — it queues the next one to start immediately after, and ticks pile up behind each other. That would be a real risk here, except it isn't, precisely *because* `pollAll` is non-blocking. Pointing out the hazard and then explaining why your design is immune to it is worth more than either half alone.
+
+> **⚠️ The gotcha almost nobody mentions:** if the scheduled task throws an uncaught exception, `scheduleAtFixedRate` **silently cancels the schedule forever**. No error, no restart — your monitor just quietly stops monitoring. That is a catastrophic failure mode for this system specifically. `pollAll` must never let an exception escape.
