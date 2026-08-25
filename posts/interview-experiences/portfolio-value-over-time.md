@@ -176,3 +176,50 @@ long[] portfolio(int[][][] stocks, int D) {
 - **Time:** `O(U + D)` where `U` is the total number of updates — every update is touched exactly once.
 - **Space:** `O(D)` for the delta and the result.
 - **Why it's better:** no rescanning. Work is proportional to *events*, not to *days × stocks*.
+
+---
+
+## 🔍 Full dry run
+
+The prefix-sum step is the part that doesn't click until you watch it move, so here it is on three stocks with overlapping activity:
+
+```
+Stock 0: [[0, 200], [1, 400], [5, 250]]
+Stock 1: [[1,  50], [2,  70], [4,  80]]
+Stock 2: [[0, 155], [5, 160]]
+```
+
+### Step 1 — build the delta array
+
+Width 6, all zeros. Rule per point: `delta[day] += price − prev`, with `prev` starting at `0` for each stock.
+
+**Start:** `delta = [0, 0, 0, 0, 0, 0]`
+
+**Stock 0** *(prev resets to 0)*:
+
+| Point | Operation | Result | prev |
+|---|---|---|---|
+| `(0, 200)` | `delta[0] += 200 − 0` | `delta[0] = 200` | 200 |
+| `(1, 400)` | `delta[1] += 400 − 200` | `delta[1] = 200` | 400 |
+| `(5, 250)` | `delta[5] += 250 − 400` | `delta[5] = −150` | 250 |
+
+→ `delta = [200, 200, 0, 0, 0, −150]`
+
+**Stock 1** *(prev resets to 0)*:
+
+| Point | Operation | Result | prev |
+|---|---|---|---|
+| `(1, 50)` | `delta[1] += 50 − 0` | `delta[1] = 250` | 50 |
+| `(2, 70)` | `delta[2] += 70 − 50` | `delta[2] = 20` | 70 |
+| `(4, 80)` | `delta[4] += 80 − 70` | `delta[4] = 10` | 80 |
+
+→ `delta = [200, 250, 20, 0, 10, −150]`
+
+**Stock 2** *(prev resets to 0)*:
+
+| Point | Operation | Result | prev |
+|---|---|---|---|
+| `(0, 155)` | `delta[0] += 155 − 0` | `delta[0] = 355` | 155 |
+| `(5, 160)` | `delta[5] += 160 − 155` | `delta[5] = −145` | 160 |
+
+→ **`delta = [355, 250, 20, 0, 10, −145]`**
